@@ -17,7 +17,7 @@ interface Props {
 const AuthForm = ({ handleOnSubmit, submitBtn, formFields }: Props) => {
   const methods = useForm<IFormRegisterType>({ mode: "onBlur" });
   const [error, setError] = useState<string | null>(null);
-  const [hidePassword, setHidePassword] = useState<boolean>(false);
+  const [hidePassword, setHidePassword] = useState<boolean>(true);
 
   const {
     register,

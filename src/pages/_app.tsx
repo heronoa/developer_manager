@@ -1,6 +1,8 @@
 import "../styles/globals.css";
 import "../styles/typography.css";
 import "../styles/errors.css"
+import "../styles/toggleSwitchStyles.css"
+
 import "regenerator-runtime/runtime.js";
 
 import { FetchProvider } from "@/context/FetchContext";

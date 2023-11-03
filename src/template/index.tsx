@@ -2,7 +2,6 @@ import { ReactNode, useEffect, useState } from "react";
 
 import Header from "./partials/Header";
 import SideMenu from "./partials/SideMenu";
-import SettingsMenu from "./partials/SettingsMenu";
 
 interface Props {
   children: ReactNode;

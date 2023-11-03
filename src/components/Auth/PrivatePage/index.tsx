@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+const PrivatePage = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const { user } = useAuth();
 
@@ -14,4 +14,4 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <div>{user.uid ? children : null}</div>;
 };
 
-export default ProtectedRoute;
+export default PrivatePage;

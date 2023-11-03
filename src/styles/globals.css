@@ -12,15 +12,13 @@
 .dark > * {
   :root {
     --bg-primary: black
-    
+
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  color: rgb(var(--bg-primary));
+  background: var(--bg-primary);
 }
 
 .btn {
@@ -43,6 +41,18 @@ body {
 
   @apply aspect-square h-[100px] rounded-full flex items-center justify-center relative
 
+}
+
+#main-header {
+  @apply dark:bg-[#333333] dark:text-white
+}
+
+#main-side-menu {
+  @apply dark:bg-[#333333] dark:text-white
+}
+
+.dark {
+  @apply bg-[#141414]
 }
 
 @keyframes spin {

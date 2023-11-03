@@ -11,7 +11,11 @@ const HomeLayout = () => {
   const { logIn, loading: userLoading } = useAuth();
 
   const onSubmit = async (data: ILoginType) => {
-    await logIn(data.email, data.password);
+    try {
+      await logIn(data.email, data.password);
+    } catch (error) {
+      console.error(error);
+    }
     router.push("/dashboard");
   };
 
