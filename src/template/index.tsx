@@ -42,7 +42,6 @@ export const MainTemplate = ({ children }: Props) => {
           </div>
         </div>
       </div>
-      <SettingsMenu />
     </PrivatePage>
   );
 };

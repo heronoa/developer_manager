@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import useSWR from "swr";
 
-import { IExample, ISWR } from "../@types";
+import { ISWR } from "../@types";
 import { fetcher, SWRCacheKeyGetters } from "../services/swr";
 
 interface IFetchProvider {
@@ -9,7 +9,7 @@ interface IFetchProvider {
 }
 
 interface FetchContextProps {
-  exampleData: IExample;
+  exampleData: any;
   isLoadingExampleData: boolean;
   errorExampleData: any;
 }

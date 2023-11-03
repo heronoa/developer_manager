@@ -40,7 +40,7 @@ const SideMenu = () => {
                     {item.subpaths?.map((item, index) => (
                       <li
                         key={index}
-                        className={`${router.asPath === item.path ? "bg-blue-800 hover:text-white p-2 pl-8 " : "" }  hover:bg-blue-800 rounded-[15px] w-[80%]  hover:text-white p-2 pl-8 ml-4 my-1 md:my-0 items-center mr-4 md:inline-block block`}
+                        className={`${router.asPath === item.path ? "bg-blue-800 text-white hover:!text-white p-2 pl-8 " : "" }  hover:bg-blue-800 rounded-[15px] w-[80%]  hover:!text-white p-2 pl-8 ml-4 my-1 md:my-0 items-center mr-4 md:inline-block block`}
                       >
                         <Link href={item?.path as string} >
                           {item?.displayName}
