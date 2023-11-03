@@ -5,15 +5,16 @@ import "regenerator-runtime/runtime.js";
 
 import { FetchProvider } from "@/context/FetchContext";
 import { MainTemplate } from "../template";
-import { ThemeProvider } from "next-themes";
 import { AppProps } from "next/app";
 import { AuthProvider } from "@/context/AuthContext";
+import { ThemeProvider } from "@/context/ThemeContext";
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <FetchProvider>
-        <ThemeProvider attribute="class">
+        <ThemeProvider>
           <MainTemplate>
             <Component {...pageProps} />
           </MainTemplate>

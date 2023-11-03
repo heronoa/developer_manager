@@ -7,6 +7,7 @@ import {
   firebaseAuthErrorsHandler,
   formErrorsHandler,
 } from "@/services/errorHandler";
+import Image from "next/image";
 
 const HomeLayout = () => {
   const methods = useForm<ILoginType>({ mode: "onBlur" });
@@ -55,19 +56,28 @@ const HomeLayout = () => {
   };
 
   return (
-    <div className="sign-up-form container mx-auto w-96 mt-12 border-2 border-gray-400">
+    <div className="container mx-auto w-[300px] md:w-[380px] mt-12 border-2 border-gray-400">
+      <div className="p-4">
+        <Image
+          className="m-auto"
+          src={"/imgs/logo+text.png"}
+          alt={"Logo da Encibra S/A"}
+          width={337}
+          height={56}
+        />
+      </div>
       <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900">
         Log In
       </h2>
       <FormProvider {...methods}>
         <form
           action=""
-          className="w-80 mx-auto pb-12 px-4"
+          className="w-full mx-auto pb-12 px-4"
           onSubmit={handleSubmit(onSubmit)}
         >
           {error && (
             <div>
-              <small className="form-error">{error}</small>
+              <small className="form-error absolute">{error}</small>
             </div>
           )}
           <div className="mt-8">
@@ -80,10 +90,10 @@ const HomeLayout = () => {
             <input
               type="email"
               {...register("email", { required: "Email is required" })}
-              className={`border border-solid rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`}
+              className={`border border-solid rounded-lg ring:0 focus:ring-0 focus:outline-none bg-white border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`}
             />
             {errors.email && (
-              <p className="text-red-400">{errors.email.message}</p>
+              <p className="text-red-400 absolute transition-all">{errors.email.message}</p>
             )}
           </div>
           <div className="mt-8">
@@ -96,10 +106,10 @@ const HomeLayout = () => {
             <input
               type="password"
               {...register("password", { required: "Password is required" })}
-              className={`border border-solid rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`}
+              className={`border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`}
             />
             {errors.password && (
-              <p className="text-red-400">{errors.password.message}</p>
+              <p className="text-red-400 absolute transition-all">{errors.password.message}</p>
             )}
           </div>
 
@@ -112,6 +122,11 @@ const HomeLayout = () => {
                 {submitBtn()}
               </div>
             </button>
+          </div>
+          <div className="flex justify-center items-center mt-4">
+            <small className="text-center m-auto">
+              Em caso de perda das credenciais entre em contato com um gestor
+            </small>
           </div>
         </form>
       </FormProvider>
