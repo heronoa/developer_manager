@@ -1,0 +1,5 @@
+# Ignore all files inside node_modules folder
+*node_modules
+
+# Folder de builds 
+*next
