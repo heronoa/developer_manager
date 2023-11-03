@@ -9,10 +9,9 @@
 .dark,
 [data-theme="dark"],
 [color-schema="dark"],
-.dark > * {
+.dark>* {
   :root {
     --bg-primary: black
-
   }
 }
 
@@ -40,7 +39,6 @@ body {
   animation: spin 3s linear infinite;
 
   @apply aspect-square h-[100px] rounded-full flex items-center justify-center relative
-
 }
 
 #main-header {
@@ -55,6 +53,24 @@ body {
   @apply bg-[#141414]
 }
 
+.underline-animation-event {
+  @apply relative !flex items-center
+}
+
+.underline-animation-event::after {
+  /* content: ""; */
+  transition: 0.3s ease-out;
+
+  @apply absolute bottom-0 left-0 w-0 !h-[3px] content-[""] bg-blue-900 ;
+}
+
+.underline-animation-event:hover::after {
+  @apply w-full
+}
+
+
+
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -63,7 +79,7 @@ body {
   50% {
     transform: rotate(180deg);
   }
-  
+
   100% {
     transform: rotate(360deg);
   }
