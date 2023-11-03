@@ -24,3 +24,39 @@ body {
       transparent,
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
+
+.btn {
+  @apply h-12 text-center w-2/3 bg-blue-900 border-2 rounded-md hover:shadow-lg hover:bg-blue-800 text-lg transition
+}
+
+.loading-circle {
+  border: 10px solid transparent;
+  border-top: 10px solid #fff;
+  animation: spin 1s linear infinite;
+
+  @apply aspect-square h-[150px] rounded-full flex items-center justify-center m-auto
+}
+
+.loading-circle::after {
+  content: "";
+  border: 2px solid #fff;
+  border-top: 2px solid transparent;
+  animation: spin 3s linear infinite;
+
+  @apply aspect-square h-[100px] rounded-full flex items-center justify-center relative
+
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+  
+  100% {
+    transform: rotate(360deg);
+  }
+}
