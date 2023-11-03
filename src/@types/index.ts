@@ -36,3 +36,12 @@ export interface IImageHiperlink {
   src: string;
   alt: string;
 }
+export interface IUserType {
+  email: string | null;
+  uid: string | null;
+}
+
+export interface ILoginType {
+  email: string;
+  password: string;
+}

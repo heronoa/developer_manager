@@ -1,0 +1,20 @@
+@keyframes red-blink {
+    0% {
+        color: red;
+    }
+
+    50% {
+        color: inherit;
+    }
+
+    100% {
+        color: red;
+    }
+}
+
+.form-error {
+    animation: 2s red-blink ease infinite;
+    transition: all;
+
+    @apply text-primary
+}

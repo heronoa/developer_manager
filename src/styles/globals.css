@@ -8,7 +8,7 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-@media .dark,
+.dark,
 [data-theme="dark"],
 [color-schema="dark"] {
   :root {
