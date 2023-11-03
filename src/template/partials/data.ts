@@ -15,7 +15,7 @@ export const navigationLinks: INavLinks = [
   {
     displayName: "Gerenciamento",
     subpaths: [
-        { displayName: "Adicionar Colaborador", path: "/addcolaborators" },
+        { displayName: "Adicionar Colaborador", path: "/addcolaborator" },
         { displayName: "Criar Projeto", path: "/createprojects" },
 ],
   },

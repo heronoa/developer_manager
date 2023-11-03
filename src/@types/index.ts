@@ -1,3 +1,5 @@
+import { RegisterOptions } from "react-hook-form";
+
 type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
   T,
   Exclude<keyof T, Keys>
@@ -44,4 +46,24 @@ export interface IUserType {
 export interface ILoginType {
   email: string;
   password: string;
+}
+
+export interface SignupType extends ILoginType {
+  password_confirm: string;
+}
+
+export type IFormRegisterType = Partial<{
+  [key: string]: string;
+}> & ILoginType & SignupType;
+
+export type IFormFieldOptions = RegisterOptions & {
+  fieldType: string;
+  fieldLabel?: string;
+  labelClassName?: string;
+  errorClassName?: string;
+  inputClassName?: string;
+};
+
+export interface IFormFieldType {
+  [formName: string]: IFormFieldOptions;
 }
