@@ -34,7 +34,7 @@ const SideMenu = () => {
                       {item.displayName}
                     </span>
                     {item.subpaths?.map((item, index) => (
-                      <li
+                      <span
                         key={index}
                         className={`${
                           router.asPath === item.path
@@ -48,7 +48,7 @@ const SideMenu = () => {
                         >
                           {item?.displayName}
                         </Link>
-                      </li>
+                      </span>
                     ))}
                   </div>
                 )}
