@@ -61,7 +61,7 @@ body {
   /* content: ""; */
   transition: 0.3s ease-out;
 
-  @apply absolute bottom-0 left-0 w-0 !h-[3px] content-[""] bg-blue-900 ;
+  @apply absolute bottom-0 left-0 w-0 !h-[3px] content-[""] bg-blue-900;
 }
 
 .underline-animation-event:hover::after {

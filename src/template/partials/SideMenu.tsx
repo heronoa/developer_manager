@@ -10,7 +10,7 @@ const SideMenu = () => {
   return (
     <div
       id="main-side-menu"
-      className="bg-white h-screen w-full block mt-[100px] md:mt-0"
+      className="bg-white h-screen w-full block mt-[100px] md:mt-0 shadow-lg"
     >
       <CompanyLogo />
       <nav className={``}>

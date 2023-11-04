@@ -3,7 +3,7 @@ import { INavLinks } from "@/@types";
 export const navigationLinks: INavLinks = [
   {
     displayName: "Resumo",
-    subpaths: [{ displayName: "Dashboard", path: "/dashboard" }],
+    subpaths: [{ displayName: "Painel", path: "/dashboard" }],
   },
   {
     displayName: "Detalhes",
