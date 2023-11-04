@@ -17,9 +17,9 @@ export const getAge = (strDate: string): string | number => {
 export const formatItem = (
   value: IFormatItem,
   key?: IFilterKeyOption | "age",
-): string | number | undefined => {
+): string | number | null => {
   if (key) {
-    if (key === "birthday") {
+    if (key === "birthday" || key === "deadline" || key === "startDate") {
       return new Date((value as IDateObj)?.seconds * 1000)
         .toISOString()
         .split("T")[0]
@@ -43,7 +43,7 @@ export const formatItem = (
     return value;
   }
 
-  return;
+  return null;
 };
 
 export const parseCamelCase = (camelStr: string): string => {

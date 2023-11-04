@@ -52,6 +52,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     if (user && activeUserData) {
       const fetcher = async () => {
         setAllUsers((await getAllUsers()) as IUserDataType[]);
@@ -63,8 +64,8 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       };
       if (activeUserData) {
         fetcher();
-        setLoading(false);
       }
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, activeUserData]);

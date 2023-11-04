@@ -1,9 +1,8 @@
-import { IFilterOptions, IUserDataType } from "@/@types";
-import UserDataItem from "@/components/Items/UserDataItem";
+import { IFilterOptions, IProjectDataType, IUserDataType } from "@/@types";
+import PrimaryDataItem from "@/components/UI/PrimaryDataItem";
 import Loading from "@/components/UI/Loading";
 
 interface Props {
-  type: string;
   arrayItems: any[];
   filterOptions?: IFilterOptions;
   loading?: boolean;
@@ -11,7 +10,6 @@ interface Props {
 }
 
 const RenderItems = ({
-  type,
   arrayItems,
   filterOptions,
   loading,
@@ -32,9 +30,10 @@ const RenderItems = ({
   if (filterOptions) {
     Object.entries(filterOptions).forEach(([filterKey, filterValue]) => {
       if (typeof filterValue === "string" && filterValue !== "") {
-        console.log({filterKey, filterValue})
         filteredData = arrayItems.filter(e => {
-          return e?.[filterKey]?.toLowerCase()?.startsWith(filterValue.toLowerCase());
+          return e?.[filterKey]
+            ?.toLowerCase()
+            ?.startsWith(filterValue.toLowerCase());
         });
       }
       if ((filterValue as { ASC: boolean })?.ASC) {
@@ -44,10 +43,11 @@ const RenderItems = ({
   }
 
   if (arrayItems.length > 0) {
-    return (filteredData || arrayItems).map((itemData) => (
-      <>
-      {type === "users" && <UserDataItem key={(itemData as IUserDataType).uid} data={(itemData as IUserDataType)} />}
-      </>
+    return (filteredData || arrayItems).map(itemData => (
+      <PrimaryDataItem
+        key={(itemData as any)?.uid || (itemData as any)?.id}
+        data={itemData as any}
+      />
     ));
   }
 };

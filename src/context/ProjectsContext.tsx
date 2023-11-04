@@ -12,6 +12,8 @@ interface IProjectsProvider {
 
 interface ProjectsContextProps {
   allProjects: IProjectDataType[];
+  loading: boolean;
+  error: any | undefined;
 }
 
 export const ProjectsContext = createContext({} as ProjectsContextProps);
@@ -19,6 +21,8 @@ export const ProjectsContext = createContext({} as ProjectsContextProps);
 export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   const { user } = useAuth();
   const [allProjects, setAllProjects] = useState<any[]>([]);
+  const [error, setError] = useState<any | undefined>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   const getAllProjects = async () => {
     const projectArray: IProjectDataType[] = [];
@@ -31,6 +35,8 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   };
 
   useEffect(() => {
+    setLoading(true);
+
     if (user) {
       const fetcher = async () => {
         setAllProjects((await getAllProjects()) as IProjectDataType[]);
@@ -38,13 +44,12 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
       if (user) {
         fetcher();
       }
-
-      getAllProjects();
     }
+    setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
   return (
-    <ProjectsContext.Provider value={{ allProjects }}>
+    <ProjectsContext.Provider value={{ allProjects, error, loading }}>
       {children}
     </ProjectsContext.Provider>
   );

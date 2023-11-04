@@ -1,5 +1,5 @@
 import { useUsers } from "@/hooks/useUsers";
-import UserDataItem from "@/components/Items/UserDataItem";
+import UserDataItem from "@/components/UI/PrimaryDataItem";
 import { IFilterOptions } from "@/@types";
 import { useState } from "react";
 import FilterOptionsPanel from "@/components/UI/FilterOptionsPanel";
@@ -26,7 +26,6 @@ const ColaboratorsLayout = () => {
         </div>
         <div className="w-full flex flex-col justify-center">
           <RenderItems
-            type="users"
             arrayItems={allUsers}
             error={error}
             loading={loading}
