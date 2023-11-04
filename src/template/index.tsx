@@ -36,8 +36,8 @@ export const MainTemplate = ({ children }: Props) => {
         </div>
         <div className="flex flex-col justify-center items-center min-h-[calc(100vh-80px)] col-start-0 md:col-start-3 col-end-13">
           <Header />
-          <div className=" flex min-h-screen flex-col">
-            <div className={inter.className}>{children}</div>
+          <div className="w-full items-center pt-12 flex min-h-[calc(100vh-100px)] flex-col">
+            <div className={inter.className + " w-full"}>{children}</div>
           </div>
         </div>
       </div>

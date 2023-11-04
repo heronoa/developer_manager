@@ -17,6 +17,10 @@ type RequireOnlyOne<T, Keys extends keyof T = keyof T> = Pick<
       Partial<Record<Exclude<Keys, K>, undefined>>;
   }[Keys];
 
+type ObtainKeys<Obj, Type> = {
+  [Prop in keyof Obj]: Obj[Prop] extends Type ? Prop : never;
+}[keyof Obj];
+
 export interface ISWR {
   data: any;
   error: any;
@@ -41,14 +45,6 @@ export interface IImageHiperlink {
 export interface IUserType {
   email: string | null;
   uid: string | null;
-}
-
-export interface IUserDataType extends IUserType {
-  permissionLevel: string;
-  occupation: string[];
-  projects: string[];
-  name: string;
-  uid: string;
 }
 
 export interface IRestrictedDataType {
@@ -100,3 +96,24 @@ export interface IProjectDataType {
   comments: IComments[];
   startDate: Date;
 }
+
+export interface IUserDataType extends IUserType {
+  permissionLevel: string;
+  occupation: string[];
+  projects: string[];
+  name: string;
+  uid: string;
+}
+
+type FilterKeys =
+  | ObtainKeys<Omit<IProjectDataType, "id">, string>
+  | ObtainKeys<IProjectDataType, Date>
+  | ObtainKeys<IProjectDataType, Array<string>>
+  | ObtainKeys<Omit<IUserDataType, "uid">, string>
+  | ObtainKeys<IUserDataType, Array<string>>;
+
+export type IFilterKeyOption = FilterKeys;
+
+export type IFilterOptions = {
+  [key in IFilterKeyOption]: string | { ASC: boolean };
+};

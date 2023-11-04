@@ -11,6 +11,8 @@ interface IUsersProvider {
 
 interface UsersContextProps {
   allUsers: IUserDataType[];
+  loading: boolean;
+  error: any | undefined;
 }
 
 export const UsersContext = createContext({} as UsersContextProps);
@@ -18,25 +20,35 @@ export const UsersContext = createContext({} as UsersContextProps);
 export const UsersProvider = ({ children }: IUsersProvider) => {
   const { user, activeUserData } = useAuth();
   const [allUsers, setAllUsers] = useState<IUserDataType[]>([]);
+  const [error, setError] = useState<any | undefined>();
+  const [loading, setLoading] = useState<boolean>(true);
   const [allRestrictedData, setAllRestrictedData] = useState<
     IRestrictedDataType[]
   >([]);
 
   const getAllUsers = async () => {
-    const usersArray: IUserDataType[] = [];
-    const querySnapshot = await getDocs(collection(db, "usuários"));
-    querySnapshot.forEach(doc => {
-      usersArray.push(doc.data() as IUserDataType);
-    });
-    return usersArray;
+    try {
+      const usersArray: IUserDataType[] = [];
+      const querySnapshot = await getDocs(collection(db, "usuários"));
+      querySnapshot.forEach(doc => {
+        usersArray.push(doc.data() as IUserDataType);
+      });
+      return usersArray;
+    } catch (error) {
+      setError(error);
+    }
   };
   const getAllRestrictedData = async () => {
-    const restrictedArray: IRestrictedDataType[] = [];
-    const querySnapshot = await getDocs(collection(db, "dados-restritos"));
-    querySnapshot.forEach(doc => {
-      restrictedArray.push(doc.data() as IRestrictedDataType);
-    });
-    return restrictedArray;
+    try {
+      const restrictedArray: IRestrictedDataType[] = [];
+      const querySnapshot = await getDocs(collection(db, "dados-restritos"));
+      querySnapshot.forEach(doc => {
+        restrictedArray.push(doc.data() as IRestrictedDataType);
+      });
+      return restrictedArray;
+    } catch (error) {
+      setError(error);
+    }
   };
 
   useEffect(() => {
@@ -51,13 +63,14 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       };
       if (activeUserData) {
         fetcher();
+        setLoading(false);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, activeUserData]);
 
   return (
-    <UsersContext.Provider value={{ allUsers }}>
+    <UsersContext.Provider value={{ allUsers, loading, error }}>
       {children}
     </UsersContext.Provider>
   );

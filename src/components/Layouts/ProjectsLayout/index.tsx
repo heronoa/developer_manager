@@ -1,5 +1,11 @@
+import { useProjects } from "@/hooks/useProjects";
+
 const ProjectsLayout = () => {
-    return <div></div>
-}
+  const { allProjects } = useProjects();
+
+  console.log({ allProjects });
+
+  return <div></div>;
+};
 
 export default ProjectsLayout;
