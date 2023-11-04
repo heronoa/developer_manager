@@ -7,7 +7,7 @@ import MobileMenu from "./MobileMenu";
 import CompanyLogo from "@/components/UI/CompanyLogo";
 
 const Header = () => {
-  const { user, logOut } = useAuth();
+  const { logOut, activeUserData } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -49,7 +49,7 @@ const Header = () => {
           </div>
         </div>
         <div className="flex gap-2">
-          Olá, {user.email},{" "}
+          Olá, {activeUserData?.name},{" "}
           <span
             className="underline-animation-event inline-block cursor-pointer"
             onClick={handleLogout}

@@ -68,6 +68,9 @@ body {
   @apply w-full
 }
 
+.btn {
+  @apply h-12 text-center w-2/3 bg-blue-900 border-2 rounded-md hover:shadow-lg hover:bg-blue-800 text-lg transition
+}
 
 
 
