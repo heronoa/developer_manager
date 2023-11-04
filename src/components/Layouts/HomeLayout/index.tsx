@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import Image from "next/image";
 import AuthForm from "@/components/Auth/AuthForm";
+import CompanyLogo from "@/components/UI/CompanyLogo";
 
 const HomeLayout = () => {
   const router = useRouter();
@@ -35,15 +36,7 @@ const HomeLayout = () => {
 
   return (
     <div className="container mx-auto w-[300px] md:w-[380px] mt-12 border-2 border-gray-400">
-      <div className="p-4">
-        <Image
-          className="m-auto"
-          src={"/imgs/logo+text.png"}
-          alt={"Logo da Encibra S/A"}
-          width={337}
-          height={56}
-        />
-      </div>
+      <CompanyLogo className="justify-center"/>
       <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900">
         Log In
       </h2>
