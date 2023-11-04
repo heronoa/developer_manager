@@ -1,4 +1,4 @@
-import { IProjectDataType, IUserDataType, IFilterOptions } from "@/@types";
+import { IFilterOptions, IUserDataType } from "@/@types";
 import UserDataItem from "@/components/Items/UserDataItem";
 import Loading from "@/components/UI/Loading";
 
@@ -10,7 +10,7 @@ interface Props {
   error?: any | undefined;
 }
 
-export const renderItems = ({
+const RenderItems = ({
   type,
   arrayItems,
   filterOptions,
@@ -42,8 +42,12 @@ export const renderItems = ({
   }
 
   if (arrayItems.length > 0) {
-    return arrayItems.map((itemData, index) => (
-      <>{type === "users" && <UserDataItem key={index} data={itemData} />}</>
+    return arrayItems.map((itemData) => (
+      <>
+      {type === "users" && <UserDataItem key={(itemData as IUserDataType).uid} data={(itemData as IUserDataType)} />}
+      </>
     ));
   }
 };
+
+export default RenderItems;

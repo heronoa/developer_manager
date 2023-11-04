@@ -86,34 +86,47 @@ export interface IComments {
   text: string;
   user_id: string;
 }
+export interface IDateObj {
+  seconds: number;
+  nanoseconds: number;
+}
 export interface IProjectDataType {
   id: string;
   name: string;
-  deadline: Date;
+  deadline: IDateObj;
   description: string;
   stack: string[];
   teamUids: string[];
   comments: IComments[];
-  startDate: Date;
+  startDate: IDateObj;
 }
 
-export interface IUserDataType extends IUserType {
+export type IUserDataType = IUserType & {
   permissionLevel: string;
   occupation: string[];
   projects: string[];
   name: string;
+  birthday: IDateObj;
   uid: string;
-}
+};
 
-type FilterKeys =
-  | ObtainKeys<Omit<IProjectDataType, "id">, string>
-  | ObtainKeys<IProjectDataType, Date>
-  | ObtainKeys<IProjectDataType, Array<string>>
-  | ObtainKeys<Omit<IUserDataType, "uid">, string>
-  | ObtainKeys<IUserDataType, Array<string>>;
+type IFilterKeys =
+  | ObtainKeys<Omit<IProjectDataType, "id">, string | IDateObj | Array<string>>
+  | ObtainKeys<
+      Omit<IUserDataType, "uid">,
+      string | IDateObj | Array<string> | null
+    >;
 
-export type IFilterKeyOption = FilterKeys;
+export type IFilterKeyOption = IFilterKeys;
 
 export type IFilterOptions = {
-  [key in IFilterKeyOption]: string | { ASC: boolean };
+  [key in IFilterKeyOption]?: string | { ASC: boolean };
 };
+
+type IDataItems = IProjectDataType & IUserDataType;
+
+type ItemsUniqueType = {
+  [K in keyof IDataItems]: IDataItems[K];
+}[keyof IDataItems];
+
+export type IFormatItem = ItemsUniqueType;
