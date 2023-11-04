@@ -9,7 +9,7 @@ interface Props2 {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const MobileMenu = ({ isOpen, setIsOpen }: Props2) => {
+const MobileMenu = ({ isOpen }: Props2) => {
   return (
     <Transition.Root show={isOpen}>
       <BackgroundLayer />

@@ -43,6 +43,22 @@ export interface IUserType {
   uid: string | null;
 }
 
+export interface IUserDataType extends IUserType {
+  permissionLevel: string;
+  occupation: string[];
+  projects: string[];
+  name: string;
+  uid: string;
+}
+
+export interface IRestrictedDataType {
+  uid: string;
+  workType: string;
+  phone: string;
+  rg: string;
+  cpf: string;
+}
+
 export interface ILoginType {
   email: string;
   password: string;
@@ -54,7 +70,9 @@ export interface SignupType extends ILoginType {
 
 export type IFormRegisterType = Partial<{
   [key: string]: string;
-}> & ILoginType & SignupType;
+}> &
+  ILoginType &
+  SignupType;
 
 export type IFormFieldOptions = RegisterOptions & {
   fieldType: string;
@@ -66,4 +84,19 @@ export type IFormFieldOptions = RegisterOptions & {
 
 export interface IFormFieldType {
   [formName: string]: IFormFieldOptions;
+}
+export interface IComments {
+  date: Date;
+  text: string;
+  user_id: string;
+}
+export interface IProjectDataType {
+  id: string;
+  name: string;
+  deadline: Date;
+  description: string;
+  stack: string[];
+  teamUids: string[];
+  comments: IComments[];
+  startDate: Date;
 }

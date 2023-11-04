@@ -6,8 +6,9 @@ import {
   signOut,
 } from "firebase/auth";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { auth } from "../config/firebase";
-import { IUserType } from "@/@types";
+import { auth, db } from "../config/firebase";
+import { IUserDataType, IUserType } from "@/@types";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 interface IAuthProvider {
   children: ReactNode;
@@ -15,6 +16,7 @@ interface IAuthProvider {
 
 interface AuthContextProps {
   user: IUserType;
+  activeUserData: IUserDataType | null;
   loading: boolean;
   signUp: (email: string, password: string) => Promise<UserCredential>;
   logIn: (email: string, password: string) => Promise<UserCredential>;
@@ -25,6 +27,7 @@ export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: IAuthProvider) => {
   const [user, setUser] = useState<IUserType>({ email: null, uid: null });
+  const [activeUserData, setActiveUserData] = useState<IUserDataType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const signUp = (email: string, password: string) => {
@@ -56,8 +59,33 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     return () => unsubscribe();
   }, []);
 
+  const getActiveUserData = async () => {
+    try {
+      let userData = null;
+      const q = query(collection(db, "usuários"), where("uid", "==", user.uid));
+
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach(doc => {
+        userData = doc.data();
+      });
+      return userData;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetcher = async () => {
+      setActiveUserData((await getActiveUserData()) as IUserDataType | null);
+    };
+    if (user) {
+      fetcher();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, logIn, logOut }}>
+    <AuthContext.Provider value={{ user, activeUserData, loading, signUp, logIn, logOut }}>
       {children}
     </AuthContext.Provider>
   );

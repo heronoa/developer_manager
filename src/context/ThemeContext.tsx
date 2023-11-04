@@ -1,21 +1,27 @@
-import { ReactNode, Dispatch, SetStateAction, createContext, useState } from "react";
+import {
+  ReactNode,
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useState,
+} from "react";
 
-interface IAuthProvider {
+interface IThemeProvider {
   children: ReactNode;
 }
 
-interface AuthContextProps {
+interface ThemeContextProps {
   theme: string;
   setTheme: Dispatch<SetStateAction<"dark" | "light">>;
 }
 
-export const ThemeContext = createContext({} as AuthContextProps);
+export const ThemeContext = createContext({} as ThemeContextProps);
 
-export const ThemeProvider = ({ children }: IAuthProvider) => {
+export const ThemeProvider = ({ children }: IThemeProvider) => {
   const [theme, setTheme] = useState<"dark" | "light">("light");
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme}} >
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
     </ThemeContext.Provider>
   );
