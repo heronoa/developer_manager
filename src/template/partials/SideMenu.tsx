@@ -44,7 +44,11 @@ const SideMenu = () => {
                       >
                         <Link
                           href={item?.path as string}
-                          className="underline-animation-event"
+                          className={
+                            router.asPath !== item.path
+                              ? "underline-animation-event"
+                              : ""
+                          }
                         >
                           {item?.displayName}
                         </Link>
