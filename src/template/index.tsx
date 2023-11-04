@@ -30,11 +30,11 @@ export const MainTemplate = ({ children }: Props) => {
   }
   return (
     <PrivatePage>
-      <div className={theme + " md:grid md:grid-rows-1 md:grid-cols-12"}>
-        <div className="md:col-start-1 md:col-end-3 hidden md:flex flex-col">
+      <div className={theme + " lg:grid lg:grid-rows-1 lg:grid-cols-12"}>
+        <div className="lg:col-start-1 lg:col-end-3 hidden lg:flex flex-col">
           <SideMenu />
         </div>
-        <div className="flex flex-col justify-center items-center min-h-[calc(100vh-80px)] col-start-0 md:col-start-3 col-end-13">
+        <div className="flex flex-col justify-center items-center min-h-[calc(100vh-80px)] col-start-0 lg:col-start-3 col-end-13">
           <Header />
           <div className="w-full items-center pt-12 flex min-h-[calc(100vh-100px)] flex-col">
             <div className={inter.className + " w-full"}>{children}</div>

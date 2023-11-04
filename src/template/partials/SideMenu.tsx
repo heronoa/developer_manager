@@ -10,7 +10,7 @@ const SideMenu = () => {
   return (
     <div
       id="main-side-menu"
-      className="bg-white h-screen w-full block mt-[100px] md:mt-0 shadow-lg"
+      className="bg-white h-screen w-full block mt-[100px] lg:mt-0 shadow-lg"
     >
       <CompanyLogo />
       <nav className={``}>
@@ -19,7 +19,7 @@ const SideMenu = () => {
             {navigationLinks.map((item, index) => (
               <li
                 key={index}
-                className="my-3 md:my-0 items-center mr-4 md:inline-block block w-full "
+                className="my-3 lg:my-0 items-center mr-4 lg:inline-block block w-full "
               >
                 {item.path ? (
                   <Link
@@ -40,7 +40,7 @@ const SideMenu = () => {
                           router.asPath === item.path
                             ? "bg-blue-800 text-white hover:!text-white p-2 pl-8 "
                             : " "
-                        }   rounded-[15px] w-[80%] p-2 pl-8 ml-4 my-1 md:my-0 items-center mr-4 md:inline-block block`}
+                        }   rounded-[15px] w-[80%] p-2 pl-8 ml-4 my-1 lg:my-0 items-center mr-4 lg:inline-block block`}
                       >
                         <Link
                           href={item?.path as string}
@@ -61,7 +61,7 @@ const SideMenu = () => {
           </>
         </ul>
       </nav>
-      <div className="block md:hidden ml-4">
+      <div className="block lg:hidden ml-4">
         <ThemeSwitch />
       </div>
     </div>

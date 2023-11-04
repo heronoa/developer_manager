@@ -30,13 +30,13 @@ const Header = () => {
     <>
       <header
         id="main-header"
-        className="flex flex-wrap container h-[100px] mx-auto max-w-full items-center p-6 justify-between bg-primary shadow-md top-0 z-50"
+        className="flex flex-wrap container h-[100px] mx-auto max-w-full items-center p-6 justify-between bg-primary shadow-lg top-0 z-50"
       >
         <div>
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <ThemeSwitch />
           </div>
-          <div className="block md:hidden" onClick={(() => setMobileMenuIsOpen(prevState => !prevState))}>
+          <div className="block lg:hidden" onClick={(() => setMobileMenuIsOpen(prevState => !prevState))}>
             <button className="flex items-center text-primary p-3">
               <svg
                 className="block h-6 w-6 fill-current"
