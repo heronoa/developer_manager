@@ -1,5 +1,5 @@
 import { useUsers } from "@/hooks/useUsers";
-import UserDataItem from "@/components/UI/PrimaryDataItem";
+import UserDataItem from "@/components/UI/Items/PrimaryDataItem";
 import { IFilterOptions } from "@/@types";
 import { useState } from "react";
 import FilterOptionsPanel from "@/components/UI/FilterOptionsPanel";

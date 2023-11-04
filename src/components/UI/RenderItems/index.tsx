@@ -1,5 +1,5 @@
 import { IFilterOptions, IProjectDataType, IUserDataType } from "@/@types";
-import PrimaryDataItem from "@/components/UI/PrimaryDataItem";
+import PrimaryDataItem from "@/components/UI/Items/PrimaryDataItem";
 import Loading from "@/components/UI/Loading";
 
 interface Props {

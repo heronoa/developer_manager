@@ -37,6 +37,9 @@ export const formatItem = (
           .join("/"),
       );
     }
+    if (key === "projects") {
+      return (value as string[])?.length;
+    }
   }
 
   if (typeof value === "string") {
@@ -74,12 +77,11 @@ export const translateItemKeys = (
 export const sortItemsData = (data: any) => {
   const dataCopy = JSON.parse(JSON.stringify(data));
   const dataEntries = Object.entries(dataCopy);
-  
+
   const name = dataEntries.filter(e => e[0] === "name");
   const others = dataEntries.filter(e => e[0] !== "name");
 
-  others.sort()
-
+  others.sort();
 
   return [...name, ...others];
 };
