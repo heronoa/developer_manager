@@ -15,7 +15,7 @@ const SlideOverLayer = ({ children }: Props) => (
     leaveFrom="translate-x-0"
     leaveTo="-translate-x-full"
   >
-    <div className="fixed inset-0 overflow-hidden">
+    <div className="fixed inset-0 overflow-hidden z-[1]">
       <div className="absolute inset-0 overflow-hidden">
         <div className="pointer-events-none fixed inset-y-0 left-0 flex max-w-full pr-10">
           <div className="pointer-events-auto w-screen max-w-2xl">

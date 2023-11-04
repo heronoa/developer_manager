@@ -17,6 +17,7 @@ const RenderItems = ({
   loading,
   error,
 }: Props) => {
+  let filteredData;
   if (loading) {
     return <Loading />;
   }
@@ -30,9 +31,10 @@ const RenderItems = ({
   }
   if (filterOptions) {
     Object.entries(filterOptions).forEach(([filterKey, filterValue]) => {
-      if (typeof filterValue === "string") {
-        arrayItems.filter(e => {
-          return e?.[filterKey]?.startsWith(filterValue);
+      if (typeof filterValue === "string" && filterValue !== "") {
+        console.log({filterKey, filterValue})
+        filteredData = arrayItems.filter(e => {
+          return e?.[filterKey]?.toLowerCase()?.startsWith(filterValue.toLowerCase());
         });
       }
       if ((filterValue as { ASC: boolean })?.ASC) {
@@ -42,7 +44,7 @@ const RenderItems = ({
   }
 
   if (arrayItems.length > 0) {
-    return arrayItems.map((itemData) => (
+    return (filteredData || arrayItems).map((itemData) => (
       <>
       {type === "users" && <UserDataItem key={(itemData as IUserDataType).uid} data={(itemData as IUserDataType)} />}
       </>

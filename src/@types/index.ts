@@ -120,7 +120,7 @@ type IFilterKeys =
 export type IFilterKeyOption = IFilterKeys;
 
 export type IFilterOptions = {
-  [key in IFilterKeyOption]?: string | { ASC: boolean };
+  [key in IFilterKeyOption | "age"]?: string | { ASC: boolean | null };
 };
 
 type IDataItems = IProjectDataType & IUserDataType;
