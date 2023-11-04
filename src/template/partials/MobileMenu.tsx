@@ -1,6 +1,6 @@
 import { Transition } from "@headlessui/react";
 import SideMenu from "./SideMenu";
-import { Dispatch, Fragment, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import BackgroundLayer from "@/components/UI/Animations/BackgroundLayer";
 import SlideOverLayer from "@/components/UI/Animations/SlideOverLayer";
 

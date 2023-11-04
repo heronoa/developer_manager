@@ -1,4 +1,4 @@
-import { INavLinks } from "@/@types";
+import { INavActions, INavLinks } from "@/@types";
 
 export const navigationLinks: INavLinks = [
   {
@@ -8,16 +8,18 @@ export const navigationLinks: INavLinks = [
   {
     displayName: "Detalhes",
     subpaths: [
-        { displayName: "Colaboradores", path: "/colaborators" },
-        { displayName: "Projetos", path: "/projects" },
-],
+      { displayName: "Colaboradores", path: "/colaborators" },
+      { displayName: "Projetos", path: "/projects" },
+    ],
   },
+];
+
+export const restrictedNav: INavActions = [
   {
     displayName: "Gerenciamento",
-    subpaths: [
-        { displayName: "Adicionar Colaborador", path: "/addcolaborator" },
-        { displayName: "Criar Projeto", path: "/createprojects" },
-],
+    subActions: [
+      { displayName: "Adicionar Colaborador", action: "addcolaborator" },
+      { displayName: "Criar Projeto", action: "createprojects" },
+    ],
   },
-
 ];

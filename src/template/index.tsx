@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, SetStateAction, useEffect, useState } from "react";
 
 import Header from "./partials/Header";
 import SideMenu from "./partials/SideMenu";
@@ -12,18 +12,25 @@ import PrivatePage from "@/components/Auth/PrivatePage";
 import { useRouter } from "next/router";
 import { publicRoutes } from "@/utils/constants";
 import { useAuth } from "@/hooks/useAuth";
-import {useTheme} from "@/hooks/useTheme";
+import { useTheme } from "@/hooks/useTheme";
+import Modal from "./partials/Modal";
+import { useModals } from "@/hooks/useModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const MainTemplate = ({ children }: Props) => {
   const router = useRouter();
   const { user } = useAuth();
-  const {theme, setTheme} = useTheme();
+  const { theme, setTheme } = useTheme();
+  const { modalContent } = useModals();
 
   if (publicRoutes.includes(router.pathname)) {
     return (
-      <div className={theme + " flex min-h-screen flex-col justify-center items-center"}>
+      <div
+        className={
+          theme + " flex min-h-screen flex-col justify-center items-center"
+        }
+      >
         <div className={inter.className}>{children}</div>
       </div>
     );
@@ -41,6 +48,11 @@ export const MainTemplate = ({ children }: Props) => {
           </div>
         </div>
       </div>
+      {modalContent && (
+        <Modal>
+          {modalContent()}
+        </Modal>
+      )}
     </PrivatePage>
   );
 };

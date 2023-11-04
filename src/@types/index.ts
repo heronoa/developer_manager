@@ -34,7 +34,19 @@ interface INavData {
   subpaths?: Omit<INavData, "subpaths">[];
 }
 
-export type INavLinks = RequireOnlyOne<INavData, "path" | "subpaths">[];
+interface INavActionsData {
+  displayName: string;
+  action?: string;
+  subActions?: Omit<INavActionsData, "subpaths">[];
+}
+
+export type INavLinksItem = RequireOnlyOne<INavData, "path" | "subpaths">;
+export type INavLinks = INavLinksItem[];
+export type INavActionsItem = RequireOnlyOne<
+  INavActionsData,
+  "action" | "subActions"
+>;
+export type INavActions = INavActionsItem[];
 
 export interface IImageHiperlink {
   id: string;

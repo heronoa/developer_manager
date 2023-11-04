@@ -12,6 +12,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ProjectsProvider } from "@/context/ProjectsContext";
 import { UsersProvider } from "@/context/UsersContext";
+import { ModalProvider } from "@/context/ModalContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -20,9 +21,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ProjectsProvider>
           <FetchProvider>
             <ThemeProvider>
-              <MainTemplate>
-                <Component {...pageProps} />
-              </MainTemplate>
+              <ModalProvider>
+                <MainTemplate>
+                  <Component {...pageProps} />
+                </MainTemplate>
+              </ModalProvider>
             </ThemeProvider>
           </FetchProvider>
         </ProjectsProvider>
