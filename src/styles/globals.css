@@ -26,7 +26,7 @@ body {
 
 .loading-circle {
   border: 10px solid transparent;
-  border-top: 10px solid #fff;
+  border-top: 10px solid rgb(30 58 138);
   animation: spin 1s linear infinite;
 
   @apply aspect-square h-[150px] rounded-full flex items-center justify-center m-auto
@@ -34,7 +34,7 @@ body {
 
 .loading-circle::after {
   content: "";
-  border: 2px solid #fff;
+  border: 2px solid rgb(30 58 138);
   border-top: 2px solid transparent;
   animation: spin 3s linear infinite;
 

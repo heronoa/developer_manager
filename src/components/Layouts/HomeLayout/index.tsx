@@ -1,9 +1,7 @@
-import { IFormFieldOptions, IFormFieldType, ILoginType } from "@/@types";
+import { IFormFieldType, ILoginType } from "@/@types";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import Image from "next/image";
+import React from "react";
 import AuthForm from "@/components/Auth/AuthForm";
 import CompanyLogo from "@/components/UI/CompanyLogo";
 
@@ -28,7 +26,7 @@ const HomeLayout = () => {
   const submitBtn = () => {
     if (userLoading) {
       return (
-        <div className="loading-circle !h-[30px] after:!h-[10px] !border-[6px]"></div>
+        <div className="loading-circle !h-[30px] after:!h-[10px] !border-[6px] !border-white !border-t-[transparent] after:hidden"></div>
       );
     }
     return "Submit";
@@ -36,7 +34,7 @@ const HomeLayout = () => {
 
   return (
     <div className="container mx-auto w-[300px] md:w-[380px] mt-12 border-2 border-gray-400">
-      <CompanyLogo className="justify-center"/>
+      <CompanyLogo className="justify-center" />
       <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900">
         Log In
       </h2>
