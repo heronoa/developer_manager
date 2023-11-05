@@ -3,7 +3,7 @@ import { Meta } from "@/layout/meta";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
-const LazyColaborators = dynamic(
+const LazyProjects = dynamic(
     () => import("@/components/Layouts/ProjectsLayout"),
     { suspense: true },
   );
@@ -15,7 +15,7 @@ const Projects = () => {
         title={"Gerenciamento Dev - Projetos"}
         description={"Veja todos os projetos da empresa aqui"}
       />
-      <LazyColaborators />
+      <LazyProjects />
     </Suspense>
   );
 };

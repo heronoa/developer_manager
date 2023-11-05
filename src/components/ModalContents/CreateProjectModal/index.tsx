@@ -1,15 +1,26 @@
 import { IFormFieldType } from "@/@types";
 import AuthForm from "@/components/Auth/AuthForm";
 import CompanyLogo from "@/components/UI/CompanyLogo";
+import Loading from "@/components/UI/Loading";
 import { useAuth } from "@/hooks/useAuth";
+import { useModals } from "@/hooks/useModal";
 import { useProjects } from "@/hooks/useProjects";
 import { Timestamp } from "firebase/firestore";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const CreateProjectModal = () => {
   const { loading: userLoading } = useAuth();
-  const { sendNewProject } = useProjects();
+  const {
+    sendNewProject,
+    loading: projectsLoading,
+    error: projectsError,
+  } = useProjects();
   const { activeUserData } = useAuth();
+  const { setModalIsOpen } = useModals();
+  const router = useRouter();
+  const [submitted, setSubmitted] = useState(false);
 
   const onSubmit = async (data: any) => {
     const newProject = JSON.parse(JSON.stringify(data));
@@ -25,8 +36,12 @@ const CreateProjectModal = () => {
     ];
     newProject.stack = ["reactjs", "nextjs", "node"];
     newProject.teamUids = [activeUserData?.uid];
-    console.log({ newProject });
-    sendNewProject(newProject);
+    setSubmitted(true);
+    await sendNewProject(newProject);
+    if (router.pathname !== "projects") {
+      router.push("/projects");
+    }
+    return setModalIsOpen(false);
   };
 
   const formFields: IFormFieldType = {
@@ -73,17 +88,36 @@ const CreateProjectModal = () => {
     return "Submit";
   };
 
-  return (
-    <div className="container mx-auto min-w-[300px] md:-w-[800px] w-[380px] lg:min-w-[1000px]">
-      <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900 dark:text-white">
-        Novo Projeto
-      </h2>
+  const renderFormContet = () => {
+    if (projectsLoading) return <Loading />;
+
+    if (submitted)
+      return (
+        <div className="flex flex-col h-full justify-center items-center mx-auto text-[26px]">
+          <div>
+            {projectsError ? projectsError : "Projeto Criado com Sucesso"}
+          </div>
+        </div>
+      );
+
+    return (
       <AuthForm
         className="grid grid-cols-3 gap-x-4"
         handleOnSubmit={onSubmit}
         submitBtn={submitBtn}
         formFields={formFields}
       />
+    );
+  };
+
+  return (
+    <div className="container mx-auto min-w-[300px] md:-w-[800px] w-[380px] lg:min-w-[1000px]">
+      <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900 dark:text-white">
+        Novo Projeto
+      </h2>
+      <div className="min-h-[60vh] flex justify-center items-center">
+        {renderFormContet()}
+      </div>
     </div>
   );
 };

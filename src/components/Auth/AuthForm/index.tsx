@@ -13,6 +13,7 @@ interface Props {
   handleOnSubmit: (data: IFormRegisterType) => Promise<void>;
   submitBtn: () => React.ReactNode | string;
   formFields: IFormFieldType;
+  disabled?: boolean;
 }
 
 const AuthForm = ({
@@ -20,6 +21,7 @@ const AuthForm = ({
   handleOnSubmit,
   submitBtn,
   formFields,
+  disabled=false
 }: Props) => {
   const methods = useForm<IFormRegisterType>({ mode: "onBlur" });
   const [error, setError] = useState<string | null>(null);
@@ -138,7 +140,7 @@ const AuthForm = ({
           </div>
         ))}
         <div className="flex justify-center pt-8 col-span-full first-letter:">
-          <button type="submit" className={`btn`}>
+          <button type="submit" className={`btn`} disabled={disabled}>
             <div className="capitalize text-white font-normal">
               {submitBtn()}
             </div>

@@ -27,18 +27,29 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   const [update, setUpdate] = useState<boolean>(false);
 
   const sendNewProject = async (newProject: IProjectDataType) => {
-    const docRef = await addDoc(collection(db, "projects"), newProject);
-    setUpdate(prevState => !prevState)
+    setLoading(true);
+    try {
+      const docRef = await addDoc(collection(db, "projects"), newProject);
+      setUpdate(prevState => !prevState);
+    } catch (error) {
+      console.error(error);
+      setError(error);
+    }
+    setLoading(false);
   };
 
   const getAllProjects = async () => {
-    const projectArray: IProjectDataType[] = [];
-    const querySnapshot = await getDocs(collection(db, "projects"));
-    querySnapshot.forEach(doc => {
-      projectArray.push(doc.data() as IProjectDataType);
-    });
-
-    return projectArray;
+    try {
+      const projectArray: IProjectDataType[] = [];
+      const querySnapshot = await getDocs(collection(db, "projects"));
+      querySnapshot.forEach(doc => {
+        projectArray.push(doc.data() as IProjectDataType);
+      });
+      return projectArray;
+    } catch (error) {
+      console.error(error);
+      setError(error);
+    }
   };
 
   useEffect(() => {
