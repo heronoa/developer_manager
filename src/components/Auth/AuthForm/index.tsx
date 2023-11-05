@@ -3,18 +3,24 @@ import {
   firebaseAuthErrorsHandler,
   formErrorsHandler,
 } from "@/services/errorHandler";
-import { IFormFieldType, IFormRegisterType, ILoginType } from "@/@types";
+import { IFormFieldType, IFormRegisterType } from "@/@types";
 import { useEffect, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { capitalize } from "@/services/format";
 
 interface Props {
+  className?: string;
   handleOnSubmit: (data: IFormRegisterType) => Promise<void>;
   submitBtn: () => React.ReactNode | string;
   formFields: IFormFieldType;
 }
 
-const AuthForm = ({ handleOnSubmit, submitBtn, formFields }: Props) => {
+const AuthForm = ({
+  className = "",
+  handleOnSubmit,
+  submitBtn,
+  formFields,
+}: Props) => {
   const methods = useForm<IFormRegisterType>({ mode: "onBlur" });
   const [error, setError] = useState<string | null>(null);
   const [hidePassword, setHidePassword] = useState<boolean>(true);
@@ -50,8 +56,8 @@ const AuthForm = ({ handleOnSubmit, submitBtn, formFields }: Props) => {
     <FormProvider {...methods}>
       <form
         action=""
-        className="w-full mx-auto pb-12 px-4"
-        onSubmit={handleSubmit(handleOnSubmit)}
+        className={`${className} w-full mx-auto px-4`}
+        onSubmit={handleSubmit(onSubmit)}
       >
         {error && (
           <div>
@@ -59,13 +65,13 @@ const AuthForm = ({ handleOnSubmit, submitBtn, formFields }: Props) => {
           </div>
         )}
         {Object.entries(formFields).map(([formName, formOptions], index) => (
-          <div key={index} className="mt-8">
+          <div key={index} className={`${formOptions.divClassName}  mt-8`}>
             <div className="flex items-center justify-between">
               <label
                 htmlFor=""
                 className={
                   formOptions?.labelClassName +
-                  " block mb-3 font-sans text-blue-900"
+                  " block mb-3 font-sans text-blue-900 dark:text-white"
                 }
               >
                 {formOptions?.fieldLabel || capitalize(formName)}
@@ -74,14 +80,28 @@ const AuthForm = ({ handleOnSubmit, submitBtn, formFields }: Props) => {
 
             <div className="relative">
               {hidePassword ? (
-                <input
-                  type={formOptions.fieldType}
-                  {...register(formName, formOptions)}
-                  className={
-                    formOptions?.inputClassName +
-                    ` border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`
-                  }
-                />
+                formOptions.fieldType === "textarea" ? (
+                  <textarea
+                    {...register(formName, formOptions)}
+                    className={
+                      formOptions?.inputClassName +
+                      ` border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`
+                    }
+                    defaultValue={formOptions.defaultValue}
+                    placeholder={formOptions.placeholder}
+                  />
+                ) : (
+                  <input
+                    type={formOptions.fieldType}
+                    {...register(formName, formOptions)}
+                    className={
+                      formOptions?.inputClassName +
+                      ` border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`
+                    }
+                    defaultValue={formOptions.defaultValue}
+                    placeholder={formOptions.placeholder}
+                  />
+                )
               ) : (
                 <input
                   type="text"
@@ -98,9 +118,9 @@ const AuthForm = ({ handleOnSubmit, submitBtn, formFields }: Props) => {
                   onClick={() => setHidePassword(prevState => !prevState)}
                 >
                   {hidePassword ? (
-                    <AiFillEye className="w-9 h-9 text-blue-900" />
+                    <AiFillEye className="w-9 h-9 text-blue-900 dark:text-white" />
                   ) : (
-                    <AiFillEyeInvisible className="w-9 h-9 text-blue-900" />
+                    <AiFillEyeInvisible className="w-9 h-9 text-blue-900 dark:text-white" />
                   )}
                 </div>
               )}
@@ -117,20 +137,12 @@ const AuthForm = ({ handleOnSubmit, submitBtn, formFields }: Props) => {
             )}
           </div>
         ))}
-        <div className="flex justify-center pt-8">
-          <button
-            type="submit"
-            className={`btn`}
-          >
+        <div className="flex justify-center pt-8 col-span-full first-letter:">
+          <button type="submit" className={`btn`}>
             <div className="capitalize text-white font-normal">
               {submitBtn()}
             </div>
           </button>
-        </div>
-        <div className="flex justify-center items-center mt-4">
-          <small className="text-center m-auto">
-            Em caso de perda das credenciais entre em contato com um gestor
-          </small>
         </div>
       </form>
     </FormProvider>

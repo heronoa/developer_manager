@@ -88,6 +88,9 @@ export type IFormFieldOptions = RegisterOptions & {
   labelClassName?: string;
   errorClassName?: string;
   inputClassName?: string;
+  divClassName?: string;
+  placeholder?: string;
+  defaultValue?: string;
 };
 
 export interface IFormFieldType {

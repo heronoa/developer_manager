@@ -42,7 +42,7 @@ const PrimaryDataItem = ({ data }: Props) => {
   };
 
   return (
-    <div className="flex w-[90%] shadow-2xl md:shadow-none md:border-t-0 md:border-x-0 md:rounded-none border border-grey-200 md:!border-b md:!border-b-gray-300 rounded-[15px] flex-col md:flex-row justify-between text-lg mx-auto md:hover:dark:bg-[#333333] md:hover:bg-gray-200 even:bg-gray-100">
+    <div className="flex w-[90%] shadow-2xl md:shadow-none md:border-t-0 md:border-x-0 md:rounded-none border border-grey-200 md:!border-b md:!border-b-gray-300 rounded-[15px] flex-col md:flex-row justify-between text-lg mx-auto md:hover:dark:bg-[#333333] md:hover:bg-gray-200 even:bg-gray-100 dark:even:bg-[#333333] ">
       {sortedData.map(([objKey, objValue], index) => {
         if (
           ["id", "uid", "comments", "description", "teamUids"].includes(objKey)
@@ -62,7 +62,10 @@ const PrimaryDataItem = ({ data }: Props) => {
               )}
               :
             </span>
-            {renderValue(objKey, objValue)}
+            {renderValue(
+              objKey as IFilterKeyOption | "age" | undefined,
+              objValue as IFormatItem,
+            )}
           </div>
         );
       })}
