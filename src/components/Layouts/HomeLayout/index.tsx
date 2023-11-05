@@ -19,8 +19,8 @@ const HomeLayout = () => {
   };
 
   const formFields: IFormFieldType = {
-    email: { required: "Email is required", fieldType: "email" },
-    password: { required: "Password is required", fieldType: "password" },
+    email: { required: "Email é necessário", fieldType: "email" },
+    password: { required: "Senha é necessário", fieldType: "password", fieldLabel: "Senha" },
   };
 
   const submitBtn = () => {
@@ -33,16 +33,21 @@ const HomeLayout = () => {
   };
 
   return (
-    <div className="container mx-auto w-[300px] md:w-[380px] mt-12 border-2 border-gray-400">
+    <div className="container mx-auto w-[300px] md:w-[380px] border-2 border-gray-400">
       <CompanyLogo className="justify-center" />
       <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900">
-        Log In
+        Login
       </h2>
       <AuthForm
         handleOnSubmit={onSubmit}
         submitBtn={submitBtn}
         formFields={formFields}
       />
+      <div className="flex justify-center items-center mt-4 mb-8">
+          <small className="text-center m-auto">
+            Em caso de perda das credenciais entre em contato com um gestor
+          </small>
+        </div>
     </div>
   );
 };
