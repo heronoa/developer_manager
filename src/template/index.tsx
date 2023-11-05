@@ -47,12 +47,12 @@ export const MainTemplate = ({ children }: Props) => {
             <div className={inter.className + " w-full"}>{children}</div>
           </div>
         </div>
-      </div>
       {modalContent && (
         <Modal>
           {modalContent()}
         </Modal>
       )}
+      </div>
     </PrivatePage>
   );
 };
