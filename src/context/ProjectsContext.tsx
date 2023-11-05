@@ -2,7 +2,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 
 import { fetcher, SWRCacheKeyGetters } from "../services/swr";
 import { db } from "@/config/firebase";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, addDoc } from "firebase/firestore";
 import { useAuth } from "@/hooks/useAuth";
 import { IProjectDataType } from "@/@types";
 
@@ -14,6 +14,7 @@ interface ProjectsContextProps {
   allProjects: IProjectDataType[];
   loading: boolean;
   error: any | undefined;
+  sendNewProject: (newProject: IProjectDataType) => Promise<void>;
 }
 
 export const ProjectsContext = createContext({} as ProjectsContextProps);
@@ -23,6 +24,12 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   const [allProjects, setAllProjects] = useState<any[]>([]);
   const [error, setError] = useState<any | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [update, setUpdate] = useState<boolean>(false);
+
+  const sendNewProject = async (newProject: IProjectDataType) => {
+    const docRef = await addDoc(collection(db, "projects"), newProject);
+    setUpdate(prevState => !prevState)
+  };
 
   const getAllProjects = async () => {
     const projectArray: IProjectDataType[] = [];
@@ -47,9 +54,11 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
     }
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, update]);
   return (
-    <ProjectsContext.Provider value={{ allProjects, error, loading }}>
+    <ProjectsContext.Provider
+      value={{ allProjects, error, loading, sendNewProject }}
+    >
       {children}
     </ProjectsContext.Provider>
   );
