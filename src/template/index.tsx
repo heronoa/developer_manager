@@ -15,13 +15,15 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/hooks/useTheme";
 import Modal from "./partials/Modal";
 import { useModals } from "@/hooks/useModal";
+import dynamic from "next/dynamic";
+
+const LazyModal = dynamic(() => import("./partials/Modal"), { suspense: true });
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const MainTemplate = ({ children }: Props) => {
   const router = useRouter();
-  const { user } = useAuth();
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
   const { modalContent } = useModals();
 
   if (publicRoutes.includes(router.pathname)) {
@@ -47,11 +49,7 @@ export const MainTemplate = ({ children }: Props) => {
             <div className={inter.className + " w-full"}>{children}</div>
           </div>
         </div>
-      {modalContent && (
-        <Modal>
-          {modalContent()}
-        </Modal>
-      )}
+        {modalContent && <LazyModal>{modalContent()}</LazyModal>}
       </div>
     </PrivatePage>
   );
