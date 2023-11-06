@@ -39,14 +39,14 @@ export const MainTemplate = ({ children }: Props) => {
   }
   return (
     <PrivatePage>
-      <div className={theme + " lg:grid lg:grid-rows-1 lg:grid-cols-12"}>
+      <div className={theme + " lg:grid lg:grid-rows-1 lg:grid-cols-12 overflow-hidden h-screen"}>
         <div className="lg:col-start-1 lg:col-end-3 hidden lg:flex flex-col">
           <SideMenu />
         </div>
-        <div className="flex flex-col justify-center items-center min-h-[calc(100vh-80px)] col-start-0 lg:col-start-3 col-end-13">
+        <div className="flex flex-col justify-center items-center h-[calc(100vh)] col-start-0 lg:col-start-3 col-end-13">
           <Header />
-          <div className="w-full items-center pt-12 flex min-h-[calc(100vh-100px)] flex-col">
-            <div className={inter.className + " w-full"}>{children}</div>
+          <div className="w-full items-center pt-12 flex min-h-[calc(100vh-100px)] flex-col h-auto overflow-scroll">
+            <div className={inter.className + " w-full l"}>{children}</div>
           </div>
         </div>
         {modalContent && <LazyModal>{modalContent()}</LazyModal>}
