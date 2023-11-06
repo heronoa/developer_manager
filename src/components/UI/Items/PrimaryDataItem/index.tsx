@@ -76,7 +76,7 @@ const PrimaryDataItem = ({ data, type }: Props) => {
           </div>
         );
       })}
-      <div className="absolute right-3 top-[30%]">
+      <div className="absolute right-3 md:top-[30%] bottom-[5%]">
         <Link
           href={`/${type}/${
             type === "colaborators" ? (data as any).uid : (data as any).id

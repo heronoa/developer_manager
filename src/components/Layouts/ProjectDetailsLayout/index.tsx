@@ -7,6 +7,8 @@ import { useState } from "react";
 import { AiOutlineProject } from "react-icons/ai";
 import { IoMdSend } from "react-icons/io";
 import { FaUserAlt } from "react-icons/fa";
+import { BiSolidLeftArrow } from "react-icons/bi";
+import Link from "next/link";
 
 interface Props {
   project?: IProjectDataType;
@@ -28,7 +30,12 @@ const ProjectDetailsLayout = ({ project }: Props) => {
     return <div className="dark:text-white">Projeto não encontrado</div>;
   }
   return (
-    <section className="flex justify-start gap-4 items-center flex-col px-12 shadow-lg min-h-[75vh] dark:text-white">
+    <section className="flex relative justify-start gap-4 items-center flex-col px-12 shadow-lg min-h-[75vh] dark:text-white">
+      <div className="text-black dark:text-white dark:bg-[#333333] w-16 h-16 flex justify-center items-center shadow-lg rounded-full p-4 absolute left-9">
+        <Link href={"/projects"}>
+          <BiSolidLeftArrow className="h-8 w-8" />
+        </Link>
+      </div>
       <div className="mx-12 shadow-lg p-12 rounded-lg flex flex-col md:flex-row justify-center items-center gap-4 w-full md:w-[80%]">
         <div>
           <AiOutlineProject className="h-24 w-24" />
@@ -48,9 +55,7 @@ const ProjectDetailsLayout = ({ project }: Props) => {
                       {translateItemKeys(objKey as any)}:
                     </span>
 
-                    {objKey === "birthday"
-                      ? formatItem(objValue, objKey as any)
-                      : JSON.stringify(objValue)}
+                    {formatItem(objValue, objKey as any)}
                   </div>
                 );
             })}

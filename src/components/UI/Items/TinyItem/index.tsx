@@ -1,5 +1,5 @@
 import { capitalize } from "@/services/format";
-import { possibleOccupations, possiblesStacks } from "@/utils/constants";
+import { defaultColor, possibleOccupations, possiblesStacks } from "@/utils/constants";
 
 interface Props {
   value: string;
@@ -10,8 +10,7 @@ const TinyItem = ({ value }: Props) => {
     possiblesStacks?.[capitalize(value) as keyof typeof possiblesStacks] ||
     possibleOccupations?.[
       value.toLocaleLowerCase() as keyof typeof possibleOccupations
-    ] ||
-    "#a40100";
+    ] || defaultColor;
 
   return (
     <div
