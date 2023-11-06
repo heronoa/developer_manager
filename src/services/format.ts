@@ -19,7 +19,12 @@ export const formatItem = (
   key?: IFilterKeyOption | "age",
 ): string | number | null => {
   if (key) {
-    if (key === "birthday" || key === "deadline" || key === "startDate") {
+    if (
+      key === "birthday" ||
+      key === "deadline" ||
+      key === "startDate" ||
+      key === "comments"
+    ) {
       return new Date((value as IDateObj)?.seconds * 1000)
         .toISOString()
         .split("T")[0]

@@ -44,14 +44,12 @@ const FilterOptionsPanel = ({ filterOptions, setFilterOptions }: Props) => {
             return null;
           }
           return (
-            <>
-              <div
-                key={index}
-                className=" border-r-gray-400 md:border-none md:border-r min-w-[150px] last:border-0 flex gap-2 justify-center items-center md:first:justify-start first:min-w-[200px] p-4 overflow-x-auto w-full"
-              >
-                {translateItemKeys(objKey as IFilterKeyOption | "age")}
-              </div>
-            </>
+            <div
+              key={index}
+              className=" border-r-gray-400 md:border-none md:border-r min-w-[150px] last:border-0 flex gap-2 justify-center items-center md:first:justify-start first:min-w-[200px] p-4 overflow-x-auto w-full"
+            >
+              {translateItemKeys(objKey as IFilterKeyOption | "age")}
+            </div>
           );
         })}
       </div>

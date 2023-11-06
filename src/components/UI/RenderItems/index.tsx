@@ -23,7 +23,7 @@ const RenderItems = ({
   if (error) {
     return (
       <div className="dark:text-white">
-        Sorry We have a Issues! Try Again Later
+        Estamos enfrentando problemas Técnicos! Tente novamente mais tarde
       </div>
     );
   }

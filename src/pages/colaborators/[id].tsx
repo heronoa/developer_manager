@@ -3,21 +3,21 @@ import { Meta } from "@/layout/meta";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
-const LazyColaborators = dynamic(
-    () => import("@/components/Layouts/ColaboratorsLayout"),
+const LazyColaboratorDetails = dynamic(
+    () => import("@/components/Layouts/ColaboratorDetailsLayout"),
     { suspense: true },
   );
 
-const Colaborators = () => {
+const ColaboratorDetails = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Meta
         title={"Gerenciamento Dev - ${nome}"}
         description={"Perfil do colaborador ${nome}"}
       />
-      <LazyColaborators />
+      <LazyColaboratorDetails />
     </Suspense>
   );
 };
 
-export default Colaborators
+export default ColaboratorDetails

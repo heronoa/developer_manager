@@ -109,7 +109,7 @@ export interface IDateObj {
   seconds: number;
   nanoseconds: number;
 }
-export interface IProjectDataType {
+export type IProjectDataType = {
   id: string;
   name: string;
   deadline: IDateObj;
@@ -130,7 +130,7 @@ export type IUserDataType = IUserType & {
 };
 
 type IFilterKeys =
-  | ObtainKeys<Omit<IProjectDataType, "id">, string | IDateObj | Array<string>>
+  | ObtainKeys<Omit<IProjectDataType, "id">, string | IDateObj | Array<string> | IComments[]>
   | ObtainKeys<
       Omit<IUserDataType, "uid">,
       string | IDateObj | Array<string> | null
