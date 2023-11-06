@@ -1,6 +1,6 @@
 export const AppConfig = {
-  site_name: "Democracia Beta",
-  title: "Democracia Beta",
-  description: "Politics App",
+  site_name: "Gerenciador Dev",
+  title: "Gerenciador Dev",
+  description: "App de gerenciamento dev",
   locale: "pt-br",
 };

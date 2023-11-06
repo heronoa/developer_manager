@@ -1,5 +1,6 @@
-export const exampleUrl = "https://jsonplaceholder.typicode.com";
 export const publicRoutes = ["/"];
+
+export const defaultColor = "#a40100"
 
 export const possiblesStacks = {
   Javascript: "#F7DF1E",

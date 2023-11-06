@@ -4,12 +4,12 @@ import { Dispatch, SetStateAction } from "react";
 import BackgroundLayer from "@/components/UI/Animations/BackgroundLayer";
 import SlideOverLayer from "@/components/UI/Animations/SlideOverLayer";
 
-interface Props2 {
+interface Props {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const MobileMenu = ({ isOpen }: Props2) => {
+const MobileMenu = ({ isOpen }: Props) => {
   return (
     <Transition.Root show={isOpen}>
       <BackgroundLayer />

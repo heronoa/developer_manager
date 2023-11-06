@@ -5,7 +5,6 @@ import "../styles/toggleSwitchStyles.css";
 
 import "regenerator-runtime/runtime.js";
 
-import { FetchProvider } from "@/context/FetchContext";
 import { MainTemplate } from "../template";
 import { AppProps } from "next/app";
 import { AuthProvider } from "@/context/AuthContext";
@@ -19,7 +18,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     <AuthProvider>
       <UsersProvider>
         <ProjectsProvider>
-          <FetchProvider>
             <ThemeProvider>
               <ModalProvider>
                 <MainTemplate>
@@ -27,7 +25,6 @@ function MyApp({ Component, pageProps }: AppProps) {
                 </MainTemplate>
               </ModalProvider>
             </ThemeProvider>
-          </FetchProvider>
         </ProjectsProvider>
       </UsersProvider>
     </AuthProvider>
