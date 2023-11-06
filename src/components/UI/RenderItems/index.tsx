@@ -3,6 +3,7 @@ import PrimaryDataItem from "@/components/UI/Items/PrimaryDataItem";
 import Loading from "@/components/UI/Loading";
 
 interface Props {
+  type: string;
   arrayItems: any[];
   filterOptions?: IFilterOptions;
   loading?: boolean;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 const RenderItems = ({
+  type,
   arrayItems,
   filterOptions,
   loading,
@@ -45,7 +47,8 @@ const RenderItems = ({
   if (arrayItems.length > 0) {
     return (filteredData || arrayItems).map(itemData => (
       <PrimaryDataItem
-        key={(itemData as any)?.uid || (itemData as any)?.id}
+        type={type}
+        key={type === "users" ? (itemData as any)?.uid : (itemData as any)?.id}
         data={itemData as any}
       />
     ));

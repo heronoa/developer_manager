@@ -31,12 +31,35 @@ const ProjectDetailsLayout = ({ project }: Props) => {
         <div>
           <h3>{project?.name}</h3>
           <div>{project?.description}</div>
+          <div className="flex gap-4 border-t-gray-300 border-t mt-4">
+            {Object.entries(project).map(([objKey, objValue], index) => {
+              if (["startDate", "deadline"].includes(objKey))
+                return (
+                  <div key={index}>
+                    <span className="font-semibold mr-2">
+                      {translateItemKeys(objKey as any)}:
+                    </span>
+
+                    {formatItem(objValue, objKey as any)}
+                  </div>
+                );
+            })}
+          </div>
         </div>
       </div>
       <div className="mx-12 shadow-lg p-12 rounded-lg flex flex-col justify-center items-center gap-4 w-[80%]">
-        <div className="grid grid-cols-2 justify-evenly gap-4">
+        <div className="grid grid-cols-2 justify-evenly gap-4 w-full">
           {Object.entries(project).map(([objKey, objValue], index) => {
-            if (["name", "description", "comments", "id"].includes(objKey))
+            if (
+              [
+                "name",
+                "description",
+                "comments",
+                "id",
+                "startDate",
+                "deadline",
+              ].includes(objKey)
+            )
               return null;
             if (["stack", "teamUids"].includes(objKey)) {
               return (

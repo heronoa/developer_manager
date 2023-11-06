@@ -26,11 +26,11 @@ export const formatItem = (
       key === "comments"
     ) {
       return new Date((value as IDateObj)?.seconds * 1000)
-        .toISOString()
-        .split("T")[0]
-        .split("-")
-        .reverse()
-        .join("/");
+        ?.toISOString()
+        ?.split("T")[0]
+        ?.split("-")
+        ?.reverse()
+        ?.join("/") || "";
     }
     if (key === "age") {
       return getAge(
@@ -75,6 +75,7 @@ export const translateItemKeys = (
       projects: "Projetos",
       birthday: "Data de Nascimento",
       age: "Idade",
+      comments: "Comentarios"
     }?.[itemKey] || undefined
   );
 };

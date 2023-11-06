@@ -36,7 +36,7 @@ const CreateProjectModal = () => {
       {
         user_id: activeUserData?.uid,
         text: `Projeto criado por ${activeUserData?.name}`,
-        data: Timestamp.fromDate(new Date()),
+        date: Timestamp.fromDate(new Date()),
       },
     ];
     newProject.stack = stack;

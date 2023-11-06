@@ -7,7 +7,6 @@ import { useState } from "react";
 const ProjectsLayout = () => {
   const { allProjects, error, loading } = useProjects();
 
-
   const [filterOptions, setFilterOptions] = useState<IFilterOptions>({
     name: "",
     deadline: { ASC: null },
@@ -28,6 +27,7 @@ const ProjectsLayout = () => {
         </div>
         <div className="w-full flex flex-col justify-center">
           <RenderItems
+            type={"projects"}
             arrayItems={allProjects}
             error={error}
             loading={loading}

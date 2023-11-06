@@ -16,9 +16,10 @@ import Link from "next/link";
 
 interface Props {
   data: IUserDataType | IProjectDataType;
+  type: string;
 }
 
-const PrimaryDataItem = ({ data }: Props) => {
+const PrimaryDataItem = ({ data, type }: Props) => {
   const sortedData = sortItemsData(data);
 
   const renderValue = (
@@ -76,7 +77,11 @@ const PrimaryDataItem = ({ data }: Props) => {
         );
       })}
       <div className="absolute right-3 top-[30%]">
-        <Link href={`/projects/${(data as any).uid || (data as any).id}`}>
+        <Link
+          href={`/projects/${
+            type === "users" ? (data as any).uid : (data as any).id
+          } `}
+        >
           <FcViewDetails className="w-[48px] h-[48px]" />
         </Link>
       </div>
