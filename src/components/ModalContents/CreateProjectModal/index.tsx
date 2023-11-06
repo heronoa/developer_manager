@@ -5,6 +5,7 @@ import Loading from "@/components/UI/Loading";
 import { useAuth } from "@/hooks/useAuth";
 import { useModals } from "@/hooks/useModal";
 import { useProjects } from "@/hooks/useProjects";
+import { useUsers } from "@/hooks/useUsers";
 import { Timestamp } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -16,7 +17,9 @@ const CreateProjectModal = () => {
     sendNewProject,
     loading: projectsLoading,
     error: projectsError,
+    setUpdate: setUpdateProjects,
   } = useProjects();
+  const { updateUsersProjects } = useUsers();
   const { activeUserData } = useAuth();
   const { setModalIsOpen } = useModals();
   const router = useRouter();
@@ -39,9 +42,15 @@ const CreateProjectModal = () => {
     newProject.stack = stack;
     newProject.teamUids = teamUids;
     setSubmitted(true);
-    await sendNewProject(newProject);
-    if (router.pathname !== "projects") {
-      router.push("/projects");
+    try {
+      await sendNewProject(newProject);
+      await updateUsersProjects(newProject);
+      if (router.pathname !== "projects") {
+        router.push("/projects");
+      }
+      setUpdateProjects(e => !e);
+    } catch (error) {
+      console.error(error);
     }
     return setModalIsOpen(false);
   };
@@ -109,7 +118,7 @@ const CreateProjectModal = () => {
         className="w-full flex justify-center items-start flex-col h-full md:items-start md:grid md:grid-cols-3 md:gap-x-4"
         handleOnSubmit={onSubmit}
         submitBtn={submitBtn}
-        formFields={formFields} 
+        formFields={formFields}
       />
     );
   };

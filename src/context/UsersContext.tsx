@@ -1,9 +1,23 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
 import { db } from "@/config/firebase";
-import { getDocs, collection } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  doc,
+  updateDoc,
+  where,
+  query,
+} from "firebase/firestore";
 import { useAuth } from "@/hooks/useAuth";
-import { IRestrictedDataType, IUserDataType } from "@/@types";
+import { IProjectDataType, IRestrictedDataType, IUserDataType } from "@/@types";
 
 interface IUsersProvider {
   children: ReactNode;
@@ -13,6 +27,8 @@ interface UsersContextProps {
   allUsers: IUserDataType[];
   loading: boolean;
   error: any | undefined;
+  updateUsersProjects: (newProject: IProjectDataType) => Promise<void>;
+  setUpdate: Dispatch<SetStateAction<boolean>>;
 }
 
 export const UsersContext = createContext({} as UsersContextProps);
@@ -22,6 +38,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   const [allUsers, setAllUsers] = useState<IUserDataType[]>([]);
   const [error, setError] = useState<any | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [update, setUpdate] = useState<boolean>(true);
   const [allRestrictedData, setAllRestrictedData] = useState<
     IRestrictedDataType[]
   >([]);
@@ -51,6 +68,34 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     }
   };
 
+  const updateUsersProjects = async (newProject: IProjectDataType) => {
+    // TODO: Atualizar usuarios adicionados no projeto novo
+    try {
+      for (let i = 0; i < newProject.teamUids.length; i++) {
+        const q = query(
+          collection(db, "usuários"),
+          where("uid", "==", newProject.teamUids[i]),
+        );
+        const querySnapshot = await getDocs(q);
+        const docId: string[] = [];
+        querySnapshot.forEach(e => docId.push(e.id));
+        const userRef = doc(db, "usuários", docId[0]);
+        const userData = allUsers.find(e => e.uid === newProject.teamUids[i]);
+        if (userData) {
+          const projectsCopy = JSON.parse(JSON.stringify(userData.projects));
+          projectsCopy.push(newProject.id);
+          console.log({ userData, newProject });
+          await updateDoc(userRef, {
+            projects: projectsCopy,
+          });
+        }
+      }
+      setUpdate(e => !e);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
     if (user && activeUserData) {
@@ -68,10 +113,12 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, activeUserData]);
+  }, [user, activeUserData, update]);
 
   return (
-    <UsersContext.Provider value={{ allUsers, loading, error }}>
+    <UsersContext.Provider
+      value={{ allUsers, loading, error, updateUsersProjects, setUpdate }}
+    >
       {children}
     </UsersContext.Provider>
   );

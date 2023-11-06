@@ -1,8 +1,18 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
-import { fetcher, SWRCacheKeyGetters } from "../services/swr";
 import { db } from "@/config/firebase";
-import { getDocs, collection, addDoc } from "firebase/firestore";
+import {
+  getDocs,
+  collection,
+  addDoc,
+} from "firebase/firestore";
 import { useAuth } from "@/hooks/useAuth";
 import { IProjectDataType } from "@/@types";
 
@@ -15,6 +25,7 @@ interface ProjectsContextProps {
   loading: boolean;
   error: any | undefined;
   sendNewProject: (newProject: IProjectDataType) => Promise<void>;
+  setUpdate: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ProjectsContext = createContext({} as ProjectsContextProps);
@@ -68,7 +79,7 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   }, [user, update]);
   return (
     <ProjectsContext.Provider
-      value={{ allProjects, error, loading, sendNewProject }}
+      value={{ allProjects, error, loading, sendNewProject, setUpdate }}
     >
       {children}
     </ProjectsContext.Provider>

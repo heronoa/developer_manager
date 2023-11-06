@@ -37,7 +37,7 @@ export const formatItem = (
           .join("/"),
       );
     }
-    if (key === "projects") {
+    if (key === "projects" || key === "teamUids") {
       return (value as string[])?.length;
     }
   }
@@ -63,7 +63,7 @@ export const translateItemKeys = (
       deadline: "Prazo",
       description: "Descrição",
       stack: "Tecnologias",
-      teamUids: "",
+      teamUids: "Time",
       startDate: "Data de Inicio",
       permissionLevel: "Nivel de Permissões",
       occupation: "Área de Atuação",

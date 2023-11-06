@@ -7,13 +7,13 @@ import { useState } from "react";
 const ProjectsLayout = () => {
   const { allProjects, error, loading } = useProjects();
 
-  console.log({ allProjects });
 
   const [filterOptions, setFilterOptions] = useState<IFilterOptions>({
     name: "",
     deadline: { ASC: null },
     stack: "",
     startDate: { ASC: null },
+    teamUids: { ASC: null },
   });
 
   return (
