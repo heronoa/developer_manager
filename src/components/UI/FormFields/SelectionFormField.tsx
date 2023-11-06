@@ -1,22 +1,43 @@
-import { possiblesStacks } from "@/utils/constants";
+import {
+  minimumOccupationsToProjects,
+  possiblesStacks,
+} from "@/utils/constants";
 import TinyItem from "../Items/TinyItem";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useUsers } from "@/hooks/useUsers";
 import { IUserDataType } from "@/@types";
 import PrimaryDataItem from "../Items/PrimaryDataItem";
+import { stringVerifier } from "@/services/errorHandler";
 
 interface Props {
   type: string;
   states?: [any | any[], Dispatch<SetStateAction<any | any[]>>];
+  setError: Dispatch<SetStateAction<string | null>>;
 }
 
-const SelectionFormField = ({ type, states }: Props) => {
+const SelectionFormField = ({ type, states, setError }: Props) => {
   const [searchStr, setSearchStr] = useState<string>("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<IUserDataType[]>([]);
   const [showSelection, setShowSelection] = useState<boolean>(false);
   const { allUsers } = useUsers();
+
+  useEffect(() => {
+    if (
+      !stringVerifier(
+        selectedUsers.flatMap(e => e.occupation),
+        minimumOccupationsToProjects,
+      )
+    ) {
+      return setError(
+        `Um projeto precisa ter no mínimo um ${minimumOccupationsToProjects.join(
+          " um ",
+        )}`,
+      );
+    }
+    setError(null);
+  }, [selectedUsers, setError, showSelection]);
 
   const renderInputBox = (type: string) => {
     if (type === "teamUids") {

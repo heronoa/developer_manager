@@ -37,13 +37,13 @@ const AuthForm = ({
     formState: { errors },
   } = methods;
 
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError(null);
-      }, 4000);
-    }
-  }, [error]);
+  // useEffect(() => {
+  //   if (error) {
+  //     setTimeout(() => {
+  //       setError(null);
+  //     }, 4000);
+  //   }
+  // }, [error]);
 
   const onSubmit = async (data: IFormRegisterType) => {
     const formError = formErrorsHandler(data.email, data.password);
@@ -67,6 +67,7 @@ const AuthForm = ({
         <SelectionFormField
           type={formName}
           states={formOptions?._formStates}
+          setError={setError}
         />
       );
     }
@@ -124,7 +125,7 @@ const AuthForm = ({
         onSubmit={handleSubmit(onSubmit)}
       >
         {error && (
-          <div>
+          <div className="absolute w-full">
             <small className="form-error absolute">{error}</small>
           </div>
         )}
@@ -155,8 +156,8 @@ const AuthForm = ({
             )}
           </div>
         ))}
-        <div className="flex justify-center pt-8 col-span-full first-letter:">
-          <button type="submit" className={`btn`} disabled={disabled}>
+        <div className="flex justify-center pt-8 col-span-full">
+          <button type="submit" className={`btn disabled:!bg-gray-400`} disabled={disabled || !!error}>
             <div className="capitalize text-white font-normal">
               {submitBtn()}
             </div>

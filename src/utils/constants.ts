@@ -51,3 +51,5 @@ export const possibleOccupations = {
   devops: "#FF9800",
   segurança: "#673AB7",
 };
+
+export const minimumOccupationsToProjects = ["gerente", "frontend", "backend"]
