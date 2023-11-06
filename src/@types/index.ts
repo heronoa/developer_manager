@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { RegisterOptions } from "react-hook-form";
 
 type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
@@ -82,6 +83,8 @@ export type IFormRegisterType = Partial<{
   ILoginType &
   SignupType;
 
+type formStatesAction = [any | any[], Dispatch<SetStateAction<any | any[]>>]
+
 export type IFormFieldOptions = RegisterOptions & {
   fieldType: string;
   fieldLabel?: string;
@@ -91,6 +94,7 @@ export type IFormFieldOptions = RegisterOptions & {
   divClassName?: string;
   placeholder?: string;
   defaultValue?: string;
+  _formStates?: formStatesAction;
 };
 
 export interface IFormFieldType {

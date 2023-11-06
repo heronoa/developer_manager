@@ -3,10 +3,11 @@ import {
   firebaseAuthErrorsHandler,
   formErrorsHandler,
 } from "@/services/errorHandler";
-import { IFormFieldType, IFormRegisterType } from "@/@types";
+import { IFormFieldOptions, IFormFieldType, IFormRegisterType } from "@/@types";
 import { useEffect, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { capitalize } from "@/services/format";
+import SelectionFormField from "@/components/UI/FormFields/SelectionFormField";
 
 interface Props {
   className?: string;
@@ -16,12 +17,15 @@ interface Props {
   disabled?: boolean;
 }
 
+const defaultInputClass =
+  "border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center";
+
 const AuthForm = ({
   className = "",
   handleOnSubmit,
   submitBtn,
   formFields,
-  disabled=false
+  disabled = false,
 }: Props) => {
   const methods = useForm<IFormRegisterType>({ mode: "onBlur" });
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +58,64 @@ const AuthForm = ({
     }
   };
 
+  const renderFormfield = (
+    formName: string,
+    formOptions: IFormFieldOptions,
+  ) => {
+    if (formOptions.fieldType === "selection") {
+      return (
+        <SelectionFormField
+          type={formName}
+          states={formOptions?._formStates}
+        />
+      );
+    }
+
+    if (formOptions.fieldType === "textarea") {
+      return (
+        <textarea
+          {...register(formName, formOptions)}
+          className={`${formOptions?.inputClassName || ""} 
+             ${defaultInputClass}`}
+        />
+      );
+    }
+
+    return (
+      <div className="relative">
+        {hidePassword ? (
+          <input
+            type={formOptions.fieldType}
+            {...register(formName, formOptions)}
+            className={`${formOptions?.inputClassName || ""}
+            ${defaultInputClass}`}
+            defaultValue={formOptions.defaultValue}
+            placeholder={formOptions.placeholder}
+          />
+        ) : (
+          <input
+            type="text"
+            {...register(formName, formOptions)}
+            className={`${formOptions?.inputClassName || ""}
+            ${defaultInputClass} `}
+          />
+        )}
+        {formOptions.fieldType === "password" && (
+          <div
+            className="absolute top-2 right-2"
+            onClick={() => setHidePassword(prevState => !prevState)}
+          >
+            {hidePassword ? (
+              <AiFillEye className="w-9 h-9 text-blue-900 dark:text-white" />
+            ) : (
+              <AiFillEyeInvisible className="w-9 h-9 text-blue-900 dark:text-white" />
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <FormProvider {...methods}>
       <form
@@ -80,53 +142,7 @@ const AuthForm = ({
               </label>
             </div>
 
-            <div className="relative">
-              {hidePassword ? (
-                formOptions.fieldType === "textarea" ? (
-                  <textarea
-                    {...register(formName, formOptions)}
-                    className={
-                      formOptions?.inputClassName +
-                      ` border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`
-                    }
-                    defaultValue={formOptions.defaultValue}
-                    placeholder={formOptions.placeholder}
-                  />
-                ) : (
-                  <input
-                    type={formOptions.fieldType}
-                    {...register(formName, formOptions)}
-                    className={
-                      formOptions?.inputClassName +
-                      ` border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`
-                    }
-                    defaultValue={formOptions.defaultValue}
-                    placeholder={formOptions.placeholder}
-                  />
-                )
-              ) : (
-                <input
-                  type="text"
-                  {...register(formName, formOptions)}
-                  className={
-                    formOptions?.inputClassName +
-                    ` border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`
-                  }
-                />
-              )}
-              {formOptions.fieldType === "password" && (
-                <div
-                  className="absolute top-2 right-2"
-                  onClick={() => setHidePassword(prevState => !prevState)}
-                >
-                  {hidePassword ? (
-                    <AiFillEye className="w-9 h-9 text-blue-900 dark:text-white" />
-                  ) : (
-                    <AiFillEyeInvisible className="w-9 h-9 text-blue-900 dark:text-white" />
-                  )}
-                </div>
-              )}
-            </div>
+            {renderFormfield(formName, formOptions)}
             {errors?.[formName] && (
               <p
                 className={

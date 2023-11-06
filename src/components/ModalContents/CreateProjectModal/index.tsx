@@ -21,6 +21,8 @@ const CreateProjectModal = () => {
   const { setModalIsOpen } = useModals();
   const router = useRouter();
   const [submitted, setSubmitted] = useState(false);
+  const [stack, setStack] = useState<string[]>([]);
+  const [teamUids, setTeamUids] = useState<string[]>([]);
 
   const onSubmit = async (data: any) => {
     const newProject = JSON.parse(JSON.stringify(data));
@@ -34,8 +36,8 @@ const CreateProjectModal = () => {
         data: Timestamp.fromDate(new Date()),
       },
     ];
-    newProject.stack = ["reactjs", "nextjs", "node"];
-    newProject.teamUids = [activeUserData?.uid];
+    newProject.stack = stack;
+    newProject.teamUids = teamUids;
     setSubmitted(true);
     await sendNewProject(newProject);
     if (router.pathname !== "projects") {
@@ -69,13 +71,15 @@ const CreateProjectModal = () => {
     },
     stack: {
       required: "Selecionar tecnologias",
-      fieldType: "select",
+      fieldType: "selection",
       fieldLabel: "Tecnologias",
+      _formStates: [stack, setStack],
     },
     teamUids: {
       required: "Time é necessario",
-      fieldType: "select",
+      fieldType: "selection",
       fieldLabel: "Time",
+      _formStates: [teamUids, setTeamUids],
     },
   };
 
