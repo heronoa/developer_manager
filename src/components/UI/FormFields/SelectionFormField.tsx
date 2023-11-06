@@ -3,12 +3,14 @@ import {
   possiblesStacks,
 } from "@/utils/constants";
 import TinyItem from "../Items/TinyItem";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
+import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 import { useUsers } from "@/hooks/useUsers";
 import { IUserDataType } from "@/@types";
 import PrimaryDataItem from "../Items/PrimaryDataItem";
 import { stringVerifier } from "@/services/errorHandler";
+import { Transition } from "@headlessui/react";
+import SlideOverLayer from "../Animations/SlideOverLayer";
 
 interface Props {
   type: string;
@@ -210,26 +212,42 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
   };
 
   return (
-    <div className="relative" onMouseLeave={() => setShowSelection(false)}>
-      {showSelection && (
-        <div className="absolute flex flex-col bg-gray-200 p-4 w-[100%] h-[400%] bottom-0 z-10 rounded-lg overflow-scroll">
-          <div className="h-8 relative flex justify-end mb-4">
-            <input
-              type="text"
-              value={searchStr}
-              onChange={evt => setSearchStr(evt.target.value)}
-              className="h-8 mb-2 pr-[40px] bg-transparent border-b border-b-blue-900 dark:border-b-white focus:outline-none"
-            />
-            <div className="absolute top-[20%] right-3 text-blue-900 dark:text-white">
-              <AiOutlineSearch className=" w-[24px] h-[24px] " />
+    <div className="relative min-w-[200px] w-full ">
+      <Transition.Root show={showSelection}>
+          <Transition.Child
+            as={Fragment}
+            enter="transition-all ease duration-500"
+            enterFrom={"h-0"}
+            enterTo={"h-[400%]"}
+            leave="transition-all ease duration-500"
+            leaveFrom={"h-[400%]"}
+            leaveTo={"h-0"}
+          >
+            <div className="absolute flex flex-col bg-gray-200 pt-12 p-4 w-full min-w-[200px] h-[400%] bottom-[-5px] overflow-x-hidden z-10 rounded-lg overflow-y-scroll">
+              <button
+                onClick={() => setShowSelection(false)}
+                className="absolute left-2 top-2 text-3xl text-black dark:text-white"
+              >
+                <AiOutlineClose />
+              </button>
+              <div className="h-8 relative flex justify-end mb-4">
+                <input
+                  type="text"
+                  value={searchStr}
+                  onChange={evt => setSearchStr(evt.target.value)}
+                  className="h-8 mb-2 pr-[40px] w-[150px] bg-transparent border-b border-b-blue-900 dark:border-b-white focus:outline-none"
+                />
+                <div className="absolute top-[20%] right-3 text-blue-900 dark:text-white">
+                  <AiOutlineSearch className=" w-[24px] h-[24px] " />
+                </div>
+              </div>
+              {renderItems(type)}
             </div>
-          </div>
-          {renderItems(type)}
-        </div>
-      )}
+          </Transition.Child>
+      </Transition.Root>
       <div
         onClick={() => setShowSelection(true)}
-        className="z-20 relative border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center overflow-hidden"
+        className={`${showSelection ? "z-20" : "" } cursor-pointer relative border border-solid bg-white rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center overflow-hidden`}
       >
         {renderInputBox(type)}
       </div>

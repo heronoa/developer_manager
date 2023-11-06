@@ -125,7 +125,7 @@ const AuthForm = ({
         onSubmit={handleSubmit(onSubmit)}
       >
         {error && (
-          <div className="absolute w-full">
+          <div className="hidden md:block absolute w-full">
             <small className="form-error absolute">{error}</small>
           </div>
         )}
@@ -148,7 +148,7 @@ const AuthForm = ({
               <p
                 className={
                   formOptions?.errorClassName +
-                  " text-red-400 absolute transition-all"
+                  " text-red-400 h-0 w-0 whitespace-nowrap transition-all"
                 }
               >
                 {errors?.[formName]?.message}

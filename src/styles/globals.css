@@ -21,7 +21,7 @@ body {
 }
 
 .btn {
-  @apply h-12 text-center w-2/3 bg-blue-900 border-2 rounded-md hover:shadow-lg hover:bg-blue-800 text-lg transition
+  @apply min-w-[200px] h-12 text-center md:w-2/3 bg-blue-900 border-2 rounded-md hover:shadow-lg hover:bg-blue-800 text-lg transition
 }
 
 .loading-circle {
@@ -68,9 +68,7 @@ body {
   @apply w-full
 }
 
-.btn {
-  @apply h-12 text-center w-2/3 bg-blue-900 border-2 rounded-md hover:shadow-lg hover:bg-blue-800 text-lg transition
-}
+
 
 
 

@@ -45,7 +45,7 @@ export const MainTemplate = ({ children }: Props) => {
         </div>
         <div className="flex flex-col justify-center items-center h-[calc(100vh)] col-start-0 lg:col-start-3 col-end-13">
           <Header />
-          <div className="w-full items-center pt-12 flex min-h-[calc(100vh-100px)] flex-col h-auto overflow-scroll">
+          <div className="w-full items-center pt-12 flex min-h-[calc(100vh-100px)] flex-col h-auto overflow-y-scroll">
             <div className={inter.className + " w-full l"}>{children}</div>
           </div>
         </div>

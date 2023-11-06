@@ -106,20 +106,20 @@ const CreateProjectModal = () => {
 
     return (
       <AuthForm
-        className="grid grid-cols-3 gap-x-4"
+        className="w-full flex justify-center items-start flex-col h-full md:items-start md:grid md:grid-cols-3 md:gap-x-4"
         handleOnSubmit={onSubmit}
         submitBtn={submitBtn}
-        formFields={formFields}
+        formFields={formFields} 
       />
     );
   };
 
   return (
-    <div className="container mx-auto min-w-[300px] md:-w-[800px] w-[380px] lg:min-w-[1000px]">
+    <div className="container mx-auto min-w-[250px] md:-w-[800px] w-[300px] lg:min-w-[1000px]">
       <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900 dark:text-white">
         Novo Projeto
       </h2>
-      <div className="min-h-[60vh] flex justify-center items-center">
+      <div className="max-h-[80vh] overflow-y-scroll md:overflow-y-auto md:min-h-[60vh] flex justify-center items-start">
         {renderFormContet()}
       </div>
     </div>
