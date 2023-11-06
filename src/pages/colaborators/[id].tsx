@@ -1,6 +1,8 @@
 import Loading from "@/components/UI/Loading";
+import { useUsers } from "@/hooks/useUsers";
 import { Meta } from "@/layout/meta";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { Suspense } from "react";
 
 const LazyColaboratorDetails = dynamic(
@@ -9,13 +11,18 @@ const LazyColaboratorDetails = dynamic(
   );
 
 const ColaboratorDetails = () => {
+  const router = useRouter();
+  const slug = router.query.id;
+  const { allUsers } = useUsers();
+  const selectedUser = allUsers.find(e => e.uid === slug);
+
   return (
     <Suspense fallback={<Loading />}>
       <Meta
-        title={"Gerenciamento Dev - ${nome}"}
-        description={"Perfil do colaborador ${nome}"}
+        title={`Gerenciamento Dev - ${selectedUser?.name}`}
+        description={`Perfil do colaborador ${selectedUser?.name}`}
       />
-      <LazyColaboratorDetails />
+      <LazyColaboratorDetails user={selectedUser} />
     </Suspense>
   );
 };

@@ -78,8 +78,8 @@ const PrimaryDataItem = ({ data, type }: Props) => {
       })}
       <div className="absolute right-3 top-[30%]">
         <Link
-          href={`/projects/${
-            type === "users" ? (data as any).uid : (data as any).id
+          href={`/${type}/${
+            type === "colaborators" ? (data as any).uid : (data as any).id
           } `}
         >
           <FcViewDetails className="w-[48px] h-[48px]" />

@@ -22,10 +22,14 @@ const ColaboratorsLayout = () => {
       <h3>Colaboradores</h3>
       <div className="w-full flex flex-col justify-center mt-12">
         <div className="">
-          <FilterOptionsPanel filterOptions={filterOptions} setFilterOptions={setFilterOptions} />
+          <FilterOptionsPanel
+            filterOptions={filterOptions}
+            setFilterOptions={setFilterOptions}
+          />
         </div>
         <div className="w-full flex flex-col justify-center">
           <RenderItems
+            type={"colaborators"}
             arrayItems={allUsers}
             error={error}
             loading={loading}

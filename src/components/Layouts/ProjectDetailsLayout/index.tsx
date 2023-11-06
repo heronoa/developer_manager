@@ -48,7 +48,9 @@ const ProjectDetailsLayout = ({ project }: Props) => {
                       {translateItemKeys(objKey as any)}:
                     </span>
 
-                    {formatItem(objValue, objKey as any)}
+                    {objKey === "birthday"
+                      ? formatItem(objValue, objKey as any)
+                      : JSON.stringify(objValue)}
                   </div>
                 );
             })}
