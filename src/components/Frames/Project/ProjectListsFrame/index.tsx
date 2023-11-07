@@ -3,6 +3,7 @@ import EdittableListItems from "@/components/UI/Items/EdittableListItems";
 import { useAuth } from "@/hooks/useAuth";
 import { useProjects } from "@/hooks/useProjects";
 import { useUsers } from "@/hooks/useUsers";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 interface Props {
@@ -11,14 +12,20 @@ interface Props {
 
 const ProjectListsFrame = ({ project }: Props) => {
   const { activeUserData } = useAuth();
+  const router = useRouter();
 
-  const { updateProjects } = useProjects();
+  const { updateProjects, deleteProject } = useProjects();
   const { removingUsersProjects, updateUsersProjects } = useUsers();
 
   const stack = useState<string[]>();
   const teamUids = useState<string[]>();
 
   const edittables = { stack, teamUids };
+
+  const onDeleteProject = async () => {
+    await deleteProject(project.id);
+    router.push("/projects");
+  };
 
   const submitEdittable = (key: keyof IProjectDataType) => async () => {
     const oldObj = JSON.parse(JSON.stringify(project));
@@ -28,7 +35,6 @@ const ProjectListsFrame = ({ project }: Props) => {
     );
     await updateProjects(obj);
     if (key === "teamUids") {
-
       oldObj.teamUids = oldObj.teamUids.filter(
         (e: any) => !obj[key].includes(e),
       );
@@ -62,7 +68,10 @@ const ProjectListsFrame = ({ project }: Props) => {
         })}
       </div>
       {parseInt(activeUserData?.permissionLevel || "0") > 1 && (
-        <div className="flex w-full justify-end mt-4 border-t-gray-300 border-t pt-4">
+        <div
+          onClick={onDeleteProject}
+          className="flex w-full justify-end mt-4 border-t-gray-300 border-t pt-4"
+        >
           <button className="btn !max-w-[200px] text-white !bg-red-600 hover:!bg-red-800">
             Delete
           </button>

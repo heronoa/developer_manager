@@ -34,19 +34,19 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
       }
     }
 
-    if (
-      type === "teamUids" &&
-      !stringVerifier(
-        states[0].flatMap((e: any) => e.occupation),
-        minimumOccupationsToProjects,
-      )
-    ) {
-      return setError(
-        `Um projeto precisa ter no mínimo um ${minimumOccupationsToProjects.join(
-          " um ",
-        )}`,
-      );
-    }
+    // if (
+    //   type === "teamUids" &&
+    //   !stringVerifier(
+    //     states[0].flatMap((e: any) => e.occupation),
+    //     minimumOccupationsToProjects,
+    //   )
+    // ) {
+    //   return setError(
+    //     `Um projeto precisa ter no mínimo um ${minimumOccupationsToProjects.join(
+    //       " um ",
+    //     )}`,
+    //   );
+    // }
     setError(null);
   }, [setError, showSelection, states, type]);
 

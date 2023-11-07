@@ -16,6 +16,7 @@ import {
   where,
   doc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { useAuth } from "@/hooks/useAuth";
 import { IProjectDataType } from "@/@types";
@@ -30,6 +31,7 @@ interface ProjectsContextProps {
   error: any | undefined;
   sendNewProject: (newProject: IProjectDataType) => Promise<void>;
   updateProjects: (projectPart: Partial<IProjectDataType>) => Promise<void>;
+  deleteProject: (id: string) => Promise<void>;
   setUpdate: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -59,6 +61,17 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
         console.error(error);
       }
     }
+  };
+
+  const deleteProject = async (id: string) => {
+    const q = query(collection(db, "projects"), where("id", "==", id));
+    const docId: any[] = [];
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(doc => docId.push(doc.id));
+    // await deleteDoc(doc(db, "cities", "DC"));
+    await deleteDoc(doc(db, "projects", docId[0]));
+    setUpdate(e => !e);
+
   };
 
   const sendNewProject = async (newProject: IProjectDataType) => {
@@ -110,6 +123,7 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
         sendNewProject,
         setUpdate,
         updateProjects,
+        deleteProject,
       }}
     >
       {children}
