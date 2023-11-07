@@ -35,7 +35,7 @@ const PrimaryDataItem = ({ data, type }: Props) => {
 
     if (Array.isArray(objValue)) {
       return (
-        <div className="grid grid-rows-2 grid-flow-col gap-2">
+        <div className="grid grid-cols-2 grid-flow-row gap-2 ">
           {objValue.map((value, index) => (
             <div key={index} className="w-full">
               <TinyItem value={value as string} />
@@ -59,7 +59,7 @@ const PrimaryDataItem = ({ data, type }: Props) => {
             key={`${
               (data as any)?.uid || (data as any)?.id
             }-${objKey}-${index}`}
-            className=" border-r-gray-400 md:border-none md:border-r min-w-[150px] last:border-0 flex gap-2 justify-center items-center md:first:justify-start first:min-w-[200px] p-4 overflow-x-hidden overflow-ellipsis w-full"
+            className={`${["stack"].includes(objKey) ? "hidden md:flex" : "flex"  } border-r-gray-400 md:border-none md:border-r min-w-[150px] last:border-0 gap-2 justify-center items-center md:first:justify-start first:min-w-[200px] p-4 overflow-x-hidden overflow-ellipsis w-full`}
           >
             <span className="font-semibold md:hidden">
               {translateItemKeys(

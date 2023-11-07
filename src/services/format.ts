@@ -26,7 +26,6 @@ export const formatItem = (
       key === "startDate" ||
       key === "comments"
     ) {
-      console.log({key, value})
       return new Date((value as IDateObj)?.seconds * 1000)
         ?.toISOString()
         ?.split("T")[0]

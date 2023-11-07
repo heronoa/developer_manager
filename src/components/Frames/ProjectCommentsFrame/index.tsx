@@ -1,5 +1,8 @@
 import { IComments, IProjectDataType } from "@/@types";
+import { useAuth } from "@/hooks/useAuth";
+import { useProjects } from "@/hooks/useProjects";
 import { formatItem } from "@/services/format";
+import { Timestamp } from "firebase/firestore";
 import { useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
@@ -9,10 +12,27 @@ interface Props {
 }
 
 const ProjectCommentsFrame = ({ project }: Props) => {
+  const { updateProjects } = useProjects();
+  const { user } = useAuth();
   const [text, setText] = useState<string>("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const sendComment = (txt: string) => {
-    console.log(text);
+  const sendComment = async (e: React.FormEvent<HTMLFormElement>) => {
+    try {
+      e.preventDefault();
+      setSubmitting(true);
+      const commentsCopy = JSON.parse(JSON.stringify(project.comments));
+      const newComments: IComments[] = [
+        ...commentsCopy,
+        { user_id: user.uid, date: Timestamp.now(), text },
+      ];
+      await updateProjects({ id: project.id, comments: newComments });
+      console.log({ comments: newComments });
+    } catch (err: any) {
+      console.error(err);
+    } finally {
+      setTimeout(() => setSubmitting(false), 1000);
+    }
   };
 
   return (
@@ -29,16 +49,30 @@ const ProjectCommentsFrame = ({ project }: Props) => {
         </div>
       ))}
       <div className="w-full relative mt-12">
-        <input
-          value={text}
-          onChange={evt => setText(evt.target.value)}
-          className="w-full h-[32px] text-[20px] bg-transparent border-b border-b-blue-900 dark:border-b-white focus:outline-none"
-          placeholder="Deixe seu comentário"
-        />
-        <IoMdSend
-          className="absolute top-[0%] cursor-pointer right-3 w-8 h-8 text-blue-900"
-          onClick={() => sendComment(text)}
-        />
+        <form onSubmit={sendComment}>
+          <input
+            type="text"
+            value={text}
+            onChange={evt => setText(evt.target.value)}
+            className="w-full h-[32px] text-[20px] bg-transparent border-b border-b-blue-900 dark:border-b-white focus:outline-none"
+            placeholder="Deixe seu comentário"
+          />
+
+          <button
+            type="submit"
+            className="absolute top-[0%] right-3 w-8 h-8"
+            disabled={submitting}
+          >
+            {submitting ? (
+              <div className="loading-circle !w-8 !h-8 after:hidden"></div>
+            ) : (
+              <IoMdSend
+                onClick={sendComment}
+                className="  cursor-pointer w-8 h-8 text-blue-900"
+              />
+            )}
+          </button>
+        </form>
       </div>
     </div>
   );

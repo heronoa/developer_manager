@@ -12,6 +12,10 @@ import {
   getDocs,
   collection,
   addDoc,
+  query,
+  where,
+  doc,
+  updateDoc,
 } from "firebase/firestore";
 import { useAuth } from "@/hooks/useAuth";
 import { IProjectDataType } from "@/@types";
@@ -25,6 +29,7 @@ interface ProjectsContextProps {
   loading: boolean;
   error: any | undefined;
   sendNewProject: (newProject: IProjectDataType) => Promise<void>;
+  updateProjects: (projectPart: Partial<IProjectDataType>) => Promise<void>;
   setUpdate: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -37,10 +42,30 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [update, setUpdate] = useState<boolean>(false);
 
+  const updateProjects = async (projectPart: Partial<IProjectDataType>) => {
+    try {
+      const q = query(
+        collection(db, "projects"),
+        where("id", "==", projectPart.id),
+      );
+      const querySnapshot = await getDocs(q);
+      const docId: string[] = [];
+      querySnapshot.forEach(e => docId.push(e.id));
+      console.log({ docId });
+      const projectRef = doc(db, "projects", docId[0]);
+
+      console.log({ projectPart });
+      await updateDoc(projectRef, projectPart);
+      setUpdate(e => !e);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const sendNewProject = async (newProject: IProjectDataType) => {
     setLoading(true);
     try {
-      const docRef = await addDoc(collection(db, "projects"), newProject);
+      await addDoc(collection(db, "projects"), newProject);
       setUpdate(prevState => !prevState);
     } catch (error) {
       console.error(error);
@@ -79,7 +104,14 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   }, [user, update]);
   return (
     <ProjectsContext.Provider
-      value={{ allProjects, error, loading, sendNewProject, setUpdate }}
+      value={{
+        allProjects,
+        error,
+        loading,
+        sendNewProject,
+        setUpdate,
+        updateProjects,
+      }}
     >
       {children}
     </ProjectsContext.Provider>
