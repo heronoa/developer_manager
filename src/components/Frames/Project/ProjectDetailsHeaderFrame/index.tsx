@@ -30,7 +30,6 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
   const submitEdittable = async (key: keyof IProjectDataType) => {
     const obj: any = { id: project.id };
     obj[key] = edittables[key];
-    console.log(obj);
     await updateProjects(obj);
     handleChangeEdittables(key, undefined)
   };

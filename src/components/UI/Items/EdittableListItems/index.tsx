@@ -21,11 +21,6 @@ const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
   const [objKey, objValue] = objEntries;
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    console.log({ state, objValue });
-  }, [state]);
-  console.log({ objEntries });
-
   return (
     <div>
       <span className="font-semibold mr-2 relative text-[20px]">
@@ -48,7 +43,8 @@ const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
             <GiConfirmed
               className="w-8 h-8 cursor-pointer"
               onClick={() => {
-                if (!error) submit();
+                if (!error)
+                 submit();
               }}
             />
             <ImCancelCircle
@@ -65,7 +61,6 @@ const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
             let value: string | IUserDataType = e;
             if (objKey === "teamUids") {
               value = findUser(e) || e;
-              console.log({ value });
             }
             if (typeof value === "string") {
               return <TinyItem key={index} value={value} />;

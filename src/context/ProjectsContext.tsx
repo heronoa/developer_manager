@@ -52,10 +52,7 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
         const querySnapshot = await getDocs(q);
         const docId: string[] = [];
         querySnapshot.forEach(e => docId.push(e.id));
-        console.log({ docId });
         const projectRef = doc(db, "projects", docId[0]);
-
-        console.log({ projectPart });
         await updateDoc(projectRef, projectPart);
         setUpdate(e => !e);
       } catch (error) {

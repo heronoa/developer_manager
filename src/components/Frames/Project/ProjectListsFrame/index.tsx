@@ -13,6 +13,7 @@ const ProjectListsFrame = ({ project }: Props) => {
   const { activeUserData } = useAuth();
 
   const { updateProjects } = useProjects();
+  const { removingUsersProjects, updateUsersProjects } = useUsers();
 
   const stack = useState<string[]>();
   const teamUids = useState<string[]>();
@@ -20,12 +21,25 @@ const ProjectListsFrame = ({ project }: Props) => {
   const edittables = { stack, teamUids };
 
   const submitEdittable = (key: keyof IProjectDataType) => async () => {
+    const oldObj = JSON.parse(JSON.stringify(project));
     const obj: any = { id: project.id };
     obj[key] = edittables[key as "stack" | "teamUids"][0]?.map(
       (e: any) => e?.uid || e,
     );
-    console.log(obj);
     await updateProjects(obj);
+    if (key === "teamUids") {
+
+      oldObj.teamUids = oldObj.teamUids.filter(
+        (e: any) => !obj[key].includes(e),
+      );
+      // colaboradores removidos
+      obj.teamUids = obj.teamUids.filter(
+        (e: any) => !oldObj.teamUids.includes(e),
+      );
+      // colaboradores adicionados
+      await removingUsersProjects(oldObj);
+      await updateUsersProjects(obj);
+    }
     edittables[key as "stack" | "teamUids"][1](undefined);
   };
 
