@@ -1,4 +1,4 @@
-import { IDateObj, IProjectDataType } from "@/@types";
+import { IDateObj, IProjectDataType, IUserDataType } from "@/@types";
 import EdittableListItems from "@/components/UI/Items/EdittableListItems";
 import { useAuth } from "@/hooks/useAuth";
 import { useProjects } from "@/hooks/useProjects";
@@ -14,17 +14,19 @@ const ProjectListsFrame = ({ project }: Props) => {
 
   const { updateProjects } = useProjects();
 
-  const [stack, setStack] = useState<string[]>();
-  const [teamUids, setTeamUids] = useState<string[]>();
+  const stack = useState<string[]>();
+  const teamUids = useState<string[]>();
 
-  const [edittables, setEdittables] = useState({ stack, teamUids });
+  const edittables = { stack, teamUids };
 
-  const submitEdittable = async (key: keyof IProjectDataType) => {
+  const submitEdittable = (key: keyof IProjectDataType) => async () => {
     const obj: any = { id: project.id };
-    obj[key] = edittables[key as "stack" | "teamUids"];
+    obj[key] = edittables[key as "stack" | "teamUids"][0]?.map(
+      (e: any) => e?.uid || e,
+    );
     console.log(obj);
-    // await updateProjects(obj);
-    // handleChangeEdittables(key, undefined);
+    await updateProjects(obj);
+    edittables[key as "stack" | "teamUids"][1](undefined);
   };
 
   return (
@@ -34,21 +36,13 @@ const ProjectListsFrame = ({ project }: Props) => {
           teamUids: project.teamUids,
           stack: project.stack,
         }).map((objEntries, index) => {
-          if (objEntries[0] === "stack")
-            return (
-              <EdittableListItems
-                key={index}
-                state={stack}
-                setState={setStack}
-                objEntries={objEntries}
-              />
-            );
           return (
             <EdittableListItems
               key={index}
-              state={teamUids}
-              setState={setTeamUids}
+              state={edittables[objEntries[0] as "stack" | "teamUids"][0]}
+              setState={edittables[objEntries[0] as "stack" | "teamUids"][1]}
               objEntries={objEntries}
+              submit={submitEdittable(objEntries[0] as "stack" | "teamUids")}
             />
           );
         })}

@@ -1,8 +1,8 @@
 import { IProjectDataType } from "@/@types";
-import ProjectDetailsHeaderFrame from "@/components/Frames/ProjectDetailsHeaderFrame";
+import ProjectDetailsHeaderFrame from "@/components/Frames/Project/ProjectDetailsHeaderFrame";
 import BackButton from "@/components/UI/BackButton";
-import ProjectListsFrame from "@/components/Frames/ProjectListsFrame";
-import ProjectCommentsFrame from "../../Frames/ProjectCommentsFrame";
+import ProjectListsFrame from "@/components/Frames/Project/ProjectListsFrame";
+import ProjectCommentsFrame from "../../Frames/Project/ProjectCommentsFrame";
 
 interface Props {
   project?: IProjectDataType;

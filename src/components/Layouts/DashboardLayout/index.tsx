@@ -1,5 +1,5 @@
-import ColaboratorsChartsFrame from "@/components/Frames/ColaboratorsChartFrame";
-import MainNumbersFrame from "@/components/Frames/MainNumbersFrame";
+import ColaboratorsChartsFrame from "@/components/Frames/Dashboard/ColaboratorsChartFrame";
+import MainNumbersFrame from "@/components/Frames/Dashboard/MainNumbersFrame";
 
 const DashboardLayout = () => {
 

@@ -166,7 +166,7 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
                 return (
                   (searchStr !== ""
                     ? item.toLowerCase().startsWith(searchStr)
-                    : true) && !states[0].includes(item)
+                    : true) && !(states[0] as string[]).includes(item)
                 );
               })
               .map((e, index) => (
@@ -203,6 +203,8 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
     uid: string;
     occupation: string[];
   }) => {
+    console.log({ element });
+
     states[1]((prevState: any) => {
       const newState = JSON.parse(JSON.stringify(prevState));
       const index = newState.map((e: any) => e.uid).indexOf(element.uid);

@@ -1,7 +1,7 @@
 import { IUserDataType } from "@/@types";
-import ColaboratorDetailsHeaderFrame from "@/components/Frames/ColaboratorDetailsHeaderFrame";
-import ColaboratorListsFrame from "@/components/Frames/ColaboratorListsFrama";
-import ColaboratorRestrictedFrame from "@/components/Frames/ColaboratorRestrictedFrame";
+import ColaboratorDetailsHeaderFrame from "@/components/Frames/Colaborator/ColaboratorDetailsHeaderFrame";
+import ColaboratorListsFrame from "@/components/Frames/Colaborator/ColaboratorListsFrama";
+import ColaboratorRestrictedFrame from "@/components/Frames/Colaborator/ColaboratorRestrictedFrame";
 import BackButton from "@/components/UI/BackButton";
 import { useAuth } from "@/hooks/useAuth";
 

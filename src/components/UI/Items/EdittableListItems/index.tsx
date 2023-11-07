@@ -12,9 +12,10 @@ interface Props {
   state: any | any[];
   setState: Dispatch<SetStateAction<any | any[]>>;
   objEntries: [string, string[]];
+  submit: () => Promise<void>;
 }
 
-const EdittableListItems = ({ state, setState, objEntries }: Props) => {
+const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
   const { findUser } = useUsers();
 
   const [objKey, objValue] = objEntries;
@@ -46,7 +47,9 @@ const EdittableListItems = ({ state, setState, objEntries }: Props) => {
           <div className="absolute flex -top-1 gap-2 -right-20 ">
             <GiConfirmed
               className="w-8 h-8 cursor-pointer"
-              //   onClick={() => submitEdittable("name")}
+              onClick={() => {
+                if (!error) submit();
+              }}
             />
             <ImCancelCircle
               className="w-8 h-8 cursor-pointer"
@@ -87,7 +90,7 @@ const EdittableListItems = ({ state, setState, objEntries }: Props) => {
           setError={setError}
         />
       )}
-      {error && <div>{error}</div>}
+      {error && state && <div>{error}</div>}
     </div>
   );
 };

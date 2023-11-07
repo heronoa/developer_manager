@@ -98,7 +98,7 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
                   onClick={() => submitEdittable("description")}
                 />
                 <ImCancelCircle
-                  className="w-8 h-8cursor-pointer"
+                  className="w-8 h-8 cursor-pointer"
                   onClick={() =>
                     handleChangeEdittables("description", undefined)
                   }
