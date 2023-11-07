@@ -47,6 +47,9 @@ export const formatItem = (
     if (key === "projects" || key === "teamUids") {
       return (value as string[])?.length.toString();
     }
+    if (key === "cpf") {
+      return formatCPF(value as string);
+    }
   }
 
   if (typeof value === "string") {
@@ -78,7 +81,11 @@ export const translateItemKeys = (
       birthday: "Data de Nascimento",
       age: "Idade",
       comments: "Comentarios",
-    }?.[itemKey] || undefined
+      workType: "Regime de Trabalho",
+      cpf: "CPF",
+      rg: "RG",
+      telefone: "Contato",
+    }?.[itemKey] || itemKey
   );
 };
 
@@ -92,4 +99,12 @@ export const sortItemsData = (data: any) => {
   others.sort();
 
   return [...name, ...others];
+};
+
+const formatCPF = (cpf: string): string => {
+  //retira os caracteres indesejados...
+  cpf = cpf.replace(/[^\d]/g, "");
+
+  //realizar a formatação...
+  return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
 };

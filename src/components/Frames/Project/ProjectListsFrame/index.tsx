@@ -23,6 +23,7 @@ const ProjectListsFrame = ({ project }: Props) => {
   const edittables = { stack, teamUids };
 
   const onDeleteProject = async () => {
+    await removingUsersProjects(project);
     await deleteProject(project.id);
     router.push("/projects");
   };

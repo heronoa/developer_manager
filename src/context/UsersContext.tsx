@@ -31,6 +31,7 @@ interface UsersContextProps {
   removingUsersProjects: (oldProject: IProjectDataType) => Promise<void>;
   setUpdate: Dispatch<SetStateAction<boolean>>;
   findUser: (uid: string) => IUserDataType | undefined;
+  getRestrictedData: (uid: string) => Promise<IRestrictedDataType | undefined>;
 }
 
 export const UsersContext = createContext({} as UsersContextProps);
@@ -41,9 +42,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   const [error, setError] = useState<any | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
   const [update, setUpdate] = useState<boolean>(true);
-  const [allRestrictedData, setAllRestrictedData] = useState<
-    IRestrictedDataType[]
-  >([]);
 
   const getAllUsers = async () => {
     try {
@@ -57,16 +55,22 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       setError(error);
     }
   };
-  const getAllRestrictedData = async () => {
-    try {
-      const restrictedArray: IRestrictedDataType[] = [];
-      const querySnapshot = await getDocs(collection(db, "dados-restritos"));
-      querySnapshot.forEach(doc => {
-        restrictedArray.push(doc.data() as IRestrictedDataType);
-      });
-      return restrictedArray;
-    } catch (error) {
-      setError(error);
+  const getRestrictedData = async (uid: string) => {
+    if (parseInt(activeUserData?.permissionLevel || "0") > 1) {
+      try {
+        const restrictedArray: IRestrictedDataType[] = [];
+        const q = query(
+          collection(db, "dados-restritos"),
+          where("uid", "==", uid),
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(doc => {
+          restrictedArray.push(doc.data() as IRestrictedDataType);
+        });
+        return restrictedArray[0];
+      } catch (error) {
+        setError(error);
+      }
     }
   };
 
@@ -137,11 +141,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     if (user && activeUserData) {
       const fetcher = async () => {
         setAllUsers((await getAllUsers()) as IUserDataType[]);
-        if (+activeUserData.permissionLevel > 1) {
-          setAllRestrictedData(
-            (await getAllRestrictedData()) as IRestrictedDataType[],
-          );
-        }
       };
       if (activeUserData) {
         fetcher();
@@ -161,6 +160,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
         removingUsersProjects,
         setUpdate,
         findUser,
+        getRestrictedData,
       }}
     >
       {children}
