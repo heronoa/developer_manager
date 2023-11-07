@@ -8,8 +8,6 @@ const MainNumbersFrame = () => {
   const { allUsers } = useUsers();
   const { allProjects } = useProjects();
 
-  console.log({ allUsers, allProjects });
-
   return (
     <div className="flex flex-col md:flex-row mx-auto w-[90%] justify-center items-center shadow-lg">
       {[

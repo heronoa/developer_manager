@@ -1,39 +1,11 @@
 import { useUsers } from "@/hooks/useUsers";
-import { possibleOccupations, possiblesStacks } from "@/utils/constants";
-import { Chart } from "react-google-charts";
+import { useAnalytics } from "@/hooks/useAnalytics";
+import { Chart, GoogleChartWrapperChartType } from "react-google-charts";
 
 const ColaboratorsChartsFrame = () => {
-  const { allUsers } = useUsers();
+  const { getUsersByOccupation, getUsersByProjects } = useAnalytics();
 
-  const getUsersByOccupation = (): any[] => {
-    const data: any[] = [];
-    Object.keys(possibleOccupations).forEach(occ => {
-      const filteredUsers = allUsers.filter(e => e.occupation.includes(occ));
-      data.push([occ, filteredUsers.length]);
-    });
-    return data;
-  };
-
-  const getUsersByProjects = () => {
-    const data: any[] = [];
-    const mappedValues = allUsers.map(user => user.projects.length);
-    const iterableArray = new Array(Math.max(...mappedValues) + 1);
-    console.log({ mappedValues, iterableArray });
-
-    iterableArray
-      .fill("value")
-      .forEach((item, index) =>
-        data.push([
-          `${mappedValues.filter(e => e === index).length} Colaboradores`,
-          index,
-          "gold",
-          null,
-        ]),
-      );
-    return data;
-  };
-
-  const dataP = [
+  const dataBars = [
     [
       "Colaboradores",
       "Numero de projetos",
@@ -48,7 +20,7 @@ const ColaboratorsChartsFrame = () => {
     ...getUsersByProjects(),
   ];
 
-  const data = [
+  const dataPie = [
     ["Colaboradores", "Área de atuação"],
     ...getUsersByOccupation(),
   ];
@@ -66,36 +38,36 @@ const ColaboratorsChartsFrame = () => {
     // outerHeight: "200px",
     // innerHeight: "400px",
   };
-  const optionsP = {
-    title: "Colaboradores por projetos",
-    width: 600,
-    height: 400,
-    bar: { groupWidth: "95%" },
-    legend: { position: "none" },
-  };
 
   return (
-    <div className="flex flex-col md:flex-row mx-auto w-[90%] justify-center items-center shadow-lg">
-      <div>
-        <Chart
-          graphID="holder-chart"
-          chartType="PieChart"
-          data={data}
-          options={options}
-          width={"100%"}
-          //   height={"500px"}
-          className="h-[600px] md:h-[85vh] "
-        />
-      </div>
-      <div>
-        <Chart
-          chartType="BarChart"
-          width="100%"
-          height="400px"
-          data={dataP}
-          options={optionsP}
-        />
-      </div>
+    <div className="flex flex-col md:flex-row mx-auto md:w-[90%] dark:text-white justify-between w-full items-center shadow-lg">
+      {[
+        {
+          data: dataPie,
+          options,
+          className: "h-[600px] md:h-[85vh] dark:text-white ",
+          type: "PieChart",
+        },
+        {
+          data: dataBars,
+          options,
+          className: "h-[600px] md:h-[85vh] ",
+          type: "BarChart",
+        },
+      ].map(({ data, options, className, type }, index) => {
+        return (
+          <div key={index} className="w-full dark:!text-white">
+            <Chart
+              chartType={type as GoogleChartWrapperChartType}
+              data={data}
+              options={options}
+              width={"100%"}
+              //   height={"500px"}
+              className={className}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };
