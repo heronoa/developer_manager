@@ -36,29 +36,31 @@ interface ProjectsContextProps {
 export const ProjectsContext = createContext({} as ProjectsContextProps);
 
 export const ProjectsProvider = ({ children }: IProjectsProvider) => {
-  const { user } = useAuth();
+  const { user, activeUserData } = useAuth();
   const [allProjects, setAllProjects] = useState<any[]>([]);
   const [error, setError] = useState<any | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
   const [update, setUpdate] = useState<boolean>(false);
 
   const updateProjects = async (projectPart: Partial<IProjectDataType>) => {
-    try {
-      const q = query(
-        collection(db, "projects"),
-        where("id", "==", projectPart.id),
-      );
-      const querySnapshot = await getDocs(q);
-      const docId: string[] = [];
-      querySnapshot.forEach(e => docId.push(e.id));
-      console.log({ docId });
-      const projectRef = doc(db, "projects", docId[0]);
+    if (parseInt(activeUserData?.permissionLevel || "0") > 1) {
+      try {
+        const q = query(
+          collection(db, "projects"),
+          where("id", "==", projectPart.id),
+        );
+        const querySnapshot = await getDocs(q);
+        const docId: string[] = [];
+        querySnapshot.forEach(e => docId.push(e.id));
+        console.log({ docId });
+        const projectRef = doc(db, "projects", docId[0]);
 
-      console.log({ projectPart });
-      await updateDoc(projectRef, projectPart);
-      setUpdate(e => !e);
-    } catch (error) {
-      console.error(error);
+        console.log({ projectPart });
+        await updateDoc(projectRef, projectPart);
+        setUpdate(e => !e);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
