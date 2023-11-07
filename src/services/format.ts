@@ -17,7 +17,7 @@ export const getAge = (strDate: string): string | number => {
 export const formatItem = (
   value: IFormatItem,
   key?: IFilterKeyOption | "age",
-): string | number | null => {
+): string | null => {
 
   if (key) {
     if (
