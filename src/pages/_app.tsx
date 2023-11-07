@@ -11,7 +11,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ProjectsProvider } from "@/context/ProjectsContext";
 import { UsersProvider } from "@/context/UsersContext";
-import { ModalProvider } from "@/context/ModalContext";
+import { ModalProvider } from "@/context/ModalsContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

@@ -29,6 +29,7 @@ interface UsersContextProps {
   error: any | undefined;
   updateUsersProjects: (newProject: IProjectDataType) => Promise<void>;
   setUpdate: Dispatch<SetStateAction<boolean>>;
+  findUser: (uid: string) => IUserDataType | undefined; 
 }
 
 export const UsersContext = createContext({} as UsersContextProps);
@@ -66,6 +67,10 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     } catch (error) {
       setError(error);
     }
+  };
+
+  const findUser = (uid: string) => {
+    return allUsers.find(e => e.uid === uid);
   };
 
   const updateUsersProjects = async (newProject: IProjectDataType) => {
@@ -117,7 +122,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
 
   return (
     <UsersContext.Provider
-      value={{ allUsers, loading, error, updateUsersProjects, setUpdate }}
+      value={{ allUsers, loading, error, updateUsersProjects, setUpdate, findUser }}
     >
       {children}
     </UsersContext.Provider>

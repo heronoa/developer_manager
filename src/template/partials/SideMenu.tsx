@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import CompanyLogo from "@/components/UI/CompanyLogo";
 import { ThemeSwitch } from "@/components/UI/ThemeSwitch";
 import NavItem from "@/components/UI/Items/NavItem";
-import { useModals } from "@/hooks/useModal";
+import { useModals } from "@/hooks/useModals";
 import { useAuth } from "@/hooks/useAuth";
 
 const SideMenu = () => {

@@ -6,7 +6,7 @@ import BackButton from "@/components/UI/BackButton";
 import { useAuth } from "@/hooks/useAuth";
 
 interface Props {
-  user: IUserDataType;
+  user?: IUserDataType;
 }
 
 const ColaboratorDetailsLayout = ({ user }: Props) => {

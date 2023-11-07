@@ -19,8 +19,8 @@ const ProjectDetails = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Meta
-        title={"Gerenciamento Dev - ${nome}"}
-        description={"Perfil do colaborador ${nome}"}
+        title={`Gerenciamento Dev - ${selectedProject?.name}`}
+        description={`Perfil do colaborador ${selectedProject?.name}`}
       />
       <LazyProjectDetailsLayout project={selectedProject} />
     </Suspense>

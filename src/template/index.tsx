@@ -14,7 +14,7 @@ import { publicRoutes } from "@/utils/constants";
 import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/hooks/useTheme";
 import Modal from "./partials/Modal";
-import { useModals } from "@/hooks/useModal";
+import { useModals } from "@/hooks/useModals";
 import dynamic from "next/dynamic";
 
 const LazyModal = dynamic(() => import("./partials/Modal"), { suspense: true });

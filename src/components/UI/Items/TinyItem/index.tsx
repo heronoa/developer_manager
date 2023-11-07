@@ -9,7 +9,7 @@ const TinyItem = ({ value }: Props) => {
   const color =
     possiblesStacks?.[capitalize(value) as keyof typeof possiblesStacks] ||
     possibleOccupations?.[
-      value.toLocaleLowerCase() as keyof typeof possibleOccupations
+      value?.toLocaleLowerCase() as keyof typeof possibleOccupations
     ] || defaultColor;
 
   return (

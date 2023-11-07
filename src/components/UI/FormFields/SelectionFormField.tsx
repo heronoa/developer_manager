@@ -6,32 +6,30 @@ import TinyItem from "../Items/TinyItem";
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 import { useUsers } from "@/hooks/useUsers";
-import { IUserDataType } from "@/@types";
-import PrimaryDataItem from "../Items/PrimaryDataItem";
 import { stringVerifier } from "@/services/errorHandler";
 import { Transition } from "@headlessui/react";
-import SlideOverLayer from "../Animations/SlideOverLayer";
 
 interface Props {
   type: string;
-  states?: [any | any[], Dispatch<SetStateAction<any | any[]>>];
+  states: [
+    string[] | { uid: string; name: string; occupation: string[] }[],
+    Dispatch<SetStateAction<any | any[]>>,
+  ];
   setError: Dispatch<SetStateAction<string | null>>;
 }
 
 const SelectionFormField = ({ type, states, setError }: Props) => {
   const [searchStr, setSearchStr] = useState<string>("");
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<IUserDataType[]>([]);
   const [showSelection, setShowSelection] = useState<boolean>(false);
-  const { allUsers } = useUsers();
+  const { allUsers, findUser } = useUsers();
 
   useEffect(() => {
     if (type === "stack") {
-      if (selectedItems.length === 0) {
+      if (states[0].length === 0) {
         return setError("Selecione pelo menos uma tecnologia");
       }
     } else {
-      if (selectedUsers.length === 0) {
+      if (states[0].length === 0) {
         return setError("Selecione pelo menos uma pessoa para o time");
       }
     }
@@ -39,7 +37,7 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
     if (
       type === "teamUids" &&
       !stringVerifier(
-        selectedUsers.flatMap(e => e.occupation),
+        states[0].flatMap((e: any) => e.occupation),
         minimumOccupationsToProjects,
       )
     ) {
@@ -50,28 +48,32 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
       );
     }
     setError(null);
-  }, [selectedItems.length, selectedUsers, setError, showSelection, type]);
+  }, [setError, showSelection, states, type]);
 
   const renderInputBox = (type: string) => {
     if (type === "teamUids") {
-      return selectedUsers.map((e, index) => (
-        <div
-          key={index}
-          onClick={() =>
-            handleUserSelection({
-              name: e.name,
-              uid: e.uid,
-              occupation: e.occupation,
-            })
-          }
-        >
-          <TinyItem value={e.name.split(" ")[0]} />
-        </div>
-      ));
+      return states[0].map((e: any, index: number) => {
+        const value =
+          e?.name?.split(" ")?.[0] || findUser(e).name?.split(" ")?.[0] || e;
+        return (
+          <div
+            key={index}
+            onClick={() =>
+              handleUserSelection({
+                name: e.name,
+                uid: e.uid,
+                occupation: e.occupation,
+              })
+            }
+          >
+            <TinyItem value={value} />
+          </div>
+        );
+      });
     }
 
     if (type === "stack") {
-      return selectedItems.map((e, index) => (
+      return states[0].map((e: any, index: number) => (
         <div key={index} onClick={() => handleSelection(e)}>
           <TinyItem value={e} />
         </div>
@@ -87,7 +89,7 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
         <div className="mb-10 flex flex-col gap-6">
           Selecionados
           <div className="flex gap-4 flex-wrap">
-            {selectedUsers.map((e, index) => (
+            {states[0].map((e: any, index: number) => (
               <div
                 key={index}
                 className="w-full border-solid border-b border-b-gray-400 ml-2 pb-2"
@@ -102,7 +104,7 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
                 {e.name}
                 <br />
                 <div>
-                  {e.occupation.map((e, index) => (
+                  {e?.occupation?.map((e: any, index: number) => (
                     <TinyItem key={index} value={e} />
                   ))}
                 </div>
@@ -117,7 +119,7 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
                   (searchStr !== ""
                     ? item.name.toLowerCase().startsWith(searchStr)
                     : true) &&
-                  !selectedUsers?.map(e => e.uid).includes(item.uid)
+                  !states[0]?.map((e: any) => e.uid).includes(item.uid)
                 );
               })
               .map((e, index) => (
@@ -151,7 +153,7 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
         <div className="mb-10 flex flex-col gap-6">
           Selecionados
           <div className="flex gap-4 flex-wrap">
-            {selectedItems.map((e, index) => (
+            {states[0].map((e: any, index: number) => (
               <div key={index} onClick={() => handleSelection(e)}>
                 <TinyItem value={e} />
               </div>
@@ -164,7 +166,7 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
                 return (
                   (searchStr !== ""
                     ? item.toLowerCase().startsWith(searchStr)
-                    : true) && !selectedItems.includes(item)
+                    : true) && !states[0].includes(item)
                 );
               })
               .map((e, index) => (
@@ -181,7 +183,7 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
   };
 
   const handleSelection = (element: string) => {
-    setSelectedItems(prevState => {
+    states[1]((prevState: any) => {
       const newState = JSON.parse(JSON.stringify(prevState));
       const index = newState.indexOf(element);
 
@@ -201,7 +203,7 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
     uid: string;
     occupation: string[];
   }) => {
-    setSelectedUsers(prevState => {
+    states[1]((prevState: any) => {
       const newState = JSON.parse(JSON.stringify(prevState));
       const index = newState.map((e: any) => e.uid).indexOf(element.uid);
 

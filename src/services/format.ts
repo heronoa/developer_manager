@@ -3,7 +3,7 @@ import { IDateObj, IFilterKeyOption, IFormatItem } from "@/@types";
 export const capitalize = (str: string) => {
   if (str === "") return "";
 
-  const strCapitalize = str.charAt(0).toUpperCase() + str.slice(1);
+  const strCapitalize = str?.charAt(0)?.toUpperCase() + str?.slice(1);
   return strCapitalize;
 };
 
@@ -18,7 +18,6 @@ export const formatItem = (
   value: IFormatItem,
   key?: IFilterKeyOption | "age",
 ): string | null => {
-
   if (key) {
     if (
       key === "birthday" ||
@@ -26,12 +25,14 @@ export const formatItem = (
       key === "startDate" ||
       key === "comments"
     ) {
-      return new Date((value as IDateObj)?.seconds * 1000)
-        ?.toISOString()
-        ?.split("T")[0]
-        ?.split("-")
-        ?.reverse()
-        ?.join("/") || "";
+      return (
+        new Date((value as IDateObj)?.seconds * 1000)
+          ?.toISOString()
+          ?.split("T")[0]
+          ?.split("-")
+          ?.reverse()
+          ?.join("/") || ""
+      );
     }
     if (key === "age") {
       return getAge(
@@ -41,10 +42,10 @@ export const formatItem = (
           .split("-")
           .reverse()
           .join("/"),
-      );
+      ).toString();
     }
     if (key === "projects" || key === "teamUids") {
-      return (value as string[])?.length;
+      return (value as string[])?.length.toString();
     }
   }
 
@@ -76,7 +77,7 @@ export const translateItemKeys = (
       projects: "Projetos",
       birthday: "Data de Nascimento",
       age: "Idade",
-      comments: "Comentarios"
+      comments: "Comentarios",
     }?.[itemKey] || undefined
   );
 };

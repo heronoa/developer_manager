@@ -32,7 +32,7 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
     obj[key] = edittables[key];
     console.log(obj);
     await updateProjects(obj);
-    handleChangeEdittables(key, undefined);
+    handleChangeEdittables(key, undefined)
   };
 
   return (
@@ -58,11 +58,11 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
               />
               <div className="absolute flex top-1 gap-2 -right-20 ">
                 <GiConfirmed
-                  className="w-8 h-8"
+                  className="w-8 h-8 cursor-pointer"
                   onClick={() => submitEdittable("name")}
                 />
                 <ImCancelCircle
-                  className="w-8 h-8"
+                  className="w-8 h-8 cursor-pointer"
                   onClick={() => setEdittables({ name: undefined })}
                 />
               </div>
@@ -94,11 +94,11 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
               />
               <div className="absolute flex top-1 gap-2 -right-20 ">
                 <GiConfirmed
-                  className="w-8 h-8"
+                  className="w-8 h-8 cursor-pointer"
                   onClick={() => submitEdittable("description")}
                 />
                 <ImCancelCircle
-                  className="w-8 h-8"
+                  className="w-8 h-8cursor-pointer"
                   onClick={() =>
                     handleChangeEdittables("description", undefined)
                   }
@@ -157,13 +157,13 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
                     />
                     <div className="absolute flex top-1 gap-2 -right-20 ">
                       <GiConfirmed
-                        className="w-8 h-8"
+                        className="w-8 h-8 cursor-pointer"
                         onClick={() =>
                           submitEdittable(objKey as "startDate" | "deadline")
                         }
                       />
                       <ImCancelCircle
-                        className="w-8 h-8"
+                        className="w-8 h-8 cursor-pointer"
                         onClick={() =>
                           handleChangeEdittables(
                             objKey as "startDate" | "deadline",

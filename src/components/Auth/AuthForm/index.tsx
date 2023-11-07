@@ -63,13 +63,15 @@ const AuthForm = ({
     formOptions: IFormFieldOptions,
   ) => {
     if (formOptions.fieldType === "selection") {
-      return (
-        <SelectionFormField
-          type={formName}
-          states={formOptions?._formStates}
-          setError={setError}
-        />
-      );
+      if (formOptions?._formStates)
+        return (
+          <SelectionFormField
+            type={formName}
+            states={formOptions._formStates}
+            setError={setError}
+          />
+        );
+      return null;
     }
 
     if (formOptions.fieldType === "textarea") {
@@ -157,7 +159,11 @@ const AuthForm = ({
           </div>
         ))}
         <div className="flex justify-center pt-8 col-span-full">
-          <button type="submit" className={`btn disabled:!bg-gray-400`} disabled={disabled || !!error}>
+          <button
+            type="submit"
+            className={`btn disabled:!bg-gray-400`}
+            disabled={disabled || !!error}
+          >
             <div className="capitalize text-white font-normal">
               {submitBtn()}
             </div>

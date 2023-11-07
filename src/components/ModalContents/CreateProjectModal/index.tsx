@@ -3,7 +3,7 @@ import AuthForm from "@/components/Auth/AuthForm";
 import CompanyLogo from "@/components/UI/CompanyLogo";
 import Loading from "@/components/UI/Loading";
 import { useAuth } from "@/hooks/useAuth";
-import { useModals } from "@/hooks/useModal";
+import { useModals } from "@/hooks/useModals";
 import { useProjects } from "@/hooks/useProjects";
 import { useUsers } from "@/hooks/useUsers";
 import { Timestamp } from "firebase/firestore";
