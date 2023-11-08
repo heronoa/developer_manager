@@ -32,6 +32,31 @@ export const useAnalytics = () => {
     });
     return data;
   };
+  const getProjectsByUsers = () => {
+    const data: any[] = [];
+    const mappedValues = allProjects.map(project => project.teamUids.length);
+    const iterableArray = new Array(Math.max(...mappedValues, 0) + 1);
 
-  return { getUsersByProjects, getUsersByOccupation };
+    iterableArray
+      .fill("value")
+      .forEach((item, index) =>
+        data.push([
+          `${mappedValues.filter(e => e === index).length} Projetos`,
+          index,
+          "gold",
+          null,
+        ]),
+      );
+    return data;
+  };
+  const getProjectsByStack = (): any[] => {
+    const data: any[] = [];
+    Object.keys(possiblesStacks).forEach(stack => {
+      const filteredProjects = allProjects.filter(e => e.stack.includes(stack));
+      data.push([stack, filteredProjects.length]);
+    });
+    return data;
+  };
+
+  return { getUsersByProjects, getUsersByOccupation, getProjectsByStack, getProjectsByUsers };
 };

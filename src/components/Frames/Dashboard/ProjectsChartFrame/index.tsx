@@ -3,7 +3,7 @@ import { useAnalytics } from "@/hooks/useAnalytics";
 import { Chart, GoogleChartWrapperChartType } from "react-google-charts";
 
 const ProjectsChartsFrame = () => {
-  const { getUsersByOccupation, getUsersByProjects } = useAnalytics();
+  const { getProjectsByStack, getProjectsByUsers } = useAnalytics();
 
   const dataBars = [
     [
@@ -17,12 +17,12 @@ const ProjectsChartsFrame = () => {
         calc: "stringify",
       },
     ],
-    ...getUsersByProjects(),
+    ...getProjectsByUsers(),
   ];
 
   const dataPie = [
     ["Colaboradores", "Área de atuação"],
-    ...getUsersByOccupation(),
+    ...getProjectsByStack(),
   ];
 
   const options = {
