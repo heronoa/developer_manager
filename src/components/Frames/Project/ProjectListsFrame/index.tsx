@@ -1,4 +1,5 @@
 import { IDateObj, IProjectDataType, IUserDataType } from "@/@types";
+import DeleteButton from "@/components/Auth/DeleteButton";
 import EdittableListItems from "@/components/UI/Items/EdittableListItems";
 import { useAuth } from "@/hooks/useAuth";
 import { useProjects } from "@/hooks/useProjects";
@@ -11,7 +12,6 @@ interface Props {
 }
 
 const ProjectListsFrame = ({ project }: Props) => {
-  const { activeUserData } = useAuth();
   const router = useRouter();
 
   const { updateProjects, deleteProject } = useProjects();
@@ -68,16 +68,7 @@ const ProjectListsFrame = ({ project }: Props) => {
           );
         })}
       </div>
-      {parseInt(activeUserData?.permissionLevel || "0") > 1 && (
-        <div
-          onClick={onDeleteProject}
-          className="flex w-full justify-end mt-4 border-t-gray-300 border-t pt-4"
-        >
-          <button className="btn !max-w-[200px] text-white !bg-red-600 hover:!bg-red-800">
-            Delete
-          </button>
-        </div>
-      )}
+      <DeleteButton fn={onDeleteProject} />
     </div>
   );
 };

@@ -1,6 +1,8 @@
 import { IProjectDataType, IUserDataType } from "@/@types";
+import DeleteButton from "@/components/Auth/DeleteButton";
 import EdittableListItems from "@/components/UI/Items/EdittableListItems";
 import TinyItem from "@/components/UI/Items/TinyItem";
+import { useAuth } from "@/hooks/useAuth";
 import { useProjects } from "@/hooks/useProjects";
 import { useUsers } from "@/hooks/useUsers";
 import { translateItemKeys } from "@/services/format";
@@ -12,9 +14,9 @@ interface Props {
 }
 
 const ColaboratorListsFrame = ({ user }: Props) => {
-  const { allProjects, removingUserFromProjects, addUsersToProjects } =
-    useProjects();
+  const { removingUserFromProjects, addUsersToProjects } = useProjects();
   const { deleteUser, updateUser } = useUsers();
+  const { activeUserData } = useAuth();
   const router = useRouter();
 
   const onDeleteColaborator = async () => {
@@ -62,43 +64,18 @@ const ColaboratorListsFrame = ({ user }: Props) => {
             <EdittableListItems
               key={index}
               state={edittables[objEntries[0] as "projects" | "occupation"][0]}
-              setState={edittables[objEntries[0] as "projects" | "occupation"][1]}
+              setState={
+                edittables[objEntries[0] as "projects" | "occupation"][1]
+              }
               objEntries={objEntries}
-              submit={submitEdittable(objEntries[0] as "projects" | "occupation")}
+              submit={submitEdittable(
+                objEntries[0] as "projects" | "occupation",
+              )}
             />
-
-            // <div key={index}>
-            //   <span className="font-semibold mr-2">
-            //     {translateItemKeys(objKey as any)}:
-            //   </span>
-            //   <div
-            //     className={`${
-            //       objKey === "projects" ? "flex-col" : ""
-            //     }  flex flex-wrap`}
-            //   >
-            //     {(objValue as string[]).map((e, index) => {
-            //       let value: string | IProjectDataType = e;
-            //       if (objKey === "projects") {
-            //         value = findProject(e) || e;
-            //       }
-            //       if (typeof value === "string") {
-            //         return <TinyItem key={index} value={value} />;
-            //       }
-            //       return <div key={index}>{value?.name}</div>;
-            //     })}
-            //   </div>
-            // </div>
           );
         })}
       </div>
-      <div className="flex w-full justify-end mt-4 border-t-gray-300 border-t pt-4">
-        <button
-          onClick={onDeleteColaborator}
-          className="btn !max-w-[200px] text-white !bg-red-600 hover:!bg-red-800"
-        >
-          Delete
-        </button>
-      </div>
+      <DeleteButton userPermission={user.permissionLevel} fn={onDeleteColaborator} />
     </div>
   );
 };
