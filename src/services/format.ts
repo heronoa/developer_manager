@@ -124,7 +124,6 @@ const formatPhone = (phone: string): string => {
     const parte2 = phone.substring(3, 7);
     const parte3 = phone.substring(7);
 
-    // Formata o número de telefone
     const formatedPhone = `(${ddd}) ${parte1} ${parte2}-${parte3}`;
     return formatedPhone;
   }

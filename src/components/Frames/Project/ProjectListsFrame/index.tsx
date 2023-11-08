@@ -39,11 +39,9 @@ const ProjectListsFrame = ({ project }: Props) => {
       oldObj.teamUids = oldObj.teamUids.filter(
         (e: any) => !obj[key].includes(e),
       );
-      // colaboradores removidos
       obj.teamUids = obj.teamUids.filter(
         (e: any) => !oldObj.teamUids.includes(e),
       );
-      // colaboradores adicionados
       await removingUsersProjects(oldObj);
       await updateUsersProjects(obj);
     }

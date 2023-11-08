@@ -11,7 +11,7 @@ import { useUsers } from "@/hooks/useUsers";
 import { milissecondsInAYear } from "@/utils/constants";
 import { Timestamp } from "firebase/firestore";
 import router, { useRouter } from "next/router";
-import {  useState } from "react";
+import { useState } from "react";
 
 const CreateColaboratorModal = () => {
   const { loading, createUser, error } = useUsers();
@@ -33,7 +33,7 @@ const CreateColaboratorModal = () => {
         }
     >,
   ) => {
-    // setSubmitted(true);
+    setSubmitted(true);
     const {
       name,
       contato: telefone,
@@ -57,14 +57,14 @@ const CreateColaboratorModal = () => {
     newUser.workType = workType[0];
     newUser.projects = [];
     try {
-      // await createUser(newUser);
-      // if (router.pathname !== "/colaborators") {
-      //   router.push("/colaborators");
-      // }
+      await createUser(newUser);
+      if (router.pathname !== "/colaborators") {
+        router.push("/colaborators");
+      }
     } catch (error) {
       console.error(error);
     }
-    // return setModalIsOpen(false);
+    return setModalIsOpen(false);
   };
 
   const formFields: IFormFieldType = {
@@ -124,11 +124,15 @@ const CreateColaboratorModal = () => {
       required: "Senha é necessária",
       fieldType: "password",
       fieldLabel: "Senha",
+      minLength: 6,
+      maxLength: 32,
     },
     password_confirm: {
       required: "Senhas não são iguais",
       fieldType: "password",
       fieldLabel: "Confirmar Senha",
+      minLength: 6,
+      maxLength: 32,
     },
   };
 

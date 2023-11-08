@@ -4,6 +4,8 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
+  updateEmail,
+  updatePassword,
 } from "firebase/auth";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { auth, db } from "../config/firebase";
@@ -21,13 +23,17 @@ interface AuthContextProps {
   signUp: (email: string, password: string) => Promise<UserCredential>;
   logIn: (email: string, password: string) => Promise<UserCredential>;
   logOut: () => Promise<void>;
+  changeUserPassword: (newPassword: string) => Promise<void>;
+  changeUserEmail: (newEmail: string) => Promise<void>;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: IAuthProvider) => {
   const [user, setUser] = useState<IUserType>({ email: null, uid: null });
-  const [activeUserData, setActiveUserData] = useState<IUserDataType | null>(null);
+  const [activeUserData, setActiveUserData] = useState<IUserDataType | null>(
+    null,
+  );
   const [loading, setLoading] = useState<boolean>(true);
 
   const signUp = (email: string, password: string) => {
@@ -41,6 +47,29 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
   const logOut = async () => {
     setUser({ email: null, uid: null });
     await signOut(auth);
+  };
+
+  const changeUserPassword = async (newPassword: string) => {
+    const currentUser = auth.currentUser;
+
+    if (currentUser) {
+      try {
+        await updatePassword(currentUser, newPassword);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const changeUserEmail = async (newEmail: string) => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      try {
+        await updateEmail(currentUser, newEmail);
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
   useEffect(() => {
@@ -81,11 +110,22 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     if (user) {
       fetcher();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (
-    <AuthContext.Provider value={{ user, activeUserData, loading, signUp, logIn, logOut }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        activeUserData,
+        loading,
+        signUp,
+        logIn,
+        logOut,
+        changeUserPassword,
+        changeUserEmail,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

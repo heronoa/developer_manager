@@ -16,7 +16,6 @@ interface Props {
 const ColaboratorListsFrame = ({ user }: Props) => {
   const { removingUserFromProjects, addUsersToProjects } = useProjects();
   const { deleteUser, updateUser } = useUsers();
-  const { activeUserData } = useAuth();
   const router = useRouter();
 
   const onDeleteColaborator = async () => {
@@ -42,11 +41,9 @@ const ColaboratorListsFrame = ({ user }: Props) => {
       oldObj.projects = oldObj.projects.filter(
         (e: any) => !obj[key].includes(e),
       );
-      // projetos removidos
       obj.projects = obj.projects.filter(
         (e: any) => !oldObj.projects.includes(e),
       );
-      // projetos adicionados
       await removingUserFromProjects(oldObj);
       await addUsersToProjects(obj);
     }

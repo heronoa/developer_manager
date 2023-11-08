@@ -75,7 +75,6 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
     const docId: any[] = [];
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(doc => docId.push(doc.id));
-    // await deleteDoc(doc(db, "cities", "DC"));
     await deleteDoc(doc(db, projectsCollection, docId[0]));
     setUpdate(e => !e);
   };

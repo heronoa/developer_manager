@@ -59,8 +59,8 @@ const ColaboratorRestrictedFrame = ({ user }: Props) => {
         );
       }
       if (error) return;
-      // await updateUser(obj, true);
-      // handleChangeEdittables(key, undefined);
+      await updateUser(obj, true);
+      handleChangeEdittables(key, undefined);
     };
 
   return (

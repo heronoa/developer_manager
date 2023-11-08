@@ -98,7 +98,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   };
 
   const updateUser = async (
-    userPart: Partial<IUserDataType>,
+    userPart: Partial<IUserDataType & ISignupType>,
     restricted: boolean = false,
   ) => {
     if (parseInt(activeUserData?.permissionLevel || "0") > 1) {

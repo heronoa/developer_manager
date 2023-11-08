@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { navigationLinks, restrictedNav } from "./data";
+import { manageNav, navigationLinks, restrictedNav } from "./data";
 import { useRouter } from "next/router";
 import CompanyLogo from "@/components/UI/CompanyLogo";
 import { ThemeSwitch } from "@/components/UI/ThemeSwitch";
@@ -46,55 +46,54 @@ const SideMenu = () => {
             ))}
           </>
         </ul>
-        {parseInt(activeUserData?.permissionLevel || "0") > 1 && (
-          <ul className="text-lg inline-block">
-            <>
-              {restrictedNav.map((item, index) => (
-                <li
-                  key={index}
-                  className="my-3 lg:my-0 items-center mr-4 lg:inline-block block w-full "
-                >
-                  {item?.action ? (
+        <ul className="text-lg inline-block">
+          <>
+            {(parseInt(activeUserData?.permissionLevel || "0") > 1
+              ? [...manageNav, ...restrictedNav]
+              : manageNav
+            ).map((item, index) => (
+              <li
+                key={index}
+                className="my-3 lg:my-0 items-center mr-4 lg:inline-block block w-full "
+              >
+                {item?.action ? (
+                  <span
+                    key={index}
+                    className={`cursor-pointer rounded-[15px] w-[80%] p-2 pl-8 ml-4 my-1 lg:my-0 items-center mr-4 lg:inline-block block`}
+                  >
                     <span
-                      key={index}
-                      className={`cursor-pointer rounded-[15px] w-[80%] p-2 pl-8 ml-4 my-1 lg:my-0 items-center mr-4 lg:inline-block block`}
+                      onClick={() => handleModalAction(item?.action as string)}
+                      className={"underline-animation-event"}
                     >
-                      <span
-                        onClick={() =>
-                          handleModalAction(item?.action as string)
-                        }
-                        className={"underline-animation-event"}
-                      >
-                        {item?.displayName}
-                      </span>
+                      {item?.displayName}
                     </span>
-                  ) : (
-                    <div className="flex flex-col ml-4 ">
-                      <span className="font-semibold text-gray-500 uppercase">
-                        {item.displayName}
-                      </span>
-                      {item?.subActions?.map((item: any, index: number) => (
+                  </span>
+                ) : (
+                  <div className="flex flex-col ml-4 ">
+                    <span className="font-semibold text-gray-500 uppercase">
+                      {item.displayName}
+                    </span>
+                    {item?.subActions?.map((item: any, index: number) => (
+                      <span
+                        key={index}
+                        className={`cursor-pointer rounded-[15px] w-[80%] p-2 pl-8 ml-4 my-1 lg:my-0 items-center mr-4 lg:inline-block block`}
+                      >
                         <span
-                          key={index}
-                          className={`cursor-pointer rounded-[15px] w-[80%] p-2 pl-8 ml-4 my-1 lg:my-0 items-center mr-4 lg:inline-block block`}
+                          onClick={() =>
+                            handleModalAction(item?.action as string)
+                          }
+                          className={"underline-animation-event"}
                         >
-                          <span
-                            onClick={() =>
-                              handleModalAction(item?.action as string)
-                            }
-                            className={"underline-animation-event"}
-                          >
-                            {item?.displayName}
-                          </span>
+                          {item?.displayName}
                         </span>
-                      ))}
-                    </div>
-                  )}
-                </li>
-              ))}
-            </>
-          </ul>
-        )}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </li>
+            ))}
+          </>
+        </ul>
       </nav>
       <div className="block lg:hidden ml-4">
         <ThemeSwitch />

@@ -35,8 +35,6 @@ const ColaboratorsChartsFrame = () => {
     },
     backgroundColor: "transparent",
     legend: { position: "bottom" },
-    // outerHeight: "200px",
-    // innerHeight: "400px",
   };
 
   return (
@@ -62,7 +60,6 @@ const ColaboratorsChartsFrame = () => {
               data={data}
               options={options}
               width={"100%"}
-              //   height={"500px"}
               className={className}
             />
           </div>

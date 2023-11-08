@@ -39,15 +39,7 @@ const AuthForm = ({
     handleSubmit,
     formState: { errors },
   } = methods;
-
-  // useEffect(() => {
-  //   if (error) {
-  //     setTimeout(() => {
-  //       setError(null);
-  //     }, 4000);
-  //   }
-  // }, [error]);
-
+  
   const onSubmit = async (data: IFormRegisterType) => {
     const formError = formErrorsHandler(data);
     const invalidMessage: string[] = [];
@@ -166,11 +158,6 @@ const AuthForm = ({
         className={`${className} w-full mx-auto px-4`}
         onSubmit={handleSubmit(onSubmit)}
       >
-        {error && (
-          <div className="hidden md:block absolute w-full">
-            <small className="form-error absolute">{error}</small>
-          </div>
-        )}
         {Object.entries(formFields).map(([formName, formOptions], index) => (
           <div key={index} className={`${formOptions.divClassName}  mt-8`}>
             <div className="flex items-center justify-between">
@@ -198,10 +185,13 @@ const AuthForm = ({
             )}
           </div>
         ))}
-        <div className="flex justify-center pt-8 col-span-full">
+        <div className="flex flex-col items-center justify-center pt-8 col-span-full">
+          <div className="block min-h-8">
+            {error && <small className="form-error ">{error}</small>}
+          </div>
           <button
             type="submit"
-            className={`btn disabled:!bg-gray-400`}
+            className={`btn disabled:!bg-gray-400 max-w-[200px]`}
             disabled={disabled || !!error}
           >
             <div className="capitalize text-white font-normal">

@@ -1,3 +1,4 @@
+import ChangeColaboratorModal from "@/components/ModalContents/ChangeColaboratorModal";
 import CreateColaboratorModal from "@/components/ModalContents/CreateColaboratorModal";
 import CreateProjectModal from "@/components/ModalContents/CreateProjectModal";
 import {
@@ -29,6 +30,7 @@ export const ModalProvider = ({ children }: IModalProvider) => {
     default: () => <></>,
     addcolaborator: () => <CreateColaboratorModal />,
     createprojects: () =>  <CreateProjectModal />,
+    changecolaborator: () => <ChangeColaboratorModal />
   }[modalContentKey];
 
   return (

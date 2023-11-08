@@ -23,3 +23,11 @@ export const restrictedNav: INavActions = [
     ],
   },
 ];
+export const manageNav: INavActions = [
+  {
+    displayName: "Configurações",
+    subActions: [
+      { displayName: "Gerenciar Credenciais", action: "changecolaborator" },
+    ],
+  },
+];
