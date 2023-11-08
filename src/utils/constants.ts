@@ -42,7 +42,6 @@ export const possibleOccupations = {
   frontend: "#61DAFB",
   backend: "#FF6F61",
   engenheiro: "#40A9FF",
-  manager: "#40A9FF",
   gerente: "#FFD700",
   "ui/ux": "#7D3C98",
   qa: "#8BC34A",

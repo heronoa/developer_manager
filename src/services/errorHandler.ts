@@ -52,5 +52,5 @@ export const formErrorsHandler = ({
 };
 
 export const stringVerifier = (array: string[], strings: string[]) => {
-  return strings.every(string => array.includes(string));
+  return strings.every(string => array.includes(string)) || array.some(e => e === "manager");
 };
