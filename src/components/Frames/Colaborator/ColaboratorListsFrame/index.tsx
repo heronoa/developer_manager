@@ -4,14 +4,15 @@ import { useProjects } from "@/hooks/useProjects";
 import { useUsers } from "@/hooks/useUsers";
 import { translateItemKeys } from "@/services/format";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 interface Props {
   user: IUserDataType;
 }
 
 const ColaboratorListsFrame = ({ user }: Props) => {
-  const { allProjects, removingUserFromProjects } = useProjects();
-  const { deleteUser } = useUsers();
+  const { allProjects, removingUserFromProjects, addUsersToProjects } = useProjects();
+  const { deleteUser, updateUser } = useUsers();
   const router = useRouter();
 
   const onDeleteColaborator = async () => {
@@ -22,6 +23,33 @@ const ColaboratorListsFrame = ({ user }: Props) => {
 
   const findProject = (id: String) => {
     return allProjects.find(e => e.id === id);
+  };
+  const projects = useState<string[]>();
+  const occupation = useState<string[]>();
+
+  const edittables = { projects, occupation };
+
+  const submitEdittable = (key: keyof IUserDataType) => async () => {
+    const oldObj = JSON.parse(JSON.stringify(user));
+    const obj: any = { id: user.uid };
+
+    obj[key] = edittables[key as "projects" | "occupation"][0]?.map(
+      (e: any) => e?.uid || e,
+    );
+    await updateUser(obj);
+    if (key === "projects") {
+      oldObj.teamUids = oldObj.teamUids.filter(
+        (e: any) => !obj[key].includes(e),
+      );
+      // colaboradores removidos
+      obj.teamUids = obj.teamUids.filter(
+        (e: any) => !oldObj.teamUids.includes(e),
+      );
+      // colaboradores adicionados
+      await removingUserFromProjects(oldObj);
+      await addUsersToProjects(obj);
+    }
+    edittables[key as "projects" | "occupation"][1](undefined);
   };
 
   return (

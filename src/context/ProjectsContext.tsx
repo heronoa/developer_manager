@@ -34,6 +34,7 @@ interface ProjectsContextProps {
   deleteProject: (id: string) => Promise<void>;
   setUpdate: Dispatch<SetStateAction<boolean>>;
   removingUserFromProjects: (user: IUserDataType) => Promise<void>;
+  addUsersToProjects: (user: IUserDataType) => Promise<void>;
 }
 
 export const ProjectsContext = createContext({} as ProjectsContextProps);
@@ -100,8 +101,32 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
     }
   };
 
+  const addUsersToProjects = async (user: IUserDataType) => {
+    try {
+      const q = query(
+        collection(db, "projects"),
+        where("teamUids", "array-contains", user?.uid),
+      );
+      const querySnapshot = await getDocs(q);
+      const docs: any = {};
+      querySnapshot.forEach(doc => (docs[doc.id] = doc.data()));
+      Object.entries(docs).forEach(async ([docKey, docValue]) => {
+        const docRef = doc(db, "projects", docKey);
+        const teamCopy = JSON.parse(JSON.stringify((docValue as any).teamUids));
+        teamCopy.splice(user.uid, 1);
+        console.log({docRef, teamCopy, docValue})
+        // await updateDoc(docRef, {
+        //   teamUids: teamCopy,
+        // });
+      });
+      setUpdate(e => !e);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   const removingUserFromProjects = async (user: IUserDataType) => {
-    // TODO: Atualizar usuarios adicionados no projeto novo
     try {
       if (user?.uid) {
         const q = query(
@@ -152,6 +177,7 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
         updateProjects,
         deleteProject,
         removingUserFromProjects,
+        addUsersToProjects,
       }}
     >
       {children}
