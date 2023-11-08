@@ -3,6 +3,7 @@ import EditButton from "@/components/Auth/EditButton";
 import EdittableListItems from "@/components/UI/Items/EdittableListItems";
 import TinyItem from "@/components/UI/Items/TinyItem";
 import { useUsers } from "@/hooks/useUsers";
+import { formErrorsHandler } from "@/services/errorHandler";
 import { translateItemKeys, formatItem } from "@/services/format";
 import { useEffect, useState } from "react";
 import { GiConfirmed } from "react-icons/gi";
@@ -13,8 +14,9 @@ interface Props {
 }
 
 const ColaboratorRestrictedFrame = ({ user }: Props) => {
-  const { getRestrictedData } = useUsers();
+  const { getRestrictedData, verifyUniqueField } = useUsers();
   const [data, setData] = useState<IRestrictedDataType>();
+  const [error, setError] = useState<string | null>();
 
   useEffect(() => {
     const fetcher = async () => {
@@ -48,12 +50,22 @@ const ColaboratorRestrictedFrame = ({ user }: Props) => {
     (key: keyof (IUserDataType & IRestrictedDataType)) => async () => {
       const obj: any = { uid: user.uid };
       obj[key] = edittables[key as keyof (IUserDataType & IRestrictedDataType)];
-      await updateUser(obj);
-      handleChangeEdittables(key, undefined);
+      setError(formErrorsHandler(obj));
+      if (["cpf", "rg"].includes(key)) {
+        setError(
+          (await verifyUniqueField(obj[key], key as "cpf" | "rg"))
+            ? `${key.toUpperCase()} já cadastrado`
+            : null,
+        );
+      }
+      if (error) return;
+      // await updateUser(obj, true);
+      // handleChangeEdittables(key, undefined);
     };
 
   return (
     <div className="frame-container">
+      {error && <div className="form-error">{error}</div>}
       <div className="grid md:grid-cols-2 grid-cols-1 justify-evenly gap-4 w-full mt-4">
         {data &&
           Object.entries({
@@ -62,8 +74,8 @@ const ColaboratorRestrictedFrame = ({ user }: Props) => {
             rg: data.rg,
             workType: data.workType,
           }).map(([objKey, objValue], index) => {
-            const typeKey: keyof Partial<IUserDataType> =
-              objKey as keyof Partial<IUserDataType>;
+            const typeKey: keyof Partial<IUserDataType & IRestrictedDataType> =
+              objKey as keyof Partial<IUserDataType & IRestrictedDataType>;
 
             if (objKey === "workType") {
               return (
@@ -103,14 +115,20 @@ const ColaboratorRestrictedFrame = ({ user }: Props) => {
                   <div className="relative w-[60%]">
                     <input
                       className="text-[21px] w-full bg-transparent"
-                      type={typeKey === "birthday" ? "date" : typeKey}
+                      type={
+                        { birthday: "date", cpf: "number", rg: "number" }?.[
+                          typeKey as "birthday" | "cpf" | "rg"
+                        ] || "text"
+                      }
                       value={
                         typeKey === "birthday"
                           ? (formatItem(objValue, "birthday")
                               ?.split("/")
                               ?.reverse()
                               ?.join("-") as string) ?? ""
-                          : edittables?.[typeKey] || (user?.[typeKey] ?? "")
+                          : edittables?.[typeKey] ||
+                            ((user?.[typeKey as keyof IUserDataType] ??
+                              "") as string)
                       }
                       onChange={evt =>
                         handleChangeEdittables(typeKey, evt.target.value)

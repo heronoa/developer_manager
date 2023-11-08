@@ -7,7 +7,12 @@ import {
   useState,
 } from "react";
 
-import { db, firebaseConfig } from "@/config/firebase";
+import {
+  db,
+  firebaseConfig,
+  restrictedCollection,
+  userCollection,
+} from "@/config/firebase";
 import {
   getDocs,
   collection,
@@ -50,7 +55,14 @@ interface UsersContextProps {
     user: IUserDataType & ISignupType & IRestrictedDataType,
   ) => Promise<void>;
   deleteUser: (uid: string) => Promise<void>;
-  updateUser: (user: Partial<IUserDataType>) => Promise<void>;
+  updateUser: (
+    user: Partial<IUserDataType>,
+    restricted?: boolean,
+  ) => Promise<void>;
+  verifyUniqueField: (
+    uniqueValue: string,
+    uniqueField: "cpf" | "rg" | "email",
+  ) => Promise<boolean>;
 }
 
 export const UsersContext = createContext({} as UsersContextProps);
@@ -62,18 +74,44 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [update, setUpdate] = useState<boolean>(true);
 
-  const updateUser = async (userPart: Partial<IUserDataType>) => {
+  const verifyUniqueField = async (
+    uniqueValue: string,
+    uniqueField: "cpf" | "rg" | "email",
+  ) => {
+    try {
+      const q = query(
+        collection(
+          db,
+          uniqueField === "email" ? userCollection : restrictedCollection,
+        ),
+        where(uniqueField, "==", uniqueValue),
+      );
+      const querySnapshot = await getDocs(q);
+      const docId: string[] = [];
+      querySnapshot.forEach(e => docId.push(e.id));
+      console.log({ docId });
+      return docId.length > 0;
+    } catch (error) {
+      console.error(error);
+    }
+    setUpdate(e => !e);
+  };
+
+  const updateUser = async (
+    userPart: Partial<IUserDataType>,
+    restricted: boolean = false,
+  ) => {
     if (parseInt(activeUserData?.permissionLevel || "0") > 1) {
       try {
         const q = query(
-          collection(db, "usuários"),
+          collection(db, restricted ? restrictedCollection : userCollection),
           where("uid", "==", userPart.uid),
         );
         const querySnapshot = await getDocs(q);
         const docId: string[] = [];
-        console.log({docId})
+        console.log({ docId });
         querySnapshot.forEach(e => docId.push(e.id));
-        const userRef = doc(db, "usuários", docId[0]);
+        const userRef = doc(db, userCollection, docId[0]);
         await updateDoc(userRef, userPart);
       } catch (error) {
         console.error(error);
@@ -113,7 +151,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
               email,
             } = user;
 
-            await addDoc(collection(db, "usuários"), {
+            await addDoc(collection(db, userCollection), {
               uid: user.uid,
               permissionLevel,
               occupation,
@@ -122,7 +160,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
               birthday,
               email,
             });
-            await addDoc(collection(db, "dados-restritos"), {
+            await addDoc(collection(db, restrictedCollection), {
               uid: user.uid,
               workType,
               telefone,
@@ -144,7 +182,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   const getAllUsers = async () => {
     try {
       const usersArray: IUserDataType[] = [];
-      const querySnapshot = await getDocs(collection(db, "usuários"));
+      const querySnapshot = await getDocs(collection(db, userCollection));
       querySnapshot.forEach(doc => {
         usersArray.push(doc.data() as IUserDataType);
       });
@@ -158,7 +196,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
       try {
         const restrictedArray: IRestrictedDataType[] = [];
         const q = query(
-          collection(db, "dados-restritos"),
+          collection(db, restrictedCollection),
           where("uid", "==", uid),
         );
         const querySnapshot = await getDocs(q);
@@ -180,13 +218,13 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     try {
       for (let i = 0; i < newProject.teamUids.length; i++) {
         const q = query(
-          collection(db, "usuários"),
+          collection(db, userCollection),
           where("uid", "==", newProject.teamUids[i]),
         );
         const querySnapshot = await getDocs(q);
         const docId: string[] = [];
         querySnapshot.forEach(e => docId.push(e.id));
-        const userRef = doc(db, "usuários", docId[0]);
+        const userRef = doc(db, userCollection, docId[0]);
         const userData = allUsers.find(e => e.uid === newProject.teamUids[i]);
         if (userData) {
           const projectsCopy = JSON.parse(JSON.stringify(userData.projects));
@@ -208,13 +246,13 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     try {
       for (let i = 0; i < oldProject.teamUids.length; i++) {
         const q = query(
-          collection(db, "usuários"),
+          collection(db, userCollection),
           where("uid", "==", oldProject.teamUids[i]),
         );
         const querySnapshot = await getDocs(q);
         const docId: string[] = [];
         querySnapshot.forEach(e => docId.push(e.id));
-        const userRef = doc(db, "usuários", docId[0]);
+        const userRef = doc(db, userCollection, docId[0]);
         const userData = allUsers.find(e => e.uid === oldProject.teamUids[i]);
         if (userData) {
           const projectsCopy = JSON.parse(JSON.stringify(userData.projects));
@@ -233,11 +271,11 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   };
 
   const deleteUser = async (uid: string) => {
-    const q = query(collection(db, "usuários"), where("id", "==", uid));
+    const q = query(collection(db, userCollection), where("id", "==", uid));
     const docId: any[] = [];
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(doc => docId.push(doc.id));
-    await deleteDoc(doc(db, "usuários", docId[0]));
+    await deleteDoc(doc(db, userCollection, docId[0]));
     setUpdate(e => !e);
   };
 
@@ -269,6 +307,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
         createUser,
         deleteUser,
         updateUser,
+        verifyUniqueField,
       }}
     >
       {children}

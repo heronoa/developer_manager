@@ -130,3 +130,7 @@ const formatPhone = (phone: string): string => {
   }
   return phone;
 };
+
+export const formatInvalidMessage = (invalidMessage: string[]) => {
+  return invalidMessage.join(" já cadastrado \n\r");
+};

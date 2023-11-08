@@ -33,7 +33,7 @@ const CreateColaboratorModal = () => {
         }
     >,
   ) => {
-    setSubmitted(true);
+    // setSubmitted(true);
     const {
       name,
       contato: telefone,
@@ -57,14 +57,14 @@ const CreateColaboratorModal = () => {
     newUser.workType = workType[0];
     newUser.projects = [];
     try {
-      await createUser(newUser);
-      if (router.pathname !== "/colaborators") {
-        router.push("/colaborators");
-      }
+      // await createUser(newUser);
+      // if (router.pathname !== "/colaborators") {
+      //   router.push("/colaborators");
+      // }
     } catch (error) {
       console.error(error);
     }
-    return setModalIsOpen(false);
+    // return setModalIsOpen(false);
   };
 
   const formFields: IFormFieldType = {

@@ -6,8 +6,9 @@ import {
 import { IFormFieldOptions, IFormFieldType, IFormRegisterType } from "@/@types";
 import { useEffect, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { capitalize } from "@/services/format";
+import { capitalize, formatInvalidMessage } from "@/services/format";
 import SelectionFormField from "@/components/UI/FormFields/SelectionFormField";
+import { useUsers } from "@/hooks/useUsers";
 
 interface Props {
   className?: string;
@@ -31,6 +32,8 @@ const AuthForm = ({
   const [error, setError] = useState<string | null>(null);
   const [hidePassword, setHidePassword] = useState<boolean>(true);
 
+  const { verifyUniqueField } = useUsers();
+
   const {
     register,
     handleSubmit,
@@ -47,7 +50,30 @@ const AuthForm = ({
 
   const onSubmit = async (data: IFormRegisterType) => {
     const formError = formErrorsHandler(data);
-    console.log({ formError, data });
+    const invalidMessage: string[] = [];
+    if (data.registroGeral) {
+      invalidMessage.push(
+        (await verifyUniqueField(data.registroGeral, "rg")) ? "RG" : "",
+      );
+    }
+    if (data.email && data.password_confirm) {
+      invalidMessage.push(
+        (await verifyUniqueField(data.email, "email")) ? "Email" : "",
+      );
+    }
+    if (data.cadastroDePessoaFisica) {
+      invalidMessage.push(
+        (await verifyUniqueField(data.cadastroDePessoaFisica, "cpf"))
+          ? "CPF"
+          : "",
+      );
+    }
+
+    setError(
+      invalidMessage.length > 0
+        ? invalidMessage.join(" já cadastrado. ")
+        : null,
+    );
     if (!formError) {
       try {
         await handleOnSubmit(data);

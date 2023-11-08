@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { db } from "@/config/firebase";
+import { db, projectsCollection } from "@/config/firebase";
 import {
   getDocs,
   collection,
@@ -50,13 +50,13 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
     if (parseInt(activeUserData?.permissionLevel || "0") > 1) {
       try {
         const q = query(
-          collection(db, "projects"),
+          collection(db, projectsCollection),
           where("id", "==", projectPart.id),
         );
         const querySnapshot = await getDocs(q);
         const docId: string[] = [];
         querySnapshot.forEach(e => docId.push(e.id));
-        const projectRef = doc(db, "projects", docId[0]);
+        const projectRef = doc(db, projectsCollection, docId[0]);
         await updateDoc(projectRef, projectPart);
         setUpdate(e => !e);
       } catch (error) {
@@ -66,19 +66,19 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   };
 
   const deleteProject = async (id: string) => {
-    const q = query(collection(db, "projects"), where("id", "==", id));
+    const q = query(collection(db, projectsCollection), where("id", "==", id));
     const docId: any[] = [];
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach(doc => docId.push(doc.id));
     // await deleteDoc(doc(db, "cities", "DC"));
-    await deleteDoc(doc(db, "projects", docId[0]));
+    await deleteDoc(doc(db, projectsCollection, docId[0]));
     setUpdate(e => !e);
   };
 
   const sendNewProject = async (newProject: IProjectDataType) => {
     setLoading(true);
     try {
-      await addDoc(collection(db, "projects"), newProject);
+      await addDoc(collection(db, projectsCollection), newProject);
       setUpdate(prevState => !prevState);
     } catch (error) {
       console.error(error);
@@ -90,7 +90,7 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   const getAllProjects = async () => {
     try {
       const projectArray: IProjectDataType[] = [];
-      const querySnapshot = await getDocs(collection(db, "projects"));
+      const querySnapshot = await getDocs(collection(db, projectsCollection));
       querySnapshot.forEach(doc => {
         projectArray.push(doc.data() as IProjectDataType);
       });
@@ -104,14 +104,14 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   const addUsersToProjects = async (user: IUserDataType) => {
     try {
       const q = query(
-        collection(db, "projects"),
+        collection(db, projectsCollection),
         where("teamUids", "array-contains", user?.uid),
       );
       const querySnapshot = await getDocs(q);
       const docs: any = {};
       querySnapshot.forEach(doc => (docs[doc.id] = doc.data()));
       Object.entries(docs).forEach(async ([docKey, docValue]) => {
-        const docRef = doc(db, "projects", docKey);
+        const docRef = doc(db, projectsCollection, docKey);
         const teamCopy = JSON.parse(JSON.stringify((docValue as any).teamUids));
         teamCopy.splice(user.uid, 1);
         console.log({docRef, teamCopy, docValue})
@@ -130,14 +130,14 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
     try {
       if (user?.uid) {
         const q = query(
-          collection(db, "projects"),
+          collection(db, projectsCollection),
           where("teamUids", "array-contains", user?.uid),
         );
         const querySnapshot = await getDocs(q);
         const docs: any = {};
         querySnapshot.forEach(doc => (docs[doc.id] = doc.data()));
         Object.entries(docs).forEach(async ([docKey, docValue]) => {
-          const docRef = doc(db, "projects", docKey);
+          const docRef = doc(db, projectsCollection, docKey);
           const teamCopy = JSON.parse(JSON.stringify((docValue as any).teamUids));
           teamCopy.splice(user.uid, 1);
           console.log({docRef, teamCopy, docValue})

@@ -19,7 +19,11 @@ export const formErrorsHandler = ({
   email,
   password,
   cadastroDePessoaFisica,
+  cpf,
+  registroGeral,
+  rg,
   contato,
+  telefone,
 }: args): string | null => {
   if (password && password.length < 6) {
     return "As senhas tem no mínimo 6 caracteres";
@@ -27,11 +31,22 @@ export const formErrorsHandler = ({
   if (contato && contato.length < 11) {
     return "O contato precisar ter 11 numeros contando com o DDD";
   }
-  if (cadastroDePessoaFisica && cadastroDePessoaFisica.length !== 11) {
-    return "CPF precisa ter no minimo 11 digitos";
+  if (cadastroDePessoaFisica || cpf) {
+    if (cadastroDePessoaFisica?.length !== 11 && cpf?.length !== 11) {
+      return "CPF precisa ter 11 digitos";
+    }
+    if (!validarCPF(cadastroDePessoaFisica || cpf)) {
+      return "CPF inválido";
+    }
   }
-  if (cadastroDePessoaFisica && !validarCPF(cadastroDePessoaFisica)) {
-    return "CPF inválido";
+  if (
+    (rg && (rg.length > 9 || rg.length < 7))
+  ) {
+    return "RG precisa ter entre 7 e 9 digitos";
+  }
+
+  if (telefone && telefone.length !== 11) {
+    return "Contato precisa ter 11 digitos";
   }
   return null;
 };
