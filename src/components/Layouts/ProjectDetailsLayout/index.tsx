@@ -15,18 +15,16 @@ const ProjectDetailsLayout = ({ project }: Props) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-  
+    setMounted(true);
+  }, []);
+
   if (!project) {
     return <div className="dark:text-white">Projeto não encontrado</div>;
   }
   return (
     <section className="flex relative justify-start gap-4 items-center flex-col px-12 shadow-lg min-h-[75vh] dark:text-white">
-      <Transition.Root show={mounted}>
-        <FadeIn delay="delay-[300ms]">
-          <BackButton path={"/projects"} />
-        </FadeIn>
+      <Transition.Root show={mounted} className={"w-full"}>
+        <BackButton path={"/projects"} />
         <FadeIn delay="delay-[300ms]">
           <ProjectDetailsHeaderFrame project={project} />
         </FadeIn>

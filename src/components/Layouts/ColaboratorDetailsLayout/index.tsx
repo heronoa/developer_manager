@@ -18,8 +18,8 @@ const ColaboratorDetailsLayout = ({ user }: Props) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   if (!user) {
     return (
@@ -30,11 +30,9 @@ const ColaboratorDetailsLayout = ({ user }: Props) => {
   }
   return (
     <section className="flex relative justify-start gap-4 items-center flex-col px-12 shadow-lg min-h-[75vh] dark:text-white">
-      <Transition.Root show={mounted}>
-        <FadeIn delay="delay-[300ms]">
-          <BackButton path={"/colaborators"} />
-        </FadeIn>
-        <FadeIn delay="delay-[300ms]">
+      <Transition.Root show={mounted} className="w-full">
+        <BackButton path={"/colaborators"} />
+        <FadeIn delay="delay-[300ms] flex items-center">
           <ColaboratorDetailsHeaderFrame user={user} />
         </FadeIn>
 
