@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
 
     if (currentUser) {
       try {
-        if (parseInt(activeUserData?.permissionLevel || "0")) {
+        if (parseInt(activeUserData?.permissionLevel || "0") > 2) {
           throw Error("Admin não pode ser alterado")
         }
         await updatePassword(currentUser, newPassword);
@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     const currentUser = auth.currentUser;
     if (currentUser) {
       try {
-        if (parseInt(activeUserData?.permissionLevel || "0")) {
+        if (parseInt(activeUserData?.permissionLevel || "0") > 2) {
           throw Error("Admin não pode ser alterado")
         }
         await updateEmail(currentUser, newEmail);

@@ -56,7 +56,7 @@ interface UsersContextProps {
   ) => Promise<void>;
   deleteUser: (uid: string) => Promise<void>;
   updateUser: (
-    user: Partial<IUserDataType>,
+    user: Partial<IUserDataType & ISignupType>,
     restricted?: boolean,
   ) => Promise<void>;
   verifyUniqueField: (
