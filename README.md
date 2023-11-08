@@ -1,8 +1,16 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Para rodar o projeto
 
-## Getting Started
+versões:
+Node v18.16.1
 
-First, run the development server:
+
+Baixar dependencias:
+```bash
+npm install
+# or
+yarn 
+```
+
 
 ```bash
 npm run dev
@@ -14,23 +22,40 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Estrutura de pastas
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Estrutura de pastas:
+- public: assets estáticos como imagens, a logo por exemplo
+- src:arquivos principais da aplicação
+- src/@types: todas as tipagens da aplicação
+- src/components: todos os componentes usados na aplicação
+- src/components/Auth: componentes voltados a autenticação formulário e componente que só devem ser renderizado para permissões de gestor
+- src/components/Frames: componentes que compoem os layouts das páginas (cada página tem uma pasta aqui)
+- src/components/Layout: componentes principais de uma página (cada página tem um)
+- src/components/ModalContents: componentes de de renderização interna dos modais (cada modal tem um)
+- src/components/UI: componentes de interface que se repetem pela aplicação
+- src/config: configurações para inicialização de libs etc, aqui se inicializa o firebase
+- src/context: todos os meus arquivos de contextAPI aqui existem algumas das funções mais importantes (para ler, escrever, atualizar e deletar do banco de dados do firebase, por exemplo)
+- src/hooks: customs hooks a maioria deles está sendo usado para facilitar o acesso do contextAPI com excesão do useAnalytics onde é realizado o tratamento de dados para os gráficos do dashboard
+- src/layout: componente de SEO com os metadados da aplicação
+- src/pages: rotas da aplicação
+- src/services: funções que não são usadas para renderização e podem ser usadas em muito lugares da aplicação, usada principalmente para validação e formatação de dados
+- src/styles: os arquivos de estilo da aplicação usando tailwind e css puro
+- src/utils: usado principalmente para armazenar constantes
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## Colaborar
+ Nesse projeto foi usado o husky para garantir commits semanticos, as principais regras são que o commit precisa ter até no máximo 100 caracteres e precisa começar com algum prefix semantico segue os prefixos:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+-build: Alterações que afetam o sistema de construção ou dependências externas (escopos de exemplo: gulp, broccoli, npm),
+-ci: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs);
+-docs: referem-se a inclusão ou alteração somente de arquivos de documentação;
+-feat: Tratam adições de novas funcionalidades ou de quaisquer outras novas implantações ao código;
+-fix: Essencialmente definem o tratamento de correções de bugs;
+-perf: Uma alteração de código que melhora o desempenho;
+-refactor: Tipo utilizado em quaisquer mudanças que sejam executados no código, porém não alterem a funcionalidade final da tarefa impactada;
+-style: Alterações referentes a formatações na apresentação do código que não afetam o significado do código, como por exemplo: espaço em branco, formatação, ponto e vírgula ausente etc.);
+-test: Adicionando testes ausentes ou corrigindo testes existentes nos processos de testes automatizados (TDD);
+-chore: Atualização de tarefas que não ocasionam alteração no código de produção, mas mudanças de ferramentas, mudanças de configuração e bibliotecas que realmente não entram em produção;
+-env: basicamente utilizado na descrição de modificações ou adições em arquivos de configuração em processos e métodos de integração contínua (CI), como parâmetros em arquivos de configuração de containers.
