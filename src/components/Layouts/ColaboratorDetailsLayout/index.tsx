@@ -2,8 +2,11 @@ import { IUserDataType } from "@/@types";
 import ColaboratorDetailsHeaderFrame from "@/components/Frames/Colaborator/ColaboratorDetailsHeaderFrame";
 import ColaboratorListsFrame from "@/components/Frames/Colaborator/ColaboratorListsFrame";
 import ColaboratorRestrictedFrame from "@/components/Frames/Colaborator/ColaboratorRestrictedFrame";
+import FadeIn from "@/components/UI/Animations/FadeIn";
 import BackButton from "@/components/UI/BackButton";
 import { useAuth } from "@/hooks/useAuth";
+import { Transition } from "@headlessui/react";
+import { useState, useEffect } from "react";
 
 interface Props {
   user?: IUserDataType;
@@ -11,6 +14,12 @@ interface Props {
 
 const ColaboratorDetailsLayout = ({ user }: Props) => {
   const { activeUserData } = useAuth();
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   if (!user) {
     return (
@@ -21,13 +30,24 @@ const ColaboratorDetailsLayout = ({ user }: Props) => {
   }
   return (
     <section className="flex relative justify-start gap-4 items-center flex-col px-12 shadow-lg min-h-[75vh] dark:text-white">
-      <BackButton path={"/colaborators"} />
-      <ColaboratorDetailsHeaderFrame user={user} />
+      <Transition.Root show={mounted}>
+        <FadeIn delay="delay-[300ms]">
+          <BackButton path={"/colaborators"} />
+        </FadeIn>
+        <FadeIn delay="delay-[300ms]">
+          <ColaboratorDetailsHeaderFrame user={user} />
+        </FadeIn>
 
-      {parseInt(activeUserData?.permissionLevel || "0") > 1 && (
-        <ColaboratorRestrictedFrame user={user} />
-      )}
-      <ColaboratorListsFrame user={user} />
+        <FadeIn delay="delay-[600ms]">
+          {parseInt(activeUserData?.permissionLevel || "0") > 1 && (
+            <ColaboratorRestrictedFrame user={user} />
+          )}
+        </FadeIn>
+
+        <FadeIn delay="delay-[600ms]">
+          <ColaboratorListsFrame user={user} />
+        </FadeIn>
+      </Transition.Root>
     </section>
   );
 };

@@ -9,7 +9,7 @@ export const useAnalytics = () => {
   const getUsersByProjects = () => {
     const data: any[] = [];
     const mappedValues = allUsers.map(user => user.projects.length);
-    const iterableArray = new Array(Math.max(...mappedValues) + 1);
+    const iterableArray = new Array(Math.max(...mappedValues, 0) + 1);
 
     iterableArray
       .fill("value")
