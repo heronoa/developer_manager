@@ -1,4 +1,9 @@
-import { IDateObj, IFilterKeyOption, IFormatItem } from "@/@types";
+import {
+  IDateObj,
+  IFilterKeyOption,
+  IFormatItem,
+  IRestrictedDataType,
+} from "@/@types";
 
 export const capitalize = (str: string) => {
   if (str === "") return "";
@@ -16,7 +21,7 @@ export const getAge = (strDate: string): string | number => {
 
 export const formatItem = (
   value: IFormatItem,
-  key?: IFilterKeyOption | "age",
+  key?: IFilterKeyOption | keyof IRestrictedDataType | "age",
 ): string | null => {
   if (key) {
     if (
@@ -49,6 +54,12 @@ export const formatItem = (
     }
     if (key === "cpf") {
       return formatCPF(value as string);
+    }
+    if (key === "telefone") {
+      return formatPhone(value as string);
+    }
+    if (key === "workType") {
+      return (value as string).toUpperCase();
     }
   }
 
@@ -105,4 +116,17 @@ const formatCPF = (cpf: string): string => {
   cpf = cpf.replace(/[^\d]/g, "");
 
   return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+};
+const formatPhone = (phone: string): string => {
+  if (/^\d{11}$/.test(phone)) {
+    const ddd = phone.substring(0, 2);
+    const parte1 = phone.substring(2, 3);
+    const parte2 = phone.substring(3, 7);
+    const parte3 = phone.substring(7);
+
+    // Formata o número de telefone
+    const formatedPhone = `(${ddd}) ${parte1} ${parte2}-${parte3}`;
+    return formatedPhone;
+  }
+  return phone;
 };

@@ -49,7 +49,8 @@ interface UsersContextProps {
   createUser: (
     user: IUserDataType & ISignupType & IRestrictedDataType,
   ) => Promise<void>;
-  deleteUser: (uid: string) => Promise<void>
+  deleteUser: (uid: string) => Promise<void>;
+  updateUser: (user: Partial<IUserDataType>) => Promise<void>;
 }
 
 export const UsersContext = createContext({} as UsersContextProps);
@@ -60,6 +61,26 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   const [error, setError] = useState<any | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
   const [update, setUpdate] = useState<boolean>(true);
+
+  const updateUser = async (userPart: Partial<IUserDataType>) => {
+    if (parseInt(activeUserData?.permissionLevel || "0") > 1) {
+      try {
+        const q = query(
+          collection(db, "usuários"),
+          where("uid", "==", userPart.uid),
+        );
+        const querySnapshot = await getDocs(q);
+        const docId: string[] = [];
+        console.log({docId})
+        querySnapshot.forEach(e => docId.push(e.id));
+        const userRef = doc(db, "usuários", docId[0]);
+        await updateDoc(userRef, userPart);
+      } catch (error) {
+        console.error(error);
+      }
+      setUpdate(e => !e);
+    }
+  };
 
   const createUser = async (
     user: IUserDataType & ISignupType & IRestrictedDataType,
@@ -218,7 +239,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     querySnapshot.forEach(doc => docId.push(doc.id));
     await deleteDoc(doc(db, "usuários", docId[0]));
     setUpdate(e => !e);
-
   };
 
   useEffect(() => {
@@ -248,6 +268,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
         getRestrictedData,
         createUser,
         deleteUser,
+        updateUser,
       }}
     >
       {children}
