@@ -26,7 +26,7 @@ export const formErrorsHandler = ({
   telefone,
 }: args): string | null => {
   if (password && password.length < 6) {
-    return "As senhas tem no mínimo 6 caracteres";
+    return "As senhas precisma de no mínimo 6 caracteres";
   }
   if (contato && contato.length < 11) {
     return "O contato precisar ter 11 numeros contando com o DDD";
