@@ -1,3 +1,5 @@
+import { validarCPF } from "./textValidation";
+
 export const firebaseAuthErrorsHandler = (message: string): string => {
   return (
     {
@@ -9,12 +11,27 @@ export const firebaseAuthErrorsHandler = (message: string): string => {
   );
 };
 
-export const formErrorsHandler = (
-  email: string,
-  password: string,
-): string | null => {
+interface args {
+  [key: string]: any;
+}
+
+export const formErrorsHandler = ({
+  email,
+  password,
+  cadastroDePessoaFisica,
+  contato,
+}: args): string | null => {
   if (password?.length < 6) {
     return "As senhas tem no mínimo 6 caracteres";
+  }
+  if (contato.length < 11) {
+    return "O contato precisar ter 11 numeros contando com o DDD"
+  }
+  if (cadastroDePessoaFisica.length !== 11) {
+    return "CPF precisa ter no minimo 11 digitos"
+  }
+  if (!validarCPF(cadastroDePessoaFisica)) {
+    return "CPF inválido"
   }
   return null;
 };

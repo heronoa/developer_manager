@@ -22,13 +22,6 @@ type ObtainKeys<Obj, Type> = {
   [Prop in keyof Obj]: Obj[Prop] extends Type ? Prop : never;
 }[keyof Obj];
 
-export interface ISWR {
-  data: any;
-  error: any;
-  isValidating: boolean;
-  isLoading: boolean;
-}
-
 interface INavData {
   displayName: string;
   path?: string;
@@ -63,7 +56,7 @@ export interface IUserType {
 export interface IRestrictedDataType {
   uid: string;
   workType: string;
-  phone: string;
+  telefone: string;
   rg: string;
   cpf: string;
 }
@@ -73,7 +66,7 @@ export interface ILoginType {
   password: string;
 }
 
-export interface SignupType extends ILoginType {
+export interface ISignupType extends ILoginType {
   password_confirm: string;
 }
 
@@ -81,7 +74,7 @@ export type IFormRegisterType = Partial<{
   [key: string]: string;
 }> &
   ILoginType &
-  SignupType;
+  ISignupType;
 
 type formStatesAction = [any | any[], Dispatch<SetStateAction<any | any[]>>]
 

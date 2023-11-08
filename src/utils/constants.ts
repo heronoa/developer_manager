@@ -1,6 +1,6 @@
 export const publicRoutes = ["/"];
 
-export const defaultColor = "#a40100"
+export const defaultColor = "#a40100";
 
 export const possiblesStacks = {
   Javascript: "#F7DF1E",
@@ -53,4 +53,11 @@ export const possibleOccupations = {
   segurança: "#673AB7",
 };
 
-export const minimumOccupationsToProjects = ["gerente", "frontend", "backend"]
+export const minimumOccupationsToProjects = ["gerente", "frontend", "backend"];
+
+export const possiblesWorkTypes = {
+  clt: "#61DAFB",
+  pj: "#FF6F61",
+};
+
+export const milissecondsInAYear = 365 * 24 * 60 * 60 * 1000;

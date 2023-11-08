@@ -46,7 +46,13 @@ const AuthForm = ({
   // }, [error]);
 
   const onSubmit = async (data: IFormRegisterType) => {
-    const formError = formErrorsHandler(data.email, data.password);
+    const formError = formErrorsHandler({
+      email: data.email,
+      passoword: data.password,
+      cadastroDePessoaFisica: data.cadastroDePessoaFisica,
+      contato: data.contato,
+    });
+    console.log({ formError, data });
     if (!formError) {
       try {
         await handleOnSubmit(data);
@@ -84,26 +90,26 @@ const AuthForm = ({
       );
     }
 
-    return (
-      <div className="relative">
-        {hidePassword ? (
-          <input
-            type={formOptions.fieldType}
-            {...register(formName, formOptions)}
-            className={`${formOptions?.inputClassName || ""}
+    if (formOptions.fieldType === "password") {
+      return (
+        <div className="relative">
+          {hidePassword ? (
+            <input
+              type={formOptions.fieldType}
+              {...register(formName, formOptions)}
+              className={`${formOptions?.inputClassName || ""}
             ${defaultInputClass}`}
-            defaultValue={formOptions.defaultValue}
-            placeholder={formOptions.placeholder}
-          />
-        ) : (
-          <input
-            type="text"
-            {...register(formName, formOptions)}
-            className={`${formOptions?.inputClassName || ""}
+              defaultValue={formOptions.defaultValue}
+              placeholder={formOptions.placeholder}
+            />
+          ) : (
+            <input
+              type="text"
+              {...register(formName, formOptions)}
+              className={`${formOptions?.inputClassName || ""}
             ${defaultInputClass} `}
-          />
-        )}
-        {formOptions.fieldType === "password" && (
+            />
+          )}
           <div
             className="absolute top-2 right-2"
             onClick={() => setHidePassword(prevState => !prevState)}
@@ -114,7 +120,20 @@ const AuthForm = ({
               <AiFillEyeInvisible className="w-9 h-9 text-blue-900 dark:text-white" />
             )}
           </div>
-        )}
+        </div>
+      );
+    }
+
+    return (
+      <div className="relative">
+        <input
+          type={formOptions.fieldType}
+          {...register(formName, formOptions)}
+          className={`${formOptions?.inputClassName || ""}
+            ${defaultInputClass}`}
+          defaultValue={formOptions.defaultValue}
+          placeholder={formOptions.placeholder}
+        />
       </div>
     );
   };

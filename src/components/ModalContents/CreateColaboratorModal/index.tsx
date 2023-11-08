@@ -1,104 +1,175 @@
-import { SignupType } from "@/@types";
+import {
+  IFormFieldType,
+  IRestrictedDataType,
+  ISignupType,
+  IUserDataType,
+} from "@/@types";
 import AuthForm from "@/components/Auth/AuthForm";
-import { useAuth } from "@/hooks/useAuth";
-import { register } from "module";
-import router from "next/router";
-import { FormProvider, useForm } from "react-hook-form";
+import Loading from "@/components/UI/Loading";
+import { useModals } from "@/hooks/useModals";
+import { useUsers } from "@/hooks/useUsers";
+import { milissecondsInAYear } from "@/utils/constants";
+import { Timestamp } from "firebase/firestore";
+import router, { useRouter } from "next/router";
+import {  useState } from "react";
 
 const CreateColaboratorModal = () => {
-  const methods = useForm<SignupType>({ mode: "onBlur" });
-  const { signUp } = useAuth();
+  const { loading, createUser, error } = useUsers();
+  const [occupation, setOccupation] = useState<string[]>([]);
+  const [workType, setWorkType] = useState<string[]>([]);
+  const [submitted, setSubmitted] = useState(false);
+  const router = useRouter();
+  const { setModalIsOpen } = useModals();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = methods;
-
-  const onSubmit = async (data: SignupType) => {
+  const onSubmit = async (
+    data: Partial<
+      IUserDataType &
+        ISignupType &
+        IRestrictedDataType & {
+          registroGeral: string;
+          cadastroDePessoaFisica: string;
+          senha: string;
+          contato: string;
+        }
+    >,
+  ) => {
+    setSubmitted(true);
+    const {
+      name,
+      contato: telefone,
+      birthday,
+      registroGeral: rg,
+      cadastroDePessoaFisica: cpf,
+      email,
+      senha: password,
+    } = data;
+    const newUser: any = {
+      name,
+      telefone,
+      birthday,
+      rg,
+      cpf,
+      email,
+      password,
+    };
+    newUser.birthday = Timestamp.fromDate(new Date(newUser.birthday));
+    newUser.occupation = occupation;
+    newUser.workType = workType[0];
+    newUser.projects = [];
     try {
-      await signUp(data.email, data.password);
-      router.push("/dashboard");
-    } catch (error: any) {
-      console.log(error.message);
+      await createUser(newUser);
+      if (router.pathname !== "/colaborators") {
+        router.push("/colaborators");
+      }
+    } catch (error) {
+      console.error(error);
     }
+    return setModalIsOpen(false);
   };
 
-  // emai, password, confirmPassword
+  const formFields: IFormFieldType = {
+    name: {
+      required: "Nome é necessário",
+      fieldType: "text",
+    },
+    contato: {
+      fieldType: "number",
+      fieldLabel: "Telefone com DDD",
+      minLength: 11,
+      maxLength: 11,
+      required: "Telefone é necessário",
+    },
+    birthday: {
+      required: "Dia da Nascimento o é necessário",
+      fieldType: "date",
+      fieldLabel: "Dia de Nascimento",
+      defaultValue: new Date(Date.now() - 18 * milissecondsInAYear)
+        .toISOString()
+        .split("T")[0],
+    },
+
+    occupation: {
+      required: "Selecionar Area de Atuação",
+      fieldType: "selection",
+      fieldLabel: "Área de Atuação",
+      _formStates: [occupation, setOccupation],
+      divClassName: "row-start-2 row-end-3",
+    },
+    workType: {
+      required: "Regime de Trabalho",
+      fieldType: "selection",
+      fieldLabel: "Regime de Trabalho",
+      _formStates: [workType, setWorkType],
+      divClassName: "row-start-2 row-end-3",
+    },
+    registroGeral: {
+      required: "RG é necessário",
+      fieldType: "number",
+      fieldLabel: "RG",
+      minLength: 7,
+      maxLength: 9,
+    },
+    cadastroDePessoaFisica: {
+      required: "CPF é necessário",
+      fieldType: "number",
+      fieldLabel: "CPF",
+      minLength: 11,
+      maxLength: 11,
+    },
+    email: {
+      required: "Email é necessária",
+      fieldType: "email",
+    },
+    senha: {
+      required: "Senha é necessária",
+      fieldType: "password",
+      fieldLabel: "Senha",
+    },
+    password_confirm: {
+      required: "Senhas não são iguais",
+      fieldType: "password",
+      fieldLabel: "Confirmar Senha",
+    },
+  };
+
+  const submitBtn = () => {
+    if (loading) {
+      return (
+        <div className="loading-circle !h-[30px] after:!h-[10px] !border-[6px] !border-white !border-t-[transparent] after:hidden"></div>
+      );
+    }
+    return "Submit";
+  };
+
+  const renderFormContent = () => {
+    if (loading) return <Loading />;
+
+    if (submitted)
+      return (
+        <div className="flex flex-col w-full h-full justify-center items-center mx-auto text-[26px]">
+          <div>{error ? error : "Usuário Criado com Sucesso"}</div>
+        </div>
+      );
+
+    return (
+      <AuthForm
+        className="w-full flex justify-center items-start flex-col h-full md:items-start md:grid md:grid-cols-4 md:gap-x-4"
+        handleOnSubmit={onSubmit as any}
+        submitBtn={submitBtn}
+        formFields={formFields}
+        disabled={loading}
+      />
+    );
+  };
 
   return (
-    <div className="container mx-auto w-96 mt-12">
-      <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900">
+    <div className="container mx-auto min-w-[250px] md:-w-[800px] w-[300px] lg:min-w-[1000px]">
+      <h2 className="px-12 mt-8 text-center text-2xl font-semibold text-blue-900 dark:text-white">
         Adicionar Colaborador
       </h2>
-      {/* <AuthForm /> */}
-
-      <FormProvider {...methods}>
-        <form
-          action=""
-          className="w-80 mx-auto pb-12 px-4"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div className="mt-8">
-            <div className="flex items-center justify-between">
-              <label htmlFor="" className="block mb-3 font-sans text-blue-900">
-                Email
-              </label>
-            </div>
-
-            <input
-              type="email"
-              {...register("email", { required: "Email is required" })}
-              className={`border border-solid rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`}
-            />
-            {errors.email && (
-              <p className="text-red-400">{errors.email.message}</p>
-            )}
-          </div>
-          <div className="mt-8">
-            <div className="flex items-center justify-between">
-              <label htmlFor="" className="block mb-3 font-sans text-blue-900">
-                Password
-              </label>
-            </div>
-
-            <input
-              type="password"
-              {...register("password", { required: "Password is required" })}
-              className={`border border-solid rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`}
-            />
-            {errors.password && (
-              <p className="text-red-400">{errors.password.message}</p>
-            )}
-          </div>
-          <div className="mt-8">
-            <div className="flex items-center justify-between">
-              <label htmlFor="" className="block mb-3 font-sans text-blue-900">
-                Confirm Password
-              </label>
-            </div>
-
-            <input
-              type="password"
-              {...register("password_confirm", {
-                required: "Verify your password",
-              })}
-              className={`border border-solid rounded-lg ring:0 focus:ring-0 focus:outline-none border-gray-400 text-gray-500 text-normal py-3 h-12 px-6 text-lg w-full flex items-center`}
-            />
-            {errors.password_confirm && (
-              <p className="text-red-400">{errors.password_confirm.message}</p>
-            )}
-          </div>
-          <div className="flex justify-center pt-8">
-            <button
-              type="submit"
-              className={`h-12 text-center w-2/3 bg-blue-900 border-2 rounded-md hover:shadow-lg hover:bg-blue-800 text-lg transition`}
-            >
-              <p className="capitalize text-white font-normal">submit</p>
-            </button>
-          </div>
-        </form>
-      </FormProvider>
+      <div className="max-h-[80vh] overflow-y-scroll md:overflow-y-auto md:min-h-[60vh] flex justify-center items-start">
+        {renderFormContent()}
+      </div>
     </div>
   );
 };

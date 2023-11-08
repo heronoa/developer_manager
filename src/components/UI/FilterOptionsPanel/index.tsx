@@ -1,4 +1,6 @@
 import { IFilterKeyOption, IFilterOptions } from "@/@types";
+import AddButton from "@/components/Auth/AddButton";
+import { useModals } from "@/hooks/useModals";
 import {
   formatItem,
   sortItemsData,
@@ -14,6 +16,7 @@ interface Props {
 
 const FilterOptionsPanel = ({ filterOptions, setFilterOptions }: Props) => {
   const sortedData = sortItemsData(filterOptions);
+  const { setModalIsOpen, setModalContentKey } = useModals();
 
   const handleChangeFilter = (key: string, value: string) => {
     setFilterOptions(prevState => {
@@ -25,7 +28,15 @@ const FilterOptionsPanel = ({ filterOptions, setFilterOptions }: Props) => {
 
   return (
     <>
-      <div className="w-[90%] rounded-full dark:border-b-0 dark:border-l-0 dark:border-r-0 md:rounded-none md:mb-0 mb-4 shadow-lg bg-white dark:bg-[#333333] dark:border dark:border-grey-200  md:bg-gray-200 h-[50px] mx-auto flex flex-row justify-center md:justify-end items-center px-4">
+      <div className="w-[90%] md:justify-between rounded-full dark:border-b-0 dark:border-l-0 dark:border-r-0 md:rounded-none md:mb-0 mb-4 shadow-lg bg-white dark:bg-[#333333] dark:border dark:border-grey-200  md:bg-gray-200 h-[50px] mx-auto flex flex-row justify-center items-center px-4">
+        <AddButton
+          fn={() => {
+            setModalContentKey(
+              filterOptions?.email !== undefined ? "addcolaborator" : "createprojects",
+            );
+            setModalIsOpen(true);
+          }}
+        />
         <div className="h-[75%] relative">
           <input
             value={filterOptions.name as string}

@@ -12,7 +12,6 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const CreateProjectModal = () => {
-  const { loading: userLoading } = useAuth();
   const {
     sendNewProject,
     loading: projectsLoading,
@@ -93,7 +92,7 @@ const CreateProjectModal = () => {
   };
 
   const submitBtn = () => {
-    if (userLoading) {
+    if (projectsLoading) {
       return (
         <div className="loading-circle !h-[30px] after:!h-[10px] !border-[6px] !border-white !border-t-[transparent] after:hidden"></div>
       );
@@ -101,7 +100,7 @@ const CreateProjectModal = () => {
     return "Submit";
   };
 
-  const renderFormContet = () => {
+  const renderFormContent = () => {
     if (projectsLoading) return <Loading />;
 
     if (submitted)
@@ -129,7 +128,7 @@ const CreateProjectModal = () => {
         Novo Projeto
       </h2>
       <div className="max-h-[80vh] overflow-y-scroll md:overflow-y-auto md:min-h-[60vh] flex justify-center items-start">
-        {renderFormContet()}
+        {renderFormContent()}
       </div>
     </div>
   );

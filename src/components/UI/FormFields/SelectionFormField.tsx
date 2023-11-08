@@ -1,6 +1,8 @@
 import {
   minimumOccupationsToProjects,
+  possibleOccupations,
   possiblesStacks,
+  possiblesWorkTypes,
 } from "@/utils/constants";
 import TinyItem from "../Items/TinyItem";
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from "react";
@@ -24,13 +26,22 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
   const { allUsers, findUser } = useUsers();
 
   useEffect(() => {
-    if (type === "stack") {
+    if (type === "teamUids") {
       if (states[0].length === 0) {
-        return setError("Selecione pelo menos uma tecnologia");
+        return setError("Selecione pelo menos uma pessoa para o time");
       }
     } else {
       if (states[0].length === 0) {
-        return setError("Selecione pelo menos uma pessoa para o time");
+        return setError(
+          `Selecione pelo menos um${
+            {
+              teamUids: "a pessoa para o time",
+              stack: "a tecnologia",
+              workType: " regime de trabalho",
+              occupation: "a area de atuação",
+            }?.[type] || "a tecnologia"
+          }`,
+        );
       }
     }
 
@@ -54,7 +65,7 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
     if (type === "teamUids") {
       return states[0].map((e: any, index: number) => {
         const value =
-          e?.name?.split(" ")?.[0] || findUser(e).name?.split(" ")?.[0] || e;
+          e?.name?.split(" ")?.[0] || findUser(e)?.name?.split(" ")?.[0] || e;
         return (
           <div
             key={index}
@@ -72,10 +83,14 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
       });
     }
 
-    if (type === "stack") {
+    if (type === "stack" || type === "workType" || type === "occupation") {
       return states[0].map((e: any, index: number) => (
         <div key={index} onClick={() => handleSelection(e)}>
-          <TinyItem value={e} />
+          <TinyItem
+            value={
+              type === "occupation" || type === "workType" ? e.toUpperCase() : e
+            }
+          />
         </div>
       ));
     }
@@ -148,20 +163,32 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
       );
     }
 
-    if (type === "stack") {
+    if (type === "stack" || type === "workType" || type === "occupation") {
       return (
         <div className="mb-10 flex flex-col gap-6">
           Selecionados
           <div className="flex gap-4 flex-wrap">
             {states[0].map((e: any, index: number) => (
               <div key={index} onClick={() => handleSelection(e)}>
-                <TinyItem value={e} />
+                <TinyItem
+                  value={
+                    type === "occupation" || type === "workType"
+                      ? e.toUpperCase()
+                      : e
+                  }
+                />
               </div>
             ))}
           </div>
           Opções
           <div className="flex gap-4 flex-wrap">
-            {Object.keys(possiblesStacks)
+            {Object.keys(
+              {
+                stack: possiblesStacks,
+                workType: possiblesWorkTypes,
+                occupation: possibleOccupations,
+              }?.[type] || possiblesStacks,
+            )
               .filter(item => {
                 return (
                   (searchStr !== ""
@@ -171,7 +198,13 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
               })
               .map((e, index) => (
                 <div key={index} onClick={() => handleSelection(e)}>
-                  <TinyItem value={e} />
+                  <TinyItem
+                    value={
+                      type === "occupation" || type === "workType"
+                        ? e.toUpperCase()
+                        : e
+                    }
+                  />
                 </div>
               ))}
           </div>
@@ -190,11 +223,15 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
       if (index !== -1) {
         newState.splice(index, 1);
       } else {
+        if (type === "workType") {
+          return [element];
+        }
         newState.push(element);
       }
       if (states) {
         states[1](newState);
       }
+
       return newState;
     });
   };

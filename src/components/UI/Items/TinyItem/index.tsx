@@ -15,7 +15,7 @@ const TinyItem = ({ value }: Props) => {
   return (
     <div
       style={{ background: color }}
-      className="text-white rounded-full p-2 w-fit text-center"
+      className="text-white rounded-full p-2 w-fit text-center min-w-[50px]"
     >
       {value}
     </div>

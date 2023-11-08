@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { db } from "@/config/firebase";
+import { db, firebaseConfig } from "@/config/firebase";
 import {
   getDocs,
   collection,
@@ -15,9 +15,22 @@ import {
   updateDoc,
   where,
   query,
+  addDoc,
 } from "firebase/firestore";
 import { useAuth } from "@/hooks/useAuth";
-import { IProjectDataType, IRestrictedDataType, IUserDataType } from "@/@types";
+import {
+  ILoginType,
+  IProjectDataType,
+  IRestrictedDataType,
+  ISignupType,
+  IUserDataType,
+} from "@/@types";
+import firebase from "firebase/compat/app";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signOut,
+} from "firebase/auth";
 
 interface IUsersProvider {
   children: ReactNode;
@@ -32,6 +45,9 @@ interface UsersContextProps {
   setUpdate: Dispatch<SetStateAction<boolean>>;
   findUser: (uid: string) => IUserDataType | undefined;
   getRestrictedData: (uid: string) => Promise<IRestrictedDataType | undefined>;
+  createUser: (
+    user: IUserDataType & ISignupType & IRestrictedDataType,
+  ) => Promise<void>;
 }
 
 export const UsersContext = createContext({} as UsersContextProps);
@@ -42,6 +58,65 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   const [error, setError] = useState<any | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
   const [update, setUpdate] = useState<boolean>(true);
+
+  const createUser = async (
+    user: IUserDataType & ISignupType & IRestrictedDataType,
+  ) => {
+    const secondaryApp = firebase.initializeApp(firebaseConfig, "Secondary");
+
+    createUserWithEmailAndPassword(
+      getAuth(secondaryApp),
+      user.email as string,
+      user.password as string,
+    )
+      .then(async firebaseUser => {
+        console.log(
+          "User " + firebaseUser.user?.uid + " created successfully!",
+        );
+        try {
+          if (firebaseUser.user?.uid) {
+            user.uid = firebaseUser.user?.uid;
+            user.permissionLevel = user.occupation.includes("gerente")
+              ? "2"
+              : "1";
+            user.projects = [];
+            const { workType, telefone, rg, cpf } = user;
+            const {
+              permissionLevel,
+              occupation,
+              projects,
+              name,
+              birthday,
+              email,
+            } = user;
+
+            await addDoc(collection(db, "usuários"), {
+              uid: user.uid,
+              permissionLevel,
+              occupation,
+              projects,
+              name,
+              birthday,
+              email,
+            });
+            await addDoc(collection(db, "dados-restritos"), {
+              uid: user.uid,
+              workType,
+              telefone,
+              rg,
+              cpf,
+            });
+          }
+        } catch (error) {
+          console.error(error);
+          setError(error);
+        }
+        signOut(getAuth(secondaryApp));
+      })
+      .finally(() => {
+        setUpdate(prevState => !prevState);
+      });
+  };
 
   const getAllUsers = async () => {
     try {
@@ -161,6 +236,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
         setUpdate,
         findUser,
         getRestrictedData,
+        createUser,
       }}
     >
       {children}
