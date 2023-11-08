@@ -60,7 +60,11 @@ const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
       </span>
 
       {!state && (
-        <div className={` ${objKey === "projects" ? "flex-col" : ""} flex flex-wrap relative mt-8`}>
+        <div
+          className={` ${
+            ["projects", "teamUids"].includes(objKey) ? "flex-col" : ""
+          } flex flex-wrap relative mt-8`}
+        >
           {(objValue as string[]).map((e, index) => {
             let value: string | IUserDataType | IProjectDataType = e;
             if (objKey === "teamUids") {
@@ -76,10 +80,13 @@ const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
               <div key={index}>
                 <div>
                   {value.name}
-                  {(value as IUserDataType)?.occupation &&
-                    (value as IUserDataType)?.occupation.map((e, index2) => {
-                      return <TinyItem key={index2} value={e} />;
-                    })}
+                  {(value as IUserDataType)?.occupation && (
+                    <div className="flex flex-wrap">
+                      {(value as IUserDataType)?.occupation.map((e, index2) => {
+                        return <TinyItem key={index2} value={e} />;
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             );
