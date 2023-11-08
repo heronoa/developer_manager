@@ -21,17 +21,17 @@ export const formErrorsHandler = ({
   cadastroDePessoaFisica,
   contato,
 }: args): string | null => {
-  if (password?.length < 6) {
+  if (password && password.length < 6) {
     return "As senhas tem no mínimo 6 caracteres";
   }
-  if (contato.length < 11) {
-    return "O contato precisar ter 11 numeros contando com o DDD"
+  if (contato && contato.length < 11) {
+    return "O contato precisar ter 11 numeros contando com o DDD";
   }
-  if (cadastroDePessoaFisica.length !== 11) {
-    return "CPF precisa ter no minimo 11 digitos"
+  if (cadastroDePessoaFisica && cadastroDePessoaFisica.length !== 11) {
+    return "CPF precisa ter no minimo 11 digitos";
   }
-  if (!validarCPF(cadastroDePessoaFisica)) {
-    return "CPF inválido"
+  if (cadastroDePessoaFisica && !validarCPF(cadastroDePessoaFisica)) {
+    return "CPF inválido";
   }
   return null;
 };

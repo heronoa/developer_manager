@@ -1,14 +1,24 @@
 import { IProjectDataType, IUserDataType } from "@/@types";
 import TinyItem from "@/components/UI/Items/TinyItem";
 import { useProjects } from "@/hooks/useProjects";
+import { useUsers } from "@/hooks/useUsers";
 import { translateItemKeys } from "@/services/format";
+import { useRouter } from "next/router";
 
 interface Props {
   user: IUserDataType;
 }
 
 const ColaboratorListsFrame = ({ user }: Props) => {
-  const { allProjects } = useProjects();
+  const { allProjects, removingUserFromProjects } = useProjects();
+  const { deleteUser } = useUsers();
+  const router = useRouter();
+
+  const onDeleteColaborator = async () => {
+    await removingUserFromProjects(user);
+    await deleteUser(user.uid);
+    router.push("/projects");
+  };
 
   const findProject = (id: String) => {
     return allProjects.find(e => e.id === id);
@@ -47,7 +57,10 @@ const ColaboratorListsFrame = ({ user }: Props) => {
         })}
       </div>
       <div className="flex w-full justify-end mt-4 border-t-gray-300 border-t pt-4">
-        <button className="btn !max-w-[200px] text-white !bg-red-600 hover:!bg-red-800">
+        <button
+          onClick={onDeleteColaborator}
+          className="btn !max-w-[200px] text-white !bg-red-600 hover:!bg-red-800"
+        >
           Delete
         </button>
       </div>

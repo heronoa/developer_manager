@@ -16,6 +16,7 @@ import {
   where,
   query,
   addDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -48,6 +49,7 @@ interface UsersContextProps {
   createUser: (
     user: IUserDataType & ISignupType & IRestrictedDataType,
   ) => Promise<void>;
+  deleteUser: (uid: string) => Promise<void>
 }
 
 export const UsersContext = createContext({} as UsersContextProps);
@@ -154,7 +156,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   };
 
   const updateUsersProjects = async (newProject: IProjectDataType) => {
-    // TODO: Atualizar usuarios adicionados no projeto novo
     try {
       for (let i = 0; i < newProject.teamUids.length; i++) {
         const q = query(
@@ -183,7 +184,6 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   };
 
   const removingUsersProjects = async (oldProject: IProjectDataType) => {
-    // TODO: Atualizar usuarios adicionados no projeto novo
     try {
       for (let i = 0; i < oldProject.teamUids.length; i++) {
         const q = query(
@@ -209,6 +209,16 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const deleteUser = async (uid: string) => {
+    const q = query(collection(db, "usuários"), where("id", "==", uid));
+    const docId: any[] = [];
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(doc => docId.push(doc.id));
+    await deleteDoc(doc(db, "usuários", docId[0]));
+    setUpdate(e => !e);
+
   };
 
   useEffect(() => {
@@ -237,6 +247,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
         findUser,
         getRestrictedData,
         createUser,
+        deleteUser,
       }}
     >
       {children}

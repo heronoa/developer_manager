@@ -46,12 +46,7 @@ const AuthForm = ({
   // }, [error]);
 
   const onSubmit = async (data: IFormRegisterType) => {
-    const formError = formErrorsHandler({
-      email: data.email,
-      passoword: data.password,
-      cadastroDePessoaFisica: data.cadastroDePessoaFisica,
-      contato: data.contato,
-    });
+    const formError = formErrorsHandler(data);
     console.log({ formError, data });
     if (!formError) {
       try {
