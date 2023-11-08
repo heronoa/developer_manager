@@ -271,12 +271,23 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
   };
 
   const deleteUser = async (uid: string) => {
-    const q = query(collection(db, userCollection), where("id", "==", uid));
-    const docId: any[] = [];
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach(doc => docId.push(doc.id));
-    await deleteDoc(doc(db, userCollection, docId[0]));
-    setUpdate(e => !e);
+    try {
+      const q = query(collection(db, userCollection), where("id", "==", uid));
+      const docId: any[] = [];
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.permissionLevel === "3") {
+          throw Error("Não é permitido deletar esse usuário");
+        } else {
+          docId.push(doc.id);
+        }
+      });
+      await deleteDoc(doc(db, userCollection, docId[0]));
+      setUpdate(e => !e);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
