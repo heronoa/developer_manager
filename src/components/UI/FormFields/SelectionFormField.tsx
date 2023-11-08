@@ -10,6 +10,7 @@ import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 import { useUsers } from "@/hooks/useUsers";
 import { stringVerifier } from "@/services/errorHandler";
 import { Transition } from "@headlessui/react";
+import { useProjects } from "@/hooks/useProjects";
 
 interface Props {
   type: string;
@@ -24,14 +25,19 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
   const [searchStr, setSearchStr] = useState<string>("");
   const [showSelection, setShowSelection] = useState<boolean>(false);
   const { allUsers, findUser } = useUsers();
+  const { allProjects, findProject } = useProjects();
 
   useEffect(() => {
     if (type === "teamUids") {
+
       if (states[0].length === 0) {
         return setError("Selecione pelo menos uma pessoa para o time");
       }
     } else {
       if (states[0].length === 0) {
+        if (type === "projects") {
+          return;
+        }
         return setError(
           `Selecione pelo menos um${
             {
@@ -74,6 +80,27 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
                 name: e.name,
                 uid: e.uid,
                 occupation: e.occupation,
+              })
+            }
+          >
+            <TinyItem value={value} />
+          </div>
+        );
+      });
+    }
+    if (type === "projects") {
+      return states[0].map((e: any, index: number) => {
+        const value =
+          e?.name?.split(" ")?.[0] ||
+          findProject(e)?.name?.split(" ")?.[0] ||
+          e;
+        return (
+          <div
+            key={index}
+            onClick={() =>
+              handleProjectSelection({
+                name: e.name,
+                id: e.id,
               })
             }
           >
@@ -156,6 +183,54 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
                       <TinyItem key={index} value={e} />
                     ))}
                   </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      );
+    }
+    if (type === "projects") {
+      return (
+        <div className="mb-10 flex flex-col gap-6">
+          Selecionados
+          <div className="flex gap-4 flex-wrap">
+            {states[0].map((e: any, index: number) => (
+              <div
+                key={index}
+                className="w-full border-solid border-b border-b-gray-400 ml-2 pb-2"
+                onClick={() =>
+                  handleProjectSelection({
+                    name: e.name,
+                    id: e.id,
+                  })
+                }
+              >
+                {e?.name}
+              </div>
+            ))}
+          </div>
+          Opções
+          <div className="flex gap-4 flex-wrap">
+            {allProjects
+              .filter(item => {
+                return (
+                  (searchStr !== ""
+                    ? item.name.toLowerCase().startsWith(searchStr)
+                    : true) && !states[0]?.map((e: any) => e).includes(item.id)
+                );
+              })
+              .map((e, index) => (
+                <div
+                  key={index}
+                  className="w-full border-solid border-b border-b-gray-400 ml-2 pb-2"
+                  onClick={() =>
+                    handleProjectSelection({
+                      name: e.name,
+                      id: e.id,
+                    })
+                  }
+                >
+                  {e?.name}
                 </div>
               ))}
           </div>
@@ -258,6 +333,25 @@ const SelectionFormField = ({ type, states, setError }: Props) => {
             (e: { uid: string; name: string; occupation: string }) => e.uid,
           ),
         );
+      }
+      return newState;
+    });
+  };
+  const handleProjectSelection = (element: { name: string; id: string }) => {
+    console.log({ element });
+
+    states[1]((prevState: any) => {
+      const newState = JSON.parse(JSON.stringify(prevState));
+      const index = newState.map((e: any) => e.id).indexOf(element.id);
+
+      if (index !== -1) {
+        newState.splice(index, 1);
+      } else {
+        newState.push(element);
+      }
+
+      if (states) {
+        states[1](newState.map((e: { id: string; name: string }) => e.id));
       }
       return newState;
     });

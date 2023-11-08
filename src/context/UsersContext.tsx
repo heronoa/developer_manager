@@ -94,7 +94,7 @@ export const UsersProvider = ({ children }: IUsersProvider) => {
     } catch (error) {
       console.error(error);
     }
-    setUpdate(e => !e);
+    return false;
   };
 
   const updateUser = async (

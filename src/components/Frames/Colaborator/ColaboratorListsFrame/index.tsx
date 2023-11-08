@@ -1,4 +1,5 @@
 import { IProjectDataType, IUserDataType } from "@/@types";
+import EdittableListItems from "@/components/UI/Items/EdittableListItems";
 import TinyItem from "@/components/UI/Items/TinyItem";
 import { useProjects } from "@/hooks/useProjects";
 import { useUsers } from "@/hooks/useUsers";
@@ -11,7 +12,8 @@ interface Props {
 }
 
 const ColaboratorListsFrame = ({ user }: Props) => {
-  const { allProjects, removingUserFromProjects, addUsersToProjects } = useProjects();
+  const { allProjects, removingUserFromProjects, addUsersToProjects } =
+    useProjects();
   const { deleteUser, updateUser } = useUsers();
   const router = useRouter();
 
@@ -21,31 +23,28 @@ const ColaboratorListsFrame = ({ user }: Props) => {
     router.push("/projects");
   };
 
-  const findProject = (id: String) => {
-    return allProjects.find(e => e.id === id);
-  };
-  const projects = useState<string[]>();
+  const projects = useState<IProjectDataType[]>();
   const occupation = useState<string[]>();
 
   const edittables = { projects, occupation };
 
   const submitEdittable = (key: keyof IUserDataType) => async () => {
     const oldObj = JSON.parse(JSON.stringify(user));
-    const obj: any = { id: user.uid };
+    const obj: any = { uid: user.uid };
 
     obj[key] = edittables[key as "projects" | "occupation"][0]?.map(
-      (e: any) => e?.uid || e,
+      (e: any) => e?.id || e,
     );
     await updateUser(obj);
     if (key === "projects") {
-      oldObj.teamUids = oldObj.teamUids.filter(
+      oldObj.projects = oldObj.projects.filter(
         (e: any) => !obj[key].includes(e),
       );
-      // colaboradores removidos
-      obj.teamUids = obj.teamUids.filter(
-        (e: any) => !oldObj.teamUids.includes(e),
+      // projetos removidos
+      obj.projects = obj.projects.filter(
+        (e: any) => !oldObj.projects.includes(e),
       );
-      // colaboradores adicionados
+      // projetos adicionados
       await removingUserFromProjects(oldObj);
       await addUsersToProjects(obj);
     }
@@ -58,29 +57,37 @@ const ColaboratorListsFrame = ({ user }: Props) => {
         {Object.entries({
           projects: user.projects,
           occupation: user.occupation,
-        }).map(([objKey, objValue], index) => {
+        }).map((objEntries, index) => {
           return (
-            <div key={index}>
-              <span className="font-semibold mr-2">
-                {translateItemKeys(objKey as any)}:
-              </span>
-              <div
-                className={`${
-                  objKey === "projects" ? "flex-col" : ""
-                }  flex flex-wrap`}
-              >
-                {(objValue as string[]).map((e, index) => {
-                  let value: string | IProjectDataType = e;
-                  if (objKey === "projects") {
-                    value = findProject(e) || e;
-                  }
-                  if (typeof value === "string") {
-                    return <TinyItem key={index} value={value} />;
-                  }
-                  return <div key={index}>{value?.name}</div>;
-                })}
-              </div>
-            </div>
+            <EdittableListItems
+              key={index}
+              state={edittables[objEntries[0] as "projects" | "occupation"][0]}
+              setState={edittables[objEntries[0] as "projects" | "occupation"][1]}
+              objEntries={objEntries}
+              submit={submitEdittable(objEntries[0] as "projects" | "occupation")}
+            />
+
+            // <div key={index}>
+            //   <span className="font-semibold mr-2">
+            //     {translateItemKeys(objKey as any)}:
+            //   </span>
+            //   <div
+            //     className={`${
+            //       objKey === "projects" ? "flex-col" : ""
+            //     }  flex flex-wrap`}
+            //   >
+            //     {(objValue as string[]).map((e, index) => {
+            //       let value: string | IProjectDataType = e;
+            //       if (objKey === "projects") {
+            //         value = findProject(e) || e;
+            //       }
+            //       if (typeof value === "string") {
+            //         return <TinyItem key={index} value={value} />;
+            //       }
+            //       return <div key={index}>{value?.name}</div>;
+            //     })}
+            //   </div>
+            // </div>
           );
         })}
       </div>

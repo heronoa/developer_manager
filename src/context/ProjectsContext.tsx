@@ -35,6 +35,7 @@ interface ProjectsContextProps {
   setUpdate: Dispatch<SetStateAction<boolean>>;
   removingUserFromProjects: (user: IUserDataType) => Promise<void>;
   addUsersToProjects: (user: IUserDataType) => Promise<void>;
+  findProject: (ui: string) => IProjectDataType | undefined;
 }
 
 export const ProjectsContext = createContext({} as ProjectsContextProps);
@@ -45,6 +46,10 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   const [error, setError] = useState<any | undefined>();
   const [loading, setLoading] = useState<boolean>(true);
   const [update, setUpdate] = useState<boolean>(false);
+
+  const findProject = (id: string) => {
+    return allProjects.find(e => e.id === id);
+  };
 
   const updateProjects = async (projectPart: Partial<IProjectDataType>) => {
     if (parseInt(activeUserData?.permissionLevel || "0") > 1) {
@@ -114,17 +119,16 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
         const docRef = doc(db, projectsCollection, docKey);
         const teamCopy = JSON.parse(JSON.stringify((docValue as any).teamUids));
         teamCopy.splice(user.uid, 1);
-        console.log({docRef, teamCopy, docValue})
-        // await updateDoc(docRef, {
-        //   teamUids: teamCopy,
-        // });
+        console.log({ docRef, teamCopy, docValue });
+        await updateDoc(docRef, {
+          teamUids: teamCopy,
+        });
       });
       setUpdate(e => !e);
     } catch (error) {
       console.error(error);
     }
   };
-
 
   const removingUserFromProjects = async (user: IUserDataType) => {
     try {
@@ -138,12 +142,14 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
         querySnapshot.forEach(doc => (docs[doc.id] = doc.data()));
         Object.entries(docs).forEach(async ([docKey, docValue]) => {
           const docRef = doc(db, projectsCollection, docKey);
-          const teamCopy = JSON.parse(JSON.stringify((docValue as any).teamUids));
+          const teamCopy = JSON.parse(
+            JSON.stringify((docValue as any).teamUids),
+          );
           teamCopy.splice(user.uid, 1);
-          console.log({docRef, teamCopy, docValue})
-          // await updateDoc(docRef, {
-          //   teamUids: teamCopy,
-          // });
+          console.log({ docRef, teamCopy, docValue });
+          await updateDoc(docRef, {
+            teamUids: teamCopy,
+          });
         });
       }
       setUpdate(e => !e);
@@ -178,6 +184,7 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
         deleteProject,
         removingUserFromProjects,
         addUsersToProjects,
+        findProject
       }}
     >
       {children}

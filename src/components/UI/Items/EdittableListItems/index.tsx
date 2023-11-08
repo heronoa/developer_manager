@@ -1,4 +1,4 @@
-import { IUserDataType } from "@/@types";
+import { IProjectDataType, IUserDataType } from "@/@types";
 import EditButton from "@/components/Auth/EditButton";
 import { translateItemKeys } from "@/services/format";
 import { GiConfirmed } from "react-icons/gi";
@@ -7,6 +7,7 @@ import SelectionFormField from "../../FormFields/SelectionFormField";
 import TinyItem from "../TinyItem";
 import { useUsers } from "@/hooks/useUsers";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useProjects } from "@/hooks/useProjects";
 
 interface Props {
   state: any | any[];
@@ -17,6 +18,7 @@ interface Props {
 
 const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
   const { findUser } = useUsers();
+  const { findProject } = useProjects();
 
   const [objKey, objValue] = objEntries;
   const [error, setError] = useState<string | null>(null);
@@ -33,6 +35,9 @@ const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
                 if (objKey === "teamUids") {
                   (arr as any[]) = arr.map((e: any) => findUser(e));
                 }
+                if (objKey === "projects") {
+                  (arr as any[]) = arr.map((e: any) => findProject(e));
+                }
                 setState(arr);
               }}
             />
@@ -43,8 +48,7 @@ const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
             <GiConfirmed
               className="w-8 h-8 cursor-pointer"
               onClick={() => {
-                if (!error)
-                 submit();
+                if (!error) submit();
               }}
             />
             <ImCancelCircle
@@ -56,11 +60,14 @@ const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
       </span>
 
       {!state && (
-        <div className="flex flex-wrap relative mt-8">
+        <div className={` ${objKey === "projects" ? "flex-col" : ""} flex flex-wrap relative mt-8`}>
           {(objValue as string[]).map((e, index) => {
-            let value: string | IUserDataType = e;
+            let value: string | IUserDataType | IProjectDataType = e;
             if (objKey === "teamUids") {
               value = findUser(e) || e;
+            }
+            if (objKey === "projects") {
+              value = findProject(e) || e;
             }
             if (typeof value === "string") {
               return <TinyItem key={index} value={value} />;
@@ -69,9 +76,10 @@ const EdittableListItems = ({ state, setState, objEntries, submit }: Props) => {
               <div key={index}>
                 <div>
                   {value.name}
-                  {value.occupation.map((e, index2) => {
-                    return <TinyItem key={index2} value={e} />;
-                  })}
+                  {(value as IUserDataType)?.occupation &&
+                    (value as IUserDataType)?.occupation.map((e, index2) => {
+                      return <TinyItem key={index2} value={e} />;
+                    })}
                 </div>
               </div>
             );
