@@ -59,7 +59,7 @@ const PrimaryDataItem = ({ data, type }: Props) => {
             key={`${
               (data as any)?.uid || (data as any)?.id
             }-${objKey}-${index}`}
-            className={`${["stack"].includes(objKey) ? "hidden md:flex" : "flex"  } border-r-gray-400 md:border-none md:border-r min-w-[150px] last:border-0 gap-2 justify-center items-center md:first:justify-start first:min-w-[200px] p-4 overflow-x-hidden overflow-ellipsis w-full`}
+            className={`flex flex-col border-r-gray-400 md:border-none md:border-r min-w-[150px] last:border-0 gap-2 justify-center items-center md:first:justify-start first:min-w-[200px] p-4 overflow-x-hidden overflow-ellipsis w-full`}
           >
             <span className="font-semibold md:hidden">
               {translateItemKeys(
