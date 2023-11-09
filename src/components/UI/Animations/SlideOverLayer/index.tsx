@@ -47,7 +47,7 @@ const SlideOverLayer = ({ children, slideDirection = "left" }: Props) => {
       leaveFrom={direction[slideDirection].leaveFrom}
       leaveTo={direction[slideDirection].leaveTo}
     >
-      <div className="fixed inset-0 overflow-hidden z-[1]">
+      <div className="fixed inset-0 overflow-hidden z-20">
         <div className="absolute inset-0 overflow-hidden">
           <div
             className={`${direction[slideDirection].className} pointer-events-none fixed inset-y-0 left-0 flex max-w-full pr-10`}
