@@ -3,14 +3,13 @@
 versões:
 Node v18.16.1
 
-
 Baixar dependencias:
+
 ```bash
 npm install
 # or
 yarn 
 ```
-
 
 ```bash
 npm run dev
@@ -42,10 +41,11 @@ bun dev
 - src/pages: rotas da aplicação
 - src/services: funções que não são usadas para renderização e podem ser usadas em muito lugares da aplicação, usada principalmente para validação e formatação de dados
 - src/styles: os arquivos de estilo da aplicação usando tailwind e css puro
+- src/templates: arquivos que vão renderizar em todas as paginas como um cabeçalho e um rodapé
 - src/utils: usado principalmente para armazenar constantes
 
-
 ## Colaborar
+
  Nesse projeto foi usado o husky para garantir commits semanticos, as principais regras são que o commit precisa ter até no máximo 100 caracteres e precisa começar com algum prefix semantico segue os prefixos:
 
 -build: Alterações que afetam o sistema de construção ou dependências externas (escopos de exemplo: gulp, broccoli, npm),
@@ -55,7 +55,22 @@ bun dev
 -fix: Essencialmente definem o tratamento de correções de bugs;
 -perf: Uma alteração de código que melhora o desempenho;
 -refactor: Tipo utilizado em quaisquer mudanças que sejam executados no código, porém não alterem a funcionalidade final da tarefa impactada;
--style: Alterações referentes a formatações na apresentação do código que não afetam o significado do código, como por exemplo: espaço em branco, formatação, ponto e vírgula ausente etc.);
+-style: Alterações referentes a formatações na apresentação do código que não afetam o significado do código, como por exemplo: espaço em branco, formatação, ponto e vírgula ausente etc.;
 -test: Adicionando testes ausentes ou corrigindo testes existentes nos processos de testes automatizados (TDD);
 -chore: Atualização de tarefas que não ocasionam alteração no código de produção, mas mudanças de ferramentas, mudanças de configuração e bibliotecas que realmente não entram em produção;
 -env: basicamente utilizado na descrição de modificações ou adições em arquivos de configuração em processos e métodos de integração contínua (CI), como parâmetros em arquivos de configuração de containers.
+
+## Variaveis de Ambiente
+
+Para o projeto rodar localmente é necessário algumas variaveis de ambiente para configuração do firebase:
+
+```bash
+# Todas podem ser encontradas no console do seu app Firebase
+
+APIKEY=
+AUTHDOMAIN=
+PROJECTID=
+STORAGEBUCKET=
+MESSAGINGSENDERID=
+APPID=
+```
