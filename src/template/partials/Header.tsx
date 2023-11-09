@@ -25,6 +25,10 @@ const Header = () => {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    setMobileMenuIsOpen(false);
+  }, [router]);
+  
   if (!mounted) return null;
   return (
     <>
@@ -36,7 +40,10 @@ const Header = () => {
           <div className="hidden lg:block">
             <ThemeSwitch />
           </div>
-          <div className="block lg:hidden" onClick={(() => setMobileMenuIsOpen(prevState => !prevState))}>
+          <div
+            className="block lg:hidden"
+            onClick={() => setMobileMenuIsOpen(prevState => !prevState)}
+          >
             <button className="flex items-center text-primary p-3">
               <svg
                 className="block h-6 w-6 fill-current"
