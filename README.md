@@ -36,7 +36,7 @@ bun dev
 - src/components/UI: componentes de interface que se repetem pela aplicação
 - src/config: configurações para inicialização de libs etc, aqui se inicializa o firebase
 - src/context: todos os meus arquivos de contextAPI aqui existem algumas das funções mais importantes (para ler, escrever, atualizar e deletar do banco de dados do firebase, por exemplo)
-- src/hooks: customs hooks a maioria deles está sendo usado para facilitar o acesso do contextAPI com excesão do useAnalytics onde é realizado o tratamento de dados para os gráficos do dashboard
+- src/hooks: customs hooks a maioria deles está sendo usado para facilitar o acesso do contextAPI com excesão do useAnalytics e do useModal onde é realizado o tratamento de dados para os gráficos do dashboard e o gerenciamento de renderização do conteúdo dos modais
 - src/layout: componente de SEO com os metadados da aplicação
 - src/pages: rotas da aplicação
 - src/services: funções que não são usadas para renderização e podem ser usadas em muito lugares da aplicação, usada principalmente para validação e formatação de dados
