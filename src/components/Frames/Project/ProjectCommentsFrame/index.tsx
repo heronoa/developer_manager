@@ -1,6 +1,7 @@
 import { IComments, IProjectDataType } from "@/@types";
 import { useAuth } from "@/hooks/useAuth";
 import { useProjects } from "@/hooks/useProjects";
+import { useUsers } from "@/hooks/useUsers";
 import { formatItem } from "@/services/format";
 import { Timestamp } from "firebase/firestore";
 import { useState } from "react";
@@ -13,6 +14,7 @@ interface Props {
 
 const ProjectCommentsFrame = ({ project }: Props) => {
   const { updateProjects } = useProjects();
+  const { findUser } = useUsers();
   const { user } = useAuth();
   const [text, setText] = useState<string>("");
   const [submitting, setSubmitting] = useState(false);
@@ -27,10 +29,10 @@ const ProjectCommentsFrame = ({ project }: Props) => {
         { user_id: user.uid, date: Timestamp.now(), text },
       ];
       await updateProjects({ id: project.id, comments: newComments });
-      console.log({ comments: newComments });
     } catch (err: any) {
       console.error(err);
     } finally {
+      setText("");
       setTimeout(() => setSubmitting(false), 1000);
     }
   };
@@ -44,6 +46,7 @@ const ProjectCommentsFrame = ({ project }: Props) => {
           </div>
           <div>
             <div className="tiny">{formatItem(e.date as any, "comments")}</div>
+            <div>{findUser(e.user_id)?.name}</div>
             <div>{e.text}</div>
           </div>
         </div>
