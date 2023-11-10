@@ -73,13 +73,13 @@ const ProjectDetailsHeaderFrame = ({ project }: Props) => {
           {!edittables?.description && (
             <p className="relative ">
               {project?.description}
-              <div className="absolute top-1 -right-8">
+              <span className="absolute top-1 -right-8">
                 <EditButton
                   fn={() =>
                     handleChangeEdittables("description", project.description)
                   }
                 />
-              </div>
+              </span>
             </p>
           )}
           {edittables?.description && (
