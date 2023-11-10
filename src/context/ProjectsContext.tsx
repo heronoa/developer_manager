@@ -52,7 +52,14 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
   };
 
   const updateProjects = async (projectPart: Partial<IProjectDataType>) => {
-    if (parseInt(activeUserData?.permissionLevel || "0") > 1) {
+    const adminPermission =
+      parseInt(activeUserData?.permissionLevel || "0") > 1;
+    const commentsException =
+      Object.keys(projectPart).length === 2 &&
+      "id" in projectPart &&
+      "comments" in projectPart;
+    console.log({ projectPart, adminPermission, commentsException });
+    if (adminPermission || commentsException) {
       try {
         const q = query(
           collection(db, projectsCollection),
@@ -183,7 +190,7 @@ export const ProjectsProvider = ({ children }: IProjectsProvider) => {
         deleteProject,
         removingUserFromProjects,
         addUsersToProjects,
-        findProject
+        findProject,
       }}
     >
       {children}
