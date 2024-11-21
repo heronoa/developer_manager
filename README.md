@@ -2,9 +2,15 @@
 
 Este projeto visa fornecer uma solução simples para gerenciar desenvolvedores e projetos utilizando Firebase como backend para autenticação e banco de dados. O sistema oferece três CRUDs principais:
 
+<video width="320" height="240" loop muted autoplay>
+  <source src="assets/demo.mp4" type="video/mp4">
+  Seu navegador não suporta a tag de vídeo.
+</video>
+
 - **Usuários**: Cadastro, edição e visualização de usuários (somente administradores podem cadastrar novos usuários).
 - **Dados restritos de usuários**: Gerenciamento de informações privadas de cada usuário.
 - **Projetos**: Gerenciamento de projetos, associando desenvolvedores a projetos.
+- **Métricas**: O projeto conta um dashboard com métricas importantes de projetos, usuarios e managers
 
 ## Funcionalidades
 
