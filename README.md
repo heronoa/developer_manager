@@ -13,6 +13,12 @@ Este projeto visa fornecer uma solução simples para gerenciar desenvolvedores 
 
 ---
 
+## Test
+
+Credenciais de Teste:
+email: testman@test.com
+senha: test123
+
 
 ## Funcionalidades
 
