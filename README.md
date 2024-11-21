@@ -9,7 +9,7 @@ Este projeto visa fornecer uma solução simples para gerenciar desenvolvedores 
 
 ## Demo
 
-![Demo Gif](public/assets/demo.gif)
+![Demo Gif](https://github.com/heronoa/developer_manager/blob/main/public/demo.gif)
 
 ---
 
