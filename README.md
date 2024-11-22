@@ -11,6 +11,8 @@ Este projeto visa fornecer uma solução simples para gerenciar desenvolvedores 
 
 ![Demo Gif](https://github.com/heronoa/developer_manager/blob/main/public/demo.gif)
 
+[Check out full demo!](https://raw.githubusercontent.com/heronoa/developer_manager/refs/heads/main/public/demo..mp4)
+
 ---
 
 ## Test
